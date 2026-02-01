@@ -20,9 +20,9 @@ export function HeroSection({ onSubmitClick }: HeroSectionProps) {
 
         {/* Headline */}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-4">
-          The Home of{" "}
+          Discover the{" "}
           <span className="bg-gradient-to-r from-foreground via-muted-foreground to-foreground bg-clip-text">
-            AI-Native Apps
+            AI Gold Rush.
           </span>
         </h1>
 
