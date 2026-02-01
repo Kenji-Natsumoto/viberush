@@ -15,17 +15,31 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        // Tool badges for VibeLaunch
-        cursor:
-          "border-transparent bg-badge-cursor text-white",
+        // Tool badges for VibeRush
         lovable:
-          "border-transparent bg-badge-lovable text-white",
-        replit:
-          "border-transparent bg-badge-replit text-white",
-        claude:
-          "border-transparent bg-badge-claude text-white",
+          "border-transparent bg-[#FF007A] text-white",
         v0:
-          "border-transparent bg-badge-v0 text-white",
+          "border-transparent bg-[#000000] text-white",
+        voltnew:
+          "border-transparent bg-[#FFD700] text-black",
+        emergent:
+          "border-transparent bg-[#6366F1] text-white",
+        replit:
+          "border-transparent bg-[#F26207] text-white",
+        devin:
+          "border-transparent bg-[#0066FF] text-white",
+        cursor:
+          "border-transparent bg-[#7C3AED] text-white",
+        windsurf:
+          "border-transparent bg-[#14B8A6] text-white",
+        claudecode:
+          "border-transparent bg-[#D97706] text-white",
+        codex:
+          "border-transparent bg-[#10A37F] text-white",
+        gemini:
+          "border-transparent bg-[#4285F4] text-white",
+        antigravity:
+          "border-transparent bg-[#8B5CF6] text-white",
         tool:
           "border-border bg-secondary text-secondary-foreground",
       },
