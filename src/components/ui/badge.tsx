@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 backdrop-blur-sm shadow-sm",
   {
     variants: {
       variant: {
@@ -15,37 +15,37 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
-        // Tool badges for VibeRush
+        // Tool badges for VibeRush - Glassmorphism style with brand colors
         lovable:
-          "border-transparent bg-[#FF007A] text-white",
+          "border-[#FF007A]/30 bg-[#FF007A]/90 text-white hover:bg-[#FF007A]",
         v0:
-          "border-transparent bg-[#000000] text-white",
+          "border-white/10 bg-[#000000]/90 text-white hover:bg-[#000000]",
         voltnew:
-          "border-transparent bg-[#FFD700] text-black",
+          "border-[#F97316]/30 bg-[#F97316]/90 text-white hover:bg-[#F97316]",
         emergent:
-          "border-transparent bg-[#6366F1] text-white",
+          "border-[#6366F1]/30 bg-[#6366F1]/90 text-white hover:bg-[#6366F1]",
         replit:
-          "border-transparent bg-[#F26207] text-white",
+          "border-[#EF4444]/30 bg-[#EF4444]/90 text-white hover:bg-[#EF4444]",
         devin:
-          "border-transparent bg-[#0066FF] text-white",
+          "border-[#0066FF]/30 bg-[#0066FF]/90 text-white hover:bg-[#0066FF]",
         cursor:
-          "border-transparent bg-[#7C3AED] text-white",
+          "border-[#00D4FF]/30 bg-[#00D4FF]/90 text-black hover:bg-[#00D4FF]",
         windsurf:
-          "border-transparent bg-[#14B8A6] text-white",
+          "border-[#14B8A6]/30 bg-[#14B8A6]/90 text-white hover:bg-[#14B8A6]",
         claudecode:
-          "border-transparent bg-[#D97706] text-white",
+          "border-[#2D2D2D]/30 bg-[#2D2D2D]/90 text-white hover:bg-[#2D2D2D]",
         codex:
-          "border-transparent bg-[#10A37F] text-white",
+          "border-[#10A37F]/30 bg-[#10A37F]/90 text-white hover:bg-[#10A37F]",
         gemini:
-          "border-transparent bg-[#4285F4] text-white",
+          "border-[#4285F4]/30 bg-[#4285F4]/90 text-white hover:bg-[#4285F4]",
         antigravity:
-          "border-transparent bg-[#8B5CF6] text-white",
+          "border-[#8B5CF6]/30 bg-[#8B5CF6]/90 text-white hover:bg-[#8B5CF6]",
         manus:
-          "border-transparent bg-[#1E3A8A] text-white",
+          "border-[#3B82F6]/30 bg-[#3B82F6]/90 text-white hover:bg-[#3B82F6]",
         genspark:
-          "border-transparent bg-[#F97316] text-white",
+          "border-[#F97316]/30 bg-[#F97316]/90 text-white hover:bg-[#F97316]",
         tool:
-          "border-border bg-secondary text-secondary-foreground",
+          "border-border/50 bg-secondary/80 text-secondary-foreground",
       },
     },
     defaultVariants: {
