@@ -13,7 +13,7 @@ interface SubmitModalProps {
   onClose: () => void;
 }
 
-const AVAILABLE_TOOLS: Tool[] = ["Lovable", "v0", "volt.new", "Emergent", "Replit", "Devin", "Cursor", "Windsurf", "Claude Code", "Codex", "Gemini", "antigravity", "Other Tools"];
+const AVAILABLE_TOOLS: Tool[] = ["Lovable", "v0", "volt.new", "Emergent", "Replit", "Devin", "Cursor", "Windsurf", "Claude Code", "Codex", "Gemini", "antigravity", "Manus", "Genspark", "Other Tools"];
 
 const TIME_OPTIONS = ["30 minutes", "1 hour", "2 hours", "4 hours", "1 day", "2+ days"];
 

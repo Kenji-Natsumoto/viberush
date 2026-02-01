@@ -40,6 +40,10 @@ const badgeVariants = cva(
           "border-transparent bg-[#4285F4] text-white",
         antigravity:
           "border-transparent bg-[#8B5CF6] text-white",
+        manus:
+          "border-transparent bg-[#1E3A8A] text-white",
+        genspark:
+          "border-transparent bg-[#F97316] text-white",
         tool:
           "border-border bg-secondary text-secondary-foreground",
       },
