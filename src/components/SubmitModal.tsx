@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { X, Upload, Clock, Link, Type, FileText } from "lucide-react";
+import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { Tool } from "@/data/dummyProducts";
 
@@ -67,6 +66,34 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
             />
           </div>
 
+          {/* Demo URL - Highlighted */}
+          <div className="space-y-2 p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/20">
+            <Label htmlFor="demoUrl" className="flex items-center gap-2 text-sm font-semibold text-primary">
+              <Play className="h-4 w-4" />
+              Demo URL (deployed app) ✨
+            </Label>
+            <Input
+              id="demoUrl"
+              placeholder="https://yourapp.lovable.app"
+              className="bg-background border-primary/30 focus:border-primary"
+            />
+            <p className="text-xs text-muted-foreground">Share your live app so users can try it instantly!</p>
+          </div>
+
+          {/* Video/GIF URL - Highlighted */}
+          <div className="space-y-2 p-4 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl border border-orange-500/20">
+            <Label htmlFor="videoUrl" className="flex items-center gap-2 text-sm font-semibold text-orange-500">
+              <Video className="h-4 w-4" />
+              Video/GIF URL (Loom or X share link) 🎬
+            </Label>
+            <Input
+              id="videoUrl"
+              placeholder="https://www.loom.com/share/..."
+              className="bg-background border-orange-500/30 focus:border-orange-500"
+            />
+            <p className="text-xs text-muted-foreground">Show off your app in action with a quick demo video!</p>
+          </div>
+
           {/* URL */}
           <div className="space-y-2">
             <Label htmlFor="url" className="flex items-center gap-2 text-sm font-medium">
@@ -106,7 +133,24 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
             />
           </div>
 
-          {/* Tools Used */}
+          {/* AI Prompt - Magic Section */}
+          <div className="space-y-2 p-4 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-xl border border-purple-500/20">
+            <Label htmlFor="aiPrompt" className="flex items-center gap-2 text-sm font-semibold">
+              <Sparkles className="h-4 w-4 text-purple-500" />
+              <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                Share Your Magic Prompt ✨
+              </span>
+            </Label>
+            <Textarea
+              id="aiPrompt"
+              placeholder="Share the prompt that created this app. Help other vibe coders learn your magic!"
+              rows={4}
+              className="bg-background border-purple-500/30 focus:border-purple-500 resize-none"
+            />
+            <p className="text-xs text-muted-foreground">
+              🪄 Your prompt is a treasure map for other builders. Share the magic!
+            </p>
+          </div>
           <div className="space-y-2">
             <Label className="text-sm font-medium">Tools Used</Label>
             <div className="flex flex-wrap gap-2">
