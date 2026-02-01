@@ -1,4 +1,5 @@
 import { Clock, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 import { ToolBadge } from "./ToolBadge";
 import { UpvoteButton } from "./UpvoteButton";
 import { VibeScoreButton } from "./VibeScoreButton";
@@ -14,7 +15,8 @@ export function ProductCard({ product, rank }: ProductCardProps) {
   const vibeScore = Math.floor(parseInt(product.id) * 17 + 42);
 
   return (
-    <div className="group flex items-center gap-4 p-4 bg-card border border-border rounded-xl transition-all duration-200 hover:shadow-card-hover hover:border-muted-foreground/20">
+    <Link to={`/product/${product.id}`} className="block group">
+      <div className="flex items-center gap-4 p-4 bg-card border border-border rounded-xl transition-all duration-200 hover:shadow-card-hover hover:border-muted-foreground/20">
       {/* Rank */}
       <div className="hidden sm:flex items-center justify-center w-8 text-lg font-semibold text-muted-foreground">
         {rank}
@@ -70,6 +72,7 @@ export function ProductCard({ product, rank }: ProductCardProps) {
         <VibeScoreButton initialScore={vibeScore} productId={product.id} />
         <UpvoteButton initialVotes={product.votes} productId={product.id} />
       </div>
-    </div>
+      </div>
+    </Link>
   );
 }

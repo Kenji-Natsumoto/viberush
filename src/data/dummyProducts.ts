@@ -8,6 +8,9 @@ export interface Product {
   url: string;
   iconUrl: string;
   bannerUrl?: string;
+  demoUrl?: string;
+  videoUrl?: string;
+  aiPrompt?: string;
   tools: Tool[];
   timeToBuild: string;
   votes: number;
@@ -24,6 +27,9 @@ export const dummyProducts: Product[] = [
     description: 'A sleek project management tool that uses AI to automatically prioritize tasks and suggest workflows.',
     url: 'https://vibeflow.app',
     iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=vibeflow&backgroundColor=6366f1',
+    demoUrl: 'https://vibeflow.app',
+    videoUrl: 'https://www.loom.com/share/example',
+    aiPrompt: 'Create an AI-powered project management tool for indie hackers. It should automatically prioritize tasks based on deadlines and importance, suggest optimal workflows, and have a clean, modern UI with dark mode support.',
     tools: ['Lovable', 'Claude Code'],
     timeToBuild: '2 hours',
     votes: 284,
