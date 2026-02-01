@@ -1,4 +1,4 @@
-export type Tool = 'Lovable' | 'v0' | 'volt.new' | 'Emergent' | 'Replit' | 'Devin' | 'Cursor' | 'Windsurf' | 'Claude Code' | 'Codex' | 'Gemini' | 'antigravity' | 'Other Tools';
+export type Tool = 'Lovable' | 'v0' | 'volt.new' | 'Emergent' | 'Replit' | 'Devin' | 'Cursor' | 'Windsurf' | 'Claude Code' | 'Codex' | 'Gemini' | 'antigravity' | 'Manus' | 'Genspark' | 'Other Tools';
 
 export interface Product {
   id: string;
