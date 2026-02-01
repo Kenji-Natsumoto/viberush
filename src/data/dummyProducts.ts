@@ -1,4 +1,4 @@
-export type Tool = 'Cursor' | 'Lovable' | 'Replit' | 'Claude' | 'v0' | 'Bolt' | 'GPT-4';
+export type Tool = 'Lovable' | 'v0' | 'volt.new' | 'Emergent' | 'Replit' | 'Devin' | 'Cursor' | 'Windsurf' | 'Claude Code' | 'Codex' | 'Gemini' | 'antigravity' | 'Other Tools';
 
 export interface Product {
   id: string;
@@ -24,7 +24,7 @@ export const dummyProducts: Product[] = [
     description: 'A sleek project management tool that uses AI to automatically prioritize tasks and suggest workflows.',
     url: 'https://vibeflow.app',
     iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=vibeflow&backgroundColor=6366f1',
-    tools: ['Lovable', 'Claude'],
+    tools: ['Lovable', 'Claude Code'],
     timeToBuild: '2 hours',
     votes: 284,
     createdAt: '2024-01-15',
@@ -38,7 +38,7 @@ export const dummyProducts: Product[] = [
     description: 'Real-time code assistance and debugging powered by Claude.',
     url: 'https://codebuddy.dev',
     iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=codebuddy&backgroundColor=10b981',
-    tools: ['Cursor', 'Claude', 'v0'],
+    tools: ['Cursor', 'Claude Code', 'v0'],
     timeToBuild: '4 hours',
     votes: 198,
     createdAt: '2024-01-14',
@@ -52,7 +52,7 @@ export const dummyProducts: Product[] = [
     description: 'A beautiful prompt library with version control and team collaboration.',
     url: 'https://promptvault.io',
     iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=promptvault&backgroundColor=f59e0b',
-    tools: ['Replit', 'GPT-4'],
+    tools: ['Replit', 'Gemini'],
     timeToBuild: '1 day',
     votes: 156,
     createdAt: '2024-01-13',
@@ -66,7 +66,7 @@ export const dummyProducts: Product[] = [
     description: 'AI-generated landing pages with conversion-optimized copy.',
     url: 'https://launchkit.co',
     iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=launchkit&backgroundColor=ec4899',
-    tools: ['Lovable', 'Claude', 'v0'],
+    tools: ['Lovable', 'Claude Code', 'v0'],
     timeToBuild: '30 minutes',
     votes: 142,
     createdAt: '2024-01-12',
@@ -80,7 +80,7 @@ export const dummyProducts: Product[] = [
     description: 'Upload a CSV and get an instant interactive dashboard with AI insights.',
     url: 'https://datastory.app',
     iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=datastory&backgroundColor=3b82f6',
-    tools: ['Bolt', 'Claude'],
+    tools: ['volt.new', 'Devin'],
     timeToBuild: '6 hours',
     votes: 128,
     createdAt: '2024-01-11',

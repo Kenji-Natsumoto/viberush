@@ -1,14 +1,20 @@
 import { Badge } from "@/components/ui/badge";
 import type { Tool } from "@/data/dummyProducts";
 
-const toolVariantMap: Record<Tool, "cursor" | "lovable" | "replit" | "claude" | "v0" | "tool"> = {
-  Cursor: "cursor",
+const toolVariantMap: Record<Tool, "lovable" | "v0" | "voltnew" | "emergent" | "replit" | "devin" | "cursor" | "windsurf" | "claudecode" | "codex" | "gemini" | "antigravity" | "tool"> = {
   Lovable: "lovable",
-  Replit: "replit",
-  Claude: "claude",
   v0: "v0",
-  Bolt: "tool",
-  "GPT-4": "tool",
+  "volt.new": "voltnew",
+  Emergent: "emergent",
+  Replit: "replit",
+  Devin: "devin",
+  Cursor: "cursor",
+  Windsurf: "windsurf",
+  "Claude Code": "claudecode",
+  Codex: "codex",
+  Gemini: "gemini",
+  antigravity: "antigravity",
+  "Other Tools": "tool",
 };
 
 interface ToolBadgeProps {
