@@ -24,69 +24,69 @@ export default function Terms() {
         <div className="max-w-3xl mx-auto px-4">
           <h1 className="text-4xl font-bold text-foreground mb-8">Terms of Service</h1>
           <div className="prose prose-neutral dark:prose-invert max-w-none space-y-6 text-muted-foreground">
-            <p className="text-sm">Last updated: {new Date().toLocaleDateString('ja-JP')}</p>
+            <p className="text-sm">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">1. サービスの利用について</h2>
+              <h2 className="text-xl font-semibold text-foreground">1. Acceptance of Terms</h2>
               <p>
-                VibeRush（以下「本サービス」）は、AIを活用して構築されたアプリケーションを共有・発見するためのコミュニティプラットフォームです。本サービスを利用することにより、以下の利用規約に同意したものとみなされます。
+                VibeRush ("the Service") is a community platform for sharing and discovering applications built with AI. By using this Service, you agree to be bound by these Terms of Service.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">2. 投稿コンテンツについて</h2>
+              <h2 className="text-xl font-semibold text-foreground">2. User Content</h2>
               <p>
-                ユーザーが投稿したコンテンツ（アプリ情報、スクリーンショット、説明文、プロンプト等）の著作権は、投稿者に帰属します。ただし、本サービス上での表示・共有に必要な範囲で、非独占的な利用権を本サービスに許諾するものとします。
+                All content you submit (app information, screenshots, descriptions, prompts, etc.) remains your intellectual property. However, by submitting content, you grant the Service a non-exclusive license to display and share your content on the platform.
               </p>
-              <p>以下のコンテンツの投稿は禁止されています：</p>
+              <p>The following content is prohibited:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>違法なコンテンツ、または違法行為を助長するもの</li>
-                <li>第三者の著作権、商標権、その他の知的財産権を侵害するもの</li>
-                <li>誹謗中傷、差別的表現、ヘイトスピーチを含むもの</li>
-                <li>マルウェア、スパム、フィッシングに関連するもの</li>
-                <li>ポルノグラフィーその他の成人向けコンテンツ</li>
+                <li>Illegal content or content that promotes illegal activities</li>
+                <li>Content that infringes on copyrights, trademarks, or other intellectual property rights</li>
+                <li>Defamatory, discriminatory, or hateful content</li>
+                <li>Malware, spam, or phishing-related content</li>
+                <li>Pornographic or adult content</li>
               </ul>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">3. ユーザーの責任</h2>
+              <h2 className="text-xl font-semibold text-foreground">3. User Responsibilities</h2>
               <p>
-                ユーザーは、自身が投稿するコンテンツについて全責任を負います。投稿されたアプリやリンク先のサービスにより生じた損害について、本サービスは一切の責任を負いません。
+                Users are fully responsible for the content they submit. The Service assumes no liability for damages caused by submitted apps or linked services.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">4. アカウントの管理</h2>
+              <h2 className="text-xl font-semibold text-foreground">4. Account Management</h2>
               <p>
-                ユーザーは、自身のアカウント情報を適切に管理する責任を負います。アカウントの不正使用が発覚した場合は、速やかに本サービスに報告してください。
+                Users are responsible for maintaining the security of their account information. Please report any unauthorized use immediately.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">5. サービスの変更・中断</h2>
+              <h2 className="text-xl font-semibold text-foreground">5. Service Modifications</h2>
               <p>
-                本サービスは、事前の通知なくサービス内容の変更、一時的な中断、または終了を行う場合があります。これにより生じた損害について、本サービスは責任を負いません。
+                The Service may modify, suspend, or terminate its services at any time without prior notice. We are not liable for any damages resulting from such changes.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">6. 免責事項</h2>
+              <h2 className="text-xl font-semibold text-foreground">6. Disclaimer</h2>
               <p>
-                本サービスは「現状有姿」で提供されます。本サービスの利用により生じた直接的・間接的な損害について、本サービスは一切の責任を負いません。
+                The Service is provided "as is." We are not liable for any direct or indirect damages resulting from the use of this Service.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">7. 規約の変更</h2>
+              <h2 className="text-xl font-semibold text-foreground">7. Changes to Terms</h2>
               <p>
-                本規約は予告なく変更される場合があります。変更後も本サービスを継続して利用することにより、変更後の規約に同意したものとみなされます。
+                These terms may be updated without notice. Continued use of the Service after changes constitutes acceptance of the new terms.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">8. お問い合わせ</h2>
+              <h2 className="text-xl font-semibold text-foreground">8. Contact</h2>
               <p>
-                本規約に関するお問い合わせは、Contactページよりご連絡ください。
+                For questions about these terms, please reach out via our Contact page.
               </p>
             </section>
           </div>

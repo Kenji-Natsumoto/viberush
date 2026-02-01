@@ -17,7 +17,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm text-muted-foreground max-w-xs mb-4">
-              思考の速度で、世界の創造力を解き放つ。AIネイティブアプリの発見と共有のためのプラットフォーム。
+              Unleash the world's creativity through the speed of thought. The platform for discovering and sharing AI-native apps.
             </p>
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               Made with <Heart className="h-3 w-3 text-destructive fill-destructive" /> by Vibe Coders
@@ -76,7 +76,7 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-12 pt-8 border-t border-border">
           <p className="text-center text-xs text-muted-foreground">
-            © {new Date().getFullYear()} VibeRush. All rights reserved.
+            © {new Date().getFullYear()} VibeRush Project. All rights reserved.
           </p>
         </div>
       </div>

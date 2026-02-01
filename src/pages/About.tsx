@@ -6,18 +6,18 @@ import { Footer } from "@/components/Footer";
 const principles = [
   {
     icon: Rocket,
-    title: "実践第一",
-    description: "考えるよりも、まず作る。失敗を恐れず、とにかく手を動かす。",
+    title: "Action First",
+    description: "Build before you overthink. Don't fear failure—just start moving.",
   },
   {
     icon: Zap,
-    title: "完璧よりスピード",
-    description: "100%を目指すより、80%で素早くリリース。改善は後からでもできる。",
+    title: "Speed Over Perfection",
+    description: "Ship at 80% and iterate. You can always improve later.",
   },
   {
     icon: Users,
-    title: "AIとの共生",
-    description: "AIは敵ではなく、最高のパートナー。共に創造する未来を信じる。",
+    title: "Symbiosis with AI",
+    description: "AI is not our enemy—it's our ultimate partner. We believe in co-creation.",
   },
 ];
 
@@ -58,7 +58,7 @@ export default function About() {
               </span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              思考の速度で、世界の創造力を解き放つ。
+              Our Massive Transformative Purpose
             </p>
           </div>
         </section>
@@ -73,13 +73,13 @@ export default function About() {
               </div>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  このVibeRush自体も、最初のプロトタイプは<span className="text-foreground font-semibold">Vibe Codingにより</span>わずか<span className="text-foreground font-semibold">1時間足らず</span>で誕生しました。
+                  VibeRush itself was born through <span className="text-foreground font-semibold">Vibe Coding</span>—our first prototype came to life in <span className="text-foreground font-semibold">less than an hour</span>.
                 </p>
                 <p>
-                  私たちは、バグに悩み、プロンプトを工夫し、形になった瞬間のあの<span className="text-foreground font-semibold">震えるような喜び</span>を、あなたと完全に共有しています。
+                  We know the struggle of debugging, the art of crafting the perfect prompt, and that <span className="text-foreground font-semibold">electrifying moment</span> when your vision finally takes shape.
                 </p>
                 <p className="text-foreground font-medium pt-4 border-t border-border">
-                  私たちは、あなたの挑戦を誰よりも理解し、応援するコミュニティです。
+                  We are a community that truly understands your journey and cheers for your every breakthrough.
                 </p>
               </div>
             </div>
@@ -90,8 +90,8 @@ export default function About() {
         <section className="py-16 md:py-24">
           <div className="max-w-4xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-foreground mb-4">行動指針</h2>
-              <p className="text-muted-foreground">私たちが大切にしている3つの価値観</p>
+              <h2 className="text-3xl font-bold text-foreground mb-4">Our Principles</h2>
+              <p className="text-muted-foreground">The three values we live by</p>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
               {principles.map((principle, index) => (
@@ -117,7 +117,7 @@ export default function About() {
           <div className="max-w-4xl mx-auto px-4 text-center">
             <h2 className="text-3xl font-bold mb-4">Ready to join the rush?</h2>
             <p className="text-primary-foreground/80 mb-8">
-              あなたのVibe Codingプロジェクトを世界に披露しよう
+              Showcase your Vibe Coding project to the world
             </p>
             <Link to="/">
               <Button
@@ -126,7 +126,7 @@ export default function About() {
                 className="gap-2"
               >
                 <Rocket className="h-4 w-4" />
-                アプリを投稿する
+                Submit Your App
               </Button>
             </Link>
           </div>
