@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { ProductFeed } from "@/components/ProductFeed";
+import { FAQSection } from "@/components/FAQSection";
+import { Footer } from "@/components/Footer";
 import { SubmitModal } from "@/components/SubmitModal";
 
 const Index = () => {
@@ -16,7 +18,9 @@ const Index = () => {
       <main>
         <HeroSection onSubmitClick={openSubmitModal} />
         <ProductFeed />
+        <FAQSection />
       </main>
+      <Footer />
       <SubmitModal isOpen={isSubmitModalOpen} onClose={closeSubmitModal} />
     </div>
   );
