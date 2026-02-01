@@ -8,24 +8,24 @@ import { HelpCircle } from "lucide-react";
 
 const faqItems = [
   {
-    question: "Vibe Codingとは何ですか？",
+    question: "What is Vibe Coding?",
     answer:
-      "AI（Lovable, Cursor, Bolt等）と対話しながら、プログラミングの細部ではなく「何を作りたいか」というビジョンに集中し、思考の速度でアプリを構築する新しい開発スタイルです。",
+      "Vibe Coding is a new development style where you collaborate with AI tools (like Lovable, Cursor, Bolt, etc.) to build apps at the speed of thought—focusing on your vision rather than implementation details.",
   },
   {
-    question: "誰でも投稿できますか？",
+    question: "Can anyone submit an app?",
     answer:
-      "はい。AIを使って構築したアプリであれば、プロの開発者から、今日初めてAIに触れた方まで誰でも大歓迎です。",
+      "Yes! Whether you're a professional developer or someone who just discovered AI today, if you've built something with AI, you're welcome here.",
   },
   {
-    question: "投稿に費用はかかりますか？",
+    question: "Does it cost anything to submit?",
     answer:
-      "完全無料です。Vibe Codingの熱狂を共有することが私たちの目的です。",
+      "Completely free. Our mission is to share the excitement of Vibe Coding with the world.",
   },
   {
-    question: "投稿したアプリの権利はどうなりますか？",
+    question: "Who owns the rights to submitted apps?",
     answer:
-      "投稿されたアプリの権利はすべて作成者に帰属します。ここはあくまで「お披露目の場」です。",
+      "All rights remain with the creator. VibeRush is simply a stage to showcase your work.",
   },
 ];
 
@@ -40,10 +40,10 @@ export function FAQSection() {
             <span>FAQ</span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-4">
-            よくある質問
+            Frequently Asked Questions
           </h2>
           <p className="text-muted-foreground">
-            VibeRushについて気になることはここで解決
+            Everything you need to know about VibeRush
           </p>
         </div>
 

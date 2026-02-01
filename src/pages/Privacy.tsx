@@ -24,89 +24,89 @@ export default function Privacy() {
         <div className="max-w-3xl mx-auto px-4">
           <h1 className="text-4xl font-bold text-foreground mb-8">Privacy Policy</h1>
           <div className="prose prose-neutral dark:prose-invert max-w-none space-y-6 text-muted-foreground">
-            <p className="text-sm">Last updated: {new Date().toLocaleDateString('ja-JP')}</p>
+            <p className="text-sm">Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">1. はじめに</h2>
+              <h2 className="text-xl font-semibold text-foreground">1. Introduction</h2>
               <p>
-                VibeRush（以下「本サービス」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めています。本プライバシーポリシーでは、収集する情報、その利用方法、およびユーザーの権利について説明します。
+                VibeRush ("the Service") respects your privacy and is committed to protecting your personal information. This Privacy Policy explains what information we collect, how we use it, and your rights regarding that information.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">2. 収集する情報</h2>
-              <p>本サービスでは、以下の情報を収集する場合があります：</p>
+              <h2 className="text-xl font-semibold text-foreground">2. Information We Collect</h2>
+              <p>We may collect the following types of information:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li><strong>アカウント情報：</strong>メールアドレス、ユーザー名など、アカウント作成時に提供される情報</li>
-                <li><strong>投稿情報：</strong>アプリの説明、スクリーンショット、URL、プロンプトなど、ユーザーが自発的に投稿する情報</li>
-                <li><strong>利用データ：</strong>アクセスログ、IPアドレス、ブラウザ情報、閲覧履歴などの技術的情報</li>
-                <li><strong>Cookie：</strong>ログイン状態の維持やサービス改善のために使用</li>
+                <li><strong>Account Information:</strong> Email address, username, and other information provided during registration</li>
+                <li><strong>Submitted Content:</strong> App descriptions, screenshots, URLs, prompts, and other content you voluntarily share</li>
+                <li><strong>Usage Data:</strong> Access logs, IP addresses, browser information, and browsing history</li>
+                <li><strong>Cookies:</strong> Used to maintain login sessions and improve the service</li>
               </ul>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">3. 情報の利用目的</h2>
-              <p>収集した情報は、以下の目的で利用されます：</p>
+              <h2 className="text-xl font-semibold text-foreground">3. How We Use Your Information</h2>
+              <p>We use collected information to:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>サービスの提供・運営・改善</li>
-                <li>ユーザーサポートの提供</li>
-                <li>サービスに関する通知・お知らせの送信</li>
-                <li>不正利用の防止・セキュリティの確保</li>
-                <li>利用状況の分析・統計データの作成</li>
+                <li>Provide, operate, and improve the Service</li>
+                <li>Provide customer support</li>
+                <li>Send service-related notifications and updates</li>
+                <li>Prevent fraud and ensure security</li>
+                <li>Analyze usage patterns and create statistical data</li>
               </ul>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">4. 情報の共有</h2>
+              <h2 className="text-xl font-semibold text-foreground">4. Information Sharing</h2>
               <p>
-                本サービスは、以下の場合を除き、ユーザーの個人情報を第三者と共有しません：
+                We do not share your personal information with third parties except in the following cases:
               </p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>ユーザーの同意がある場合</li>
-                <li>法令に基づく開示要求があった場合</li>
-                <li>サービス運営に必要な業務委託先との共有（機密保持契約に基づく）</li>
+                <li>With your consent</li>
+                <li>When required by law</li>
+                <li>With service providers under confidentiality agreements</li>
               </ul>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">5. データの保護</h2>
+              <h2 className="text-xl font-semibold text-foreground">5. Data Protection</h2>
               <p>
-                本サービスは、収集した情報を不正アクセス、紛失、破壊から保護するために、適切なセキュリティ対策を講じています。ただし、インターネット上での完全なセキュリティを保証することはできません。
+                We implement appropriate security measures to protect your information from unauthorized access, loss, or destruction. However, no method of internet transmission is 100% secure.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">6. ユーザーの権利</h2>
-              <p>ユーザーは以下の権利を有します：</p>
+              <h2 className="text-xl font-semibold text-foreground">6. Your Rights</h2>
+              <p>You have the following rights:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
-                <li>自身の個人情報へのアクセス権</li>
-                <li>個人情報の訂正・削除の要求権</li>
-                <li>データ処理への異議申立権</li>
-                <li>アカウントの削除要求権</li>
+                <li>Access to your personal information</li>
+                <li>Request correction or deletion of your data</li>
+                <li>Object to data processing</li>
+                <li>Request account deletion</li>
               </ul>
               <p>
-                これらの権利を行使する場合は、Contactページよりご連絡ください。
+                To exercise these rights, please contact us via the Contact page.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">7. 未成年者について</h2>
+              <h2 className="text-xl font-semibold text-foreground">7. Children's Privacy</h2>
               <p>
-                本サービスは13歳未満の方による利用を想定していません。13歳未満の方から個人情報を収集したことが判明した場合、速やかに削除します。
+                The Service is not intended for users under 13 years of age. If we become aware of data collected from children under 13, we will delete it promptly.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">8. ポリシーの変更</h2>
+              <h2 className="text-xl font-semibold text-foreground">8. Policy Updates</h2>
               <p>
-                本プライバシーポリシーは、必要に応じて更新される場合があります。重要な変更がある場合は、サービス上でお知らせします。
+                This Privacy Policy may be updated as needed. Significant changes will be announced on the Service.
               </p>
             </section>
 
             <section className="space-y-4">
-              <h2 className="text-xl font-semibold text-foreground">9. お問い合わせ</h2>
+              <h2 className="text-xl font-semibold text-foreground">9. Contact</h2>
               <p>
-                プライバシーに関するお問い合わせは、Contactページよりご連絡ください。
+                For privacy-related inquiries, please reach out via our Contact page.
               </p>
             </section>
           </div>
