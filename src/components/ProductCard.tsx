@@ -1,6 +1,7 @@
 import { Clock, ExternalLink } from "lucide-react";
 import { ToolBadge } from "./ToolBadge";
 import { UpvoteButton } from "./UpvoteButton";
+import { VibeScoreButton } from "./VibeScoreButton";
 import type { Product } from "@/data/dummyProducts";
 
 interface ProductCardProps {
@@ -9,6 +10,9 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, rank }: ProductCardProps) {
+  // Generate a random vibe score based on product id for demo
+  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42);
+
   return (
     <div className="group flex items-center gap-4 p-4 bg-card border border-border rounded-xl transition-all duration-200 hover:shadow-card-hover hover:border-muted-foreground/20">
       {/* Rank */}
@@ -61,8 +65,9 @@ export function ProductCard({ product, rank }: ProductCardProps) {
         </div>
       </div>
 
-      {/* Upvote */}
-      <div className="flex-shrink-0">
+      {/* Action Buttons */}
+      <div className="flex-shrink-0 flex items-center gap-2">
+        <VibeScoreButton initialScore={vibeScore} productId={product.id} />
         <UpvoteButton initialVotes={product.votes} productId={product.id} />
       </div>
     </div>
