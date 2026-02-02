@@ -1,24 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import type { Tool } from "@/data/dummyProducts";
+import type { Tool, Product } from "@/data/dummyProducts";
 
-interface SubmitModalProps {
+interface EditProductModalProps {
   isOpen: boolean;
   onClose: () => void;
+  product: Product | null;
+  onSave?: (updatedProduct: Partial<Product>) => void;
 }
 
 const AVAILABLE_TOOLS: Tool[] = ["Lovable", "v0", "volt.new", "Emergent", "Replit", "Devin", "Cursor", "Windsurf", "Claude Code", "Codex", "Gemini", "antigravity", "Manus", "Genspark", "Other Tools"];
 
 const TIME_OPTIONS = ["30 minutes", "1 hour", "2 hours", "4 hours", "1 day", "2+ days"];
 
-export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
+export function EditProductModal({ isOpen, onClose, product, onSave }: EditProductModalProps) {
+  const [name, setName] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState("");
+  const [demoUrl, setDemoUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [bannerUrl, setBannerUrl] = useState("");
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>("");
+
+  // Populate form when product changes
+  useEffect(() => {
+    if (product) {
+      setName(product.name);
+      setTagline(product.tagline);
+      setDescription(product.description);
+      setUrl(product.url);
+      setDemoUrl(product.demoUrl || "");
+      setVideoUrl(product.videoUrl || "");
+      setAiPrompt(product.aiPrompt || "");
+      setBannerUrl(product.bannerUrl || "");
+      setSelectedTools(product.tools);
+      setSelectedTime(product.timeToBuild);
+    }
+  }, [product]);
 
   const toggleTool = (tool: Tool) => {
     setSelectedTools((prev) =>
@@ -26,7 +52,26 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
     );
   };
 
-  if (!isOpen) return null;
+  const handleSave = () => {
+    if (onSave && product) {
+      onSave({
+        id: product.id,
+        name,
+        tagline,
+        description,
+        url,
+        demoUrl: demoUrl || undefined,
+        videoUrl: videoUrl || undefined,
+        aiPrompt: aiPrompt || undefined,
+        bannerUrl: bannerUrl || undefined,
+        tools: selectedTools,
+        timeToBuild: selectedTime,
+      });
+    }
+    onClose();
+  };
+
+  if (!isOpen || !product) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -41,7 +86,7 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
           <h2 className="text-lg font-semibold text-foreground">
-            Submit Your App
+            Edit Your App
           </h2>
           <button
             onClick={onClose}
@@ -54,21 +99,23 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
         {/* Content */}
         <div className="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
           {/* Reassuring Message */}
-          <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
-            <span className="text-green-600 dark:text-green-400 text-sm">✨</span>
-            <p className="text-sm text-green-700 dark:text-green-300">
-              Don't worry! You can always edit your submission later.
+          <div className="flex items-center gap-2 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+            <span className="text-blue-600 dark:text-blue-400 text-sm">✏️</span>
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              Update your app details anytime. Changes are saved instantly!
             </p>
           </div>
 
           {/* App Name */}
           <div className="space-y-2">
-            <Label htmlFor="name" className="flex items-center gap-2 text-sm font-medium">
+            <Label htmlFor="edit-name" className="flex items-center gap-2 text-sm font-medium">
               <Type className="h-3.5 w-3.5 text-muted-foreground" />
               App Name
             </Label>
             <Input
-              id="name"
+              id="edit-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="VibeFlow"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -76,12 +123,14 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* Demo URL - Highlighted */}
           <div className="space-y-2 p-4 bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl border border-primary/20">
-            <Label htmlFor="demoUrl" className="flex items-center gap-2 text-sm font-semibold text-primary">
+            <Label htmlFor="edit-demoUrl" className="flex items-center gap-2 text-sm font-semibold text-primary">
               <Play className="h-4 w-4" />
               Demo URL (deployed app) ✨
             </Label>
             <Input
-              id="demoUrl"
+              id="edit-demoUrl"
+              value={demoUrl}
+              onChange={(e) => setDemoUrl(e.target.value)}
               placeholder="https://yourapp.lovable.app"
               className="bg-background border-primary/30 focus:border-primary"
             />
@@ -90,12 +139,14 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* Video/GIF URL - Highlighted */}
           <div className="space-y-2 p-4 bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-xl border border-orange-500/20">
-            <Label htmlFor="videoUrl" className="flex items-center gap-2 text-sm font-semibold text-orange-500">
+            <Label htmlFor="edit-videoUrl" className="flex items-center gap-2 text-sm font-semibold text-orange-500">
               <Video className="h-4 w-4" />
               Video/GIF URL (Loom or X share link) 🎬
             </Label>
             <Input
-              id="videoUrl"
+              id="edit-videoUrl"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
               placeholder="https://www.loom.com/share/..."
               className="bg-background border-orange-500/30 focus:border-orange-500"
             />
@@ -104,12 +155,14 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* URL */}
           <div className="space-y-2">
-            <Label htmlFor="url" className="flex items-center gap-2 text-sm font-medium">
+            <Label htmlFor="edit-url" className="flex items-center gap-2 text-sm font-medium">
               <Link className="h-3.5 w-3.5 text-muted-foreground" />
               App URL
             </Label>
             <Input
-              id="url"
+              id="edit-url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
               placeholder="https://yourapp.com"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -117,12 +170,14 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* Tagline */}
           <div className="space-y-2">
-            <Label htmlFor="tagline" className="flex items-center gap-2 text-sm font-medium">
+            <Label htmlFor="edit-tagline" className="flex items-center gap-2 text-sm font-medium">
               <FileText className="h-3.5 w-3.5 text-muted-foreground" />
               Tagline
             </Label>
             <Input
-              id="tagline"
+              id="edit-tagline"
+              value={tagline}
+              onChange={(e) => setTagline(e.target.value)}
               placeholder="A short, catchy description"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -130,11 +185,13 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="text-sm font-medium">
+            <Label htmlFor="edit-description" className="text-sm font-medium">
               Description
             </Label>
             <Textarea
-              id="description"
+              id="edit-description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Tell us about your app..."
               rows={3}
               className="bg-secondary border-transparent focus:border-border resize-none"
@@ -143,14 +200,16 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* AI Prompt - Magic Section */}
           <div className="space-y-2 p-4 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 rounded-xl border border-purple-500/20">
-            <Label htmlFor="aiPrompt" className="flex items-center gap-2 text-sm font-semibold">
+            <Label htmlFor="edit-aiPrompt" className="flex items-center gap-2 text-sm font-semibold">
               <Sparkles className="h-4 w-4 text-purple-500" />
               <span className="bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
                 Share Your Magic Prompt ✨
               </span>
             </Label>
             <Textarea
-              id="aiPrompt"
+              id="edit-aiPrompt"
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
               placeholder="Share the prompt that created this app. Help other vibe coders learn your magic!"
               rows={4}
               className="bg-background border-purple-500/30 focus:border-purple-500 resize-none"
@@ -159,6 +218,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
               🪄 Your prompt is a treasure map for other builders. Share the magic!
             </p>
           </div>
+
+          {/* Tools Used */}
           <div className="space-y-2">
             <Label className="text-sm font-medium">Tools Used</Label>
             <div className="flex flex-wrap gap-2">
@@ -205,12 +266,14 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
           {/* Banner Image */}
           <div className="space-y-2">
-            <Label htmlFor="banner" className="flex items-center gap-2 text-sm font-medium">
+            <Label htmlFor="edit-banner" className="flex items-center gap-2 text-sm font-medium">
               <Upload className="h-3.5 w-3.5 text-muted-foreground" />
               Banner Image URL (optional)
             </Label>
             <Input
-              id="banner"
+              id="edit-banner"
+              value={bannerUrl}
+              onChange={(e) => setBannerUrl(e.target.value)}
               placeholder="https://yourapp.com/banner.png"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -222,8 +285,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            Submit App
+          <Button onClick={handleSave} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+            Save Changes
           </Button>
         </div>
       </div>
