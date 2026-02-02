@@ -6,7 +6,7 @@ import { UpvoteButton } from "./UpvoteButton";
 import { VibeScoreButton } from "./VibeScoreButton";
 import { EditProductModal } from "./EditProductModal";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Product } from "@/data/dummyProducts";
+import type { Product } from "@/types/database";
 
 interface ProductCardProps {
   product: Product;
@@ -19,9 +19,9 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   
   // Check if current user is the owner
-  const isOwner = user && creatorId && user.id === creatorId;
+  const isOwner = user && (creatorId ? user.id === creatorId : user.id === product.userId);
   // Generate a random vibe score based on product id for demo
-  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42);
+  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42) || 50;
 
   return (
     <Link to={`/product/${product.id}`} className="block group">
@@ -51,6 +51,7 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
             target="_blank"
             rel="noopener noreferrer"
             className="opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => e.stopPropagation()}
           >
             <ExternalLink className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
           </a>
@@ -103,7 +104,6 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
         product={product}
         onSave={(updatedProduct) => {
           console.log("Product updated:", updatedProduct);
-          // TODO: Connect to Supabase to persist changes
         }}
       />
     </Link>

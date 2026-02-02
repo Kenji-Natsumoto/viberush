@@ -1,15 +1,24 @@
 import { ProductCard } from "./ProductCard";
-import { dummyProducts } from "@/data/dummyProducts";
-import { Calendar, TrendingUp, Clock } from "lucide-react";
+import { Calendar, TrendingUp, Clock, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useProducts } from "@/hooks/useProducts";
+import { dummyProducts } from "@/data/dummyProducts";
 
 type SortOption = "votes" | "newest" | "time";
 
 export function ProductFeed() {
   const [sortBy, setSortBy] = useState<SortOption>("votes");
+  const { products: dbProducts, isLoading, error } = useProducts();
 
-  const sortedProducts = [...dummyProducts].sort((a, b) => {
+  // Use database products if available, otherwise fall back to dummy data
+  const products = dbProducts.length > 0 ? dbProducts : dummyProducts.map(p => ({
+    ...p,
+    userId: '',
+    updatedAt: p.createdAt,
+  }));
+
+  const sortedProducts = [...products].sort((a, b) => {
     if (sortBy === "votes") return b.votes - a.votes;
     if (sortBy === "newest") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     return 0;
@@ -56,12 +65,41 @@ export function ProductFeed() {
         </div>
       </div>
 
+      {/* Loading State */}
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">Failed to load products. Using demo data.</p>
+        </div>
+      )}
+
       {/* Product List */}
-      <div className="space-y-3">
-        {sortedProducts.map((product, index) => (
-          <ProductCard key={product.id} product={product} rank={index + 1} />
-        ))}
-      </div>
+      {!isLoading && (
+        <div className="space-y-3">
+          {sortedProducts.map((product, index) => (
+            <ProductCard 
+              key={product.id} 
+              product={product} 
+              rank={index + 1}
+              creatorId={product.userId}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Empty State */}
+      {!isLoading && sortedProducts.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground mb-2">No apps submitted yet!</p>
+          <p className="text-sm text-muted-foreground">Be the first to share your vibe-coded creation 🚀</p>
+        </div>
+      )}
     </section>
   );
 }

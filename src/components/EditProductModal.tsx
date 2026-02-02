@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import type { Tool, Product } from "@/data/dummyProducts";
+import { useUpdateProduct } from "@/hooks/useProducts";
+import type { Tool, Product } from "@/types/database";
 
 interface EditProductModalProps {
   isOpen: boolean;
@@ -19,6 +20,8 @@ const AVAILABLE_TOOLS: Tool[] = ["Lovable", "v0", "volt.new", "Emergent", "Repli
 const TIME_OPTIONS = ["30 minutes", "1 hour", "2 hours", "4 hours", "1 day", "2+ days"];
 
 export function EditProductModal({ isOpen, onClose, product, onSave }: EditProductModalProps) {
+  const updateProduct = useUpdateProduct();
+  
   const [name, setName] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
@@ -52,9 +55,11 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
     );
   };
 
-  const handleSave = () => {
-    if (onSave && product) {
-      onSave({
+  const handleSave = async () => {
+    if (!product) return;
+
+    try {
+      await updateProduct.mutateAsync({
         id: product.id,
         name,
         tagline,
@@ -67,8 +72,28 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         tools: selectedTools,
         timeToBuild: selectedTime,
       });
+      
+      // Also call the legacy onSave if provided
+      if (onSave) {
+        onSave({
+          id: product.id,
+          name,
+          tagline,
+          description,
+          url,
+          demoUrl: demoUrl || undefined,
+          videoUrl: videoUrl || undefined,
+          aiPrompt: aiPrompt || undefined,
+          bannerUrl: bannerUrl || undefined,
+          tools: selectedTools,
+          timeToBuild: selectedTime,
+        });
+      }
+      
+      onClose();
+    } catch (error) {
+      // Error is handled in the mutation
     }
-    onClose();
   };
 
   if (!isOpen || !product) return null;
@@ -285,8 +310,12 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave} className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            Save Changes
+          <Button 
+            onClick={handleSave} 
+            disabled={updateProduct.isPending}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {updateProduct.isPending ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>
