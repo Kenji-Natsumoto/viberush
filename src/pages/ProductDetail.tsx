@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
 import { UpvoteButton } from "@/components/UpvoteButton";
@@ -11,6 +12,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProduct } from "@/hooks/useProducts";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
+
+// X (Twitter) icon component
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -184,10 +192,35 @@ const ProductDetail = () => {
               </Button>
             </div>
 
-            {/* Description */}
-            <p className="text-foreground leading-relaxed">
-              {product.description}
-            </p>
+            {/* Description with Markdown */}
+            <div className="prose prose-sm dark:prose-invert max-w-none">
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="text-foreground leading-relaxed mb-4">{children}</p>,
+                  strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
+                  em: ({ children }) => <em className="italic">{children}</em>,
+                  ul: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-4">{children}</ul>,
+                  ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-4">{children}</ol>,
+                  li: ({ children }) => <li className="text-foreground">{children}</li>,
+                  a: ({ href, children }) => (
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      {children}
+                    </a>
+                  ),
+                  h1: ({ children }) => <h1 className="text-xl font-bold text-foreground mt-6 mb-3">{children}</h1>,
+                  h2: ({ children }) => <h2 className="text-lg font-bold text-foreground mt-5 mb-2">{children}</h2>,
+                  h3: ({ children }) => <h3 className="text-base font-semibold text-foreground mt-4 mb-2">{children}</h3>,
+                  code: ({ children }) => <code className="bg-secondary px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>,
+                  blockquote: ({ children }) => (
+                    <blockquote className="border-l-4 border-primary/50 pl-4 italic text-muted-foreground my-4">
+                      {children}
+                    </blockquote>
+                  ),
+                }}
+              >
+                {product.description}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
 

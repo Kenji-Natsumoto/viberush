@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles } from "lucide-react";
+import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,9 +15,36 @@ interface EditProductModalProps {
   onSave?: (updatedProduct: Partial<Product>) => void;
 }
 
-const AVAILABLE_TOOLS: Tool[] = ["Lovable", "v0", "volt.new", "Emergent", "Replit", "Devin", "Cursor", "Windsurf", "Claude Code", "Codex", "Gemini", "antigravity", "Manus", "Genspark", "Other Tools"];
+const AVAILABLE_TOOLS: Tool[] = ["Lovable", "Cursor", "Bolt", "Replit", "v0", "Windsurf", "Claude Code", "Codex", "Gemini", "Devin", "volt.new", "Emergent", "antigravity", "Manus", "Genspark", "Other Tools"];
 
 const TIME_OPTIONS = ["30 minutes", "1 hour", "2 hours", "4 hours", "1 day", "2+ days"];
+
+// Brand colors for each tool
+const toolColors: Record<Tool, { bg: string; text: string; border: string }> = {
+  Lovable: { bg: "bg-[#FF007A]", text: "text-white", border: "border-[#FF007A]" },
+  v0: { bg: "bg-[#000000]", text: "text-white", border: "border-[#000000]" },
+  "volt.new": { bg: "bg-[#F97316]", text: "text-white", border: "border-[#F97316]" },
+  Emergent: { bg: "bg-[#6366F1]", text: "text-white", border: "border-[#6366F1]" },
+  Replit: { bg: "bg-[#EF4444]", text: "text-white", border: "border-[#EF4444]" },
+  Devin: { bg: "bg-[#0066FF]", text: "text-white", border: "border-[#0066FF]" },
+  Cursor: { bg: "bg-[#00D4FF]", text: "text-black", border: "border-[#00D4FF]" },
+  Windsurf: { bg: "bg-[#14B8A6]", text: "text-white", border: "border-[#14B8A6]" },
+  "Claude Code": { bg: "bg-[#2D2D2D]", text: "text-white", border: "border-[#2D2D2D]" },
+  Codex: { bg: "bg-[#10A37F]", text: "text-white", border: "border-[#10A37F]" },
+  Gemini: { bg: "bg-[#4285F4]", text: "text-white", border: "border-[#4285F4]" },
+  antigravity: { bg: "bg-[#8B5CF6]", text: "text-white", border: "border-[#8B5CF6]" },
+  Manus: { bg: "bg-[#3B82F6]", text: "text-white", border: "border-[#3B82F6]" },
+  Genspark: { bg: "bg-[#F97316]", text: "text-white", border: "border-[#F97316]" },
+  Bolt: { bg: "bg-[#FACC15]", text: "text-black", border: "border-[#FACC15]" },
+  "Other Tools": { bg: "bg-secondary", text: "text-secondary-foreground", border: "border-border" },
+};
+
+// X (Twitter) icon component
+const XIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" className={className} fill="currentColor">
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </svg>
+);
 
 export function EditProductModal({ isOpen, onClose, product, onSave }: EditProductModalProps) {
   const updateProduct = useUpdateProduct();
@@ -32,6 +59,12 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
   const [bannerUrl, setBannerUrl] = useState("");
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>("");
+  
+  // New fields
+  const [contactEmail, setContactEmail] = useState("");
+  const [xUrl, setXUrl] = useState("");
+  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const [githubUrl, setGithubUrl] = useState("");
 
   // Populate form when product changes
   useEffect(() => {
@@ -46,6 +79,10 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
       setBannerUrl(product.bannerUrl || "");
       setSelectedTools(product.tools);
       setSelectedTime(product.timeToBuild);
+      setContactEmail(product.contactEmail || "");
+      setXUrl(product.xUrl || "");
+      setLinkedinUrl(product.linkedinUrl || "");
+      setGithubUrl(product.githubUrl || "");
     }
   }, [product]);
 
@@ -71,6 +108,10 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         bannerUrl: bannerUrl || undefined,
         tools: selectedTools,
         timeToBuild: selectedTime,
+        contactEmail: contactEmail || undefined,
+        xUrl: xUrl || undefined,
+        linkedinUrl: linkedinUrl || undefined,
+        githubUrl: githubUrl || undefined,
       });
       
       // Also call the legacy onSave if provided
@@ -87,6 +128,10 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
           bannerUrl: bannerUrl || undefined,
           tools: selectedTools,
           timeToBuild: selectedTime,
+          contactEmail: contactEmail || undefined,
+          xUrl: xUrl || undefined,
+          linkedinUrl: linkedinUrl || undefined,
+          githubUrl: githubUrl || undefined,
         });
       }
       
@@ -211,14 +256,14 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="edit-description" className="text-sm font-medium">
-              Description
+              Description <span className="text-xs text-muted-foreground">(Markdown supported)</span>
             </Label>
             <Textarea
               id="edit-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Tell us about your app..."
-              rows={3}
+              placeholder="Tell us about your app... Use **bold**, *italic*, - lists, and [links](url)"
+              rows={4}
               className="bg-secondary border-transparent focus:border-border resize-none"
             />
           </div>
@@ -244,24 +289,28 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
             </p>
           </div>
 
-          {/* Tools Used */}
+          {/* Vibe Tools */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Tools Used</Label>
+            <Label className="text-sm font-medium">Vibe Tools <span className="text-xs text-muted-foreground">(Select all that apply)</span></Label>
             <div className="flex flex-wrap gap-2">
-              {AVAILABLE_TOOLS.map((tool) => (
-                <button
-                  key={tool}
-                  onClick={() => toggleTool(tool)}
-                  className={cn(
-                    "px-3 py-1.5 text-sm font-medium rounded-lg border transition-all",
-                    selectedTools.includes(tool)
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-secondary text-muted-foreground border-transparent hover:text-foreground hover:border-border"
-                  )}
-                >
-                  {tool}
-                </button>
-              ))}
+              {AVAILABLE_TOOLS.map((tool) => {
+                const isSelected = selectedTools.includes(tool);
+                const colors = toolColors[tool];
+                return (
+                  <button
+                    key={tool}
+                    onClick={() => toggleTool(tool)}
+                    className={cn(
+                      "px-3 py-1.5 text-sm font-medium rounded-lg border transition-all",
+                      isSelected
+                        ? `${colors.bg} ${colors.text} ${colors.border}`
+                        : "bg-secondary text-muted-foreground border-transparent hover:text-foreground hover:border-border"
+                    )}
+                  >
+                    {tool}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -286,6 +335,73 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
                   {time}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Contact & Social Section */}
+          <div className="space-y-4 p-4 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-xl border border-blue-500/20">
+            <h3 className="text-sm font-semibold text-blue-600 dark:text-blue-400">Contact & Social Links</h3>
+            
+            {/* Contact Email */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-contactEmail" className="flex items-center gap-2 text-sm font-medium">
+                <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                Email
+              </Label>
+              <Input
+                id="edit-contactEmail"
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="you@example.com"
+                className="bg-background border-blue-500/30 focus:border-blue-500"
+              />
+              <p className="text-xs text-muted-foreground">📧 For rankings and updates - kept private</p>
+            </div>
+
+            {/* X (Twitter) */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-xUrl" className="flex items-center gap-2 text-sm font-medium">
+                <XIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                X (Twitter)
+              </Label>
+              <Input
+                id="edit-xUrl"
+                value={xUrl}
+                onChange={(e) => setXUrl(e.target.value)}
+                placeholder="https://x.com/yourhandle"
+                className="bg-background border-blue-500/30 focus:border-blue-500"
+              />
+            </div>
+
+            {/* LinkedIn */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-linkedinUrl" className="flex items-center gap-2 text-sm font-medium">
+                <Linkedin className="h-3.5 w-3.5 text-muted-foreground" />
+                LinkedIn
+              </Label>
+              <Input
+                id="edit-linkedinUrl"
+                value={linkedinUrl}
+                onChange={(e) => setLinkedinUrl(e.target.value)}
+                placeholder="https://linkedin.com/in/yourprofile"
+                className="bg-background border-blue-500/30 focus:border-blue-500"
+              />
+            </div>
+
+            {/* GitHub */}
+            <div className="space-y-2">
+              <Label htmlFor="edit-githubUrl" className="flex items-center gap-2 text-sm font-medium">
+                <Github className="h-3.5 w-3.5 text-muted-foreground" />
+                GitHub
+              </Label>
+              <Input
+                id="edit-githubUrl"
+                value={githubUrl}
+                onChange={(e) => setGithubUrl(e.target.value)}
+                placeholder="https://github.com/yourusername"
+                className="bg-background border-blue-500/30 focus:border-blue-500"
+              />
             </div>
           </div>
 

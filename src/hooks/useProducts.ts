@@ -107,6 +107,10 @@ export function useCreateProduct() {
           tools_used: input.tools,
           time_to_build: input.timeToBuild,
           user_id: user.id,
+          contact_email: input.contactEmail,
+          x_url: input.xUrl || null,
+          linkedin_url: input.linkedinUrl || null,
+          github_url: input.githubUrl || null,
         })
         .select()
         .single();
@@ -151,6 +155,10 @@ export function useUpdateProduct() {
       if (input.aiPrompt !== undefined) updateData.ai_prompt = input.aiPrompt || null;
       if (input.tools !== undefined) updateData.tools_used = input.tools;
       if (input.timeToBuild !== undefined) updateData.time_to_build = input.timeToBuild;
+      if (input.contactEmail !== undefined) updateData.contact_email = input.contactEmail;
+      if (input.xUrl !== undefined) updateData.x_url = input.xUrl || null;
+      if (input.linkedinUrl !== undefined) updateData.linkedin_url = input.linkedinUrl || null;
+      if (input.githubUrl !== undefined) updateData.github_url = input.githubUrl || null;
 
       const { data, error } = await supabase
         .from('products')
