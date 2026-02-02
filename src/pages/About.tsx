@@ -48,7 +48,7 @@ export default function About() {
             </div>
 
             {/* MTP */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 px-2">
               <span className="bg-gradient-to-r from-primary via-muted-foreground to-primary bg-clip-text text-transparent">
                 "Unleash the world's creativity
               </span>
@@ -57,7 +57,7 @@ export default function About() {
                 through the speed of thought."
               </span>
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Our Massive Transformative Purpose
             </p>
           </div>
@@ -66,12 +66,12 @@ export default function About() {
         {/* Our Story */}
         <section className="py-16 bg-secondary/30">
           <div className="max-w-3xl mx-auto px-4">
-            <div className="bg-card border border-border rounded-2xl p-8 md:p-12 shadow-card">
-              <div className="flex items-center gap-2 mb-6">
+            <div className="bg-card border border-border rounded-2xl p-6 sm:p-8 md:p-12 shadow-card">
+              <div className="flex items-center gap-2 mb-4 sm:mb-6">
                 <Sparkles className="h-5 w-5 text-upvote" />
-                <h2 className="text-2xl font-bold text-foreground">Our Story</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-foreground">Our Story</h2>
               </div>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
                 <p>
                   VibeRush itself was born through <span className="text-foreground font-semibold">Vibe Coding</span>—our first prototype came to life in <span className="text-foreground font-semibold">less than an hour</span>.
                 </p>
@@ -93,19 +93,19 @@ export default function About() {
               <h2 className="text-3xl font-bold text-foreground mb-4">Our Principles</h2>
               <p className="text-muted-foreground">The three values we live by</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
               {principles.map((principle, index) => (
                 <div
                   key={index}
-                  className="bg-card border border-border rounded-xl p-6 text-center hover:shadow-card-hover transition-shadow"
+                  className="bg-card border border-border rounded-xl p-5 sm:p-6 text-center hover:shadow-card-hover transition-shadow"
                 >
-                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-secondary mb-4">
-                    <principle.icon className="h-6 w-6 text-foreground" />
+                  <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-secondary mb-3 sm:mb-4">
+                    <principle.icon className="h-5 w-5 sm:h-6 sm:w-6 text-foreground" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                  <h3 className="text-base sm:text-lg font-semibold text-foreground mb-2">
                     {principle.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground">{principle.description}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{principle.description}</p>
                 </div>
               ))}
             </div>
@@ -113,10 +113,10 @@ export default function About() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 bg-primary text-primary-foreground">
+        <section className="py-12 sm:py-16 bg-primary text-primary-foreground">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to join the rush?</h2>
-            <p className="text-primary-foreground/80 mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-4">Ready to join the rush?</h2>
+            <p className="text-primary-foreground/80 mb-6 sm:mb-8 text-sm sm:text-base">
               Showcase your Vibe Coding project to the world
             </p>
             <Link to="/">

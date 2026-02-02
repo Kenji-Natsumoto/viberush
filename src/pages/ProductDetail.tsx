@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
 import { UpvoteButton } from "@/components/UpvoteButton";
@@ -62,6 +62,14 @@ const ProductDetail = () => {
       setPromptCopied(true);
       setTimeout(() => setPromptCopied(false), 2000);
     }
+  };
+
+  const handleShareToX = () => {
+    const timeToBuildText = product.timeToBuild || "a few hours";
+    const shareText = `AIと対話して${timeToBuildText}で完成！${product.name} を #VibeRush で公開しました 🚀`;
+    const shareUrl = window.location.href;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(twitterUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -165,6 +173,15 @@ const ProductDetail = () => {
                   </a>
                 </Button>
               )}
+              
+              <Button
+                variant="outline"
+                onClick={handleShareToX}
+                className="gap-2"
+              >
+                <Share2 className="h-4 w-4" />
+                Share on X
+              </Button>
             </div>
 
             {/* Description */}
