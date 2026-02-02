@@ -1,16 +1,25 @@
-import { Clock, ExternalLink } from "lucide-react";
+import { useState } from "react";
+import { Clock, ExternalLink, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 import { ToolBadge } from "./ToolBadge";
 import { UpvoteButton } from "./UpvoteButton";
 import { VibeScoreButton } from "./VibeScoreButton";
+import { EditProductModal } from "./EditProductModal";
+import { useAuth } from "@/contexts/AuthContext";
 import type { Product } from "@/data/dummyProducts";
 
 interface ProductCardProps {
   product: Product;
   rank: number;
+  creatorId?: string; // The user ID of the product creator
 }
 
-export function ProductCard({ product, rank }: ProductCardProps) {
+export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
+  const { user } = useAuth();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  
+  // Check if current user is the owner
+  const isOwner = user && creatorId && user.id === creatorId;
   // Generate a random vibe score based on product id for demo
   const vibeScore = Math.floor(parseInt(product.id) * 17 + 42);
 
@@ -69,10 +78,34 @@ export function ProductCard({ product, rank }: ProductCardProps) {
 
       {/* Action Buttons */}
       <div className="flex-shrink-0 flex items-center gap-2">
+        {isOwner && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsEditModalOpen(true);
+            }}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            title="Edit your app"
+          >
+            <Pencil className="h-4 w-4" />
+          </button>
+        )}
         <VibeScoreButton initialScore={vibeScore} productId={product.id} />
         <UpvoteButton initialVotes={product.votes} productId={product.id} />
       </div>
       </div>
+
+      {/* Edit Modal */}
+      <EditProductModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        product={product}
+        onSave={(updatedProduct) => {
+          console.log("Product updated:", updatedProduct);
+          // TODO: Connect to Supabase to persist changes
+        }}
+      />
     </Link>
   );
 }

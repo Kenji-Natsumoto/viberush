@@ -1,17 +1,21 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
 import { UpvoteButton } from "@/components/UpvoteButton";
 import { VibeScoreButton } from "@/components/VibeScoreButton";
+import { EditProductModal } from "@/components/EditProductModal";
 import { dummyProducts } from "@/data/dummyProducts";
 import { Header } from "@/components/Header";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { user } = useAuth();
   const [promptCopied, setPromptCopied] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const product = dummyProducts.find((p) => p.id === id);
 
@@ -30,6 +34,9 @@ const ProductDetail = () => {
   }
 
   const vibeScore = Math.floor(parseInt(product.id) * 17 + 42);
+  
+  // TODO: Replace with actual creator ID from database when connected
+  const isOwner = user !== null; // For demo, any logged-in user can edit
 
   const handleCopyPrompt = async () => {
     if (product.aiPrompt) {
@@ -105,6 +112,16 @@ const ProductDetail = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
+              {isOwner && (
+                <Button
+                  variant="outline"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="gap-2"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Edit App
+                </Button>
+              )}
               <VibeScoreButton initialScore={vibeScore} productId={product.id} />
               <UpvoteButton initialVotes={product.votes} productId={product.id} />
               
@@ -226,6 +243,17 @@ const ProductDetail = () => {
             })}
           </p>
         </div>
+
+        {/* Edit Modal */}
+        <EditProductModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          product={product}
+          onSave={(updatedProduct) => {
+            console.log("Product updated:", updatedProduct);
+            // TODO: Connect to Supabase to persist changes
+          }}
+        />
       </main>
     </div>
   );
