@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/contexts/AuthContext';
+import { LiveIndicator } from './LiveIndicator';
 
 interface HeaderProps {
   onSubmitClick: () => void;
@@ -33,15 +34,20 @@ export function Header({ onSubmitClick }: HeaderProps) {
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary">
-              <Zap className="h-5 w-5 text-primary-foreground" />
+          {/* Logo and Live Indicator */}
+          <div className="flex items-center gap-4">
+            <Link to="/" className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-primary">
+                <Zap className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-bold tracking-tight text-foreground">
+                VibeRush
+              </span>
+            </Link>
+            <div className="hidden lg:block">
+              <LiveIndicator />
             </div>
-            <span className="text-xl font-bold tracking-tight text-foreground">
-              VibeRush
-            </span>
-          </Link>
+          </div>
 
           {/* Search */}
           <div className="hidden md:flex items-center flex-1 max-w-md mx-8">

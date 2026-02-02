@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCreateProduct } from "@/hooks/useProducts";
+import { fireConfetti } from "@/lib/confetti";
 import type { Tool } from "@/types/database";
 
 interface SubmitModalProps {
@@ -72,6 +73,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
       });
       resetForm();
       onClose();
+      // Fire confetti celebration!
+      fireConfetti();
     } catch (error) {
       // Error is handled in the mutation
     }
