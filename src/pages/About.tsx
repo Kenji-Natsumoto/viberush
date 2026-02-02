@@ -48,7 +48,7 @@ export default function About() {
             </div>
 
             {/* MTP */}
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6 px-2">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight md:leading-snug text-foreground mb-6 px-2">
               <span className="bg-gradient-to-r from-primary via-muted-foreground to-primary bg-clip-text text-transparent">
                 "Unleash the world's creativity
               </span>
