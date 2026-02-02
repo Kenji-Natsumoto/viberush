@@ -1,23 +1,8 @@
-export type Tool = 'Lovable' | 'v0' | 'volt.new' | 'Emergent' | 'Replit' | 'Devin' | 'Cursor' | 'Windsurf' | 'Claude Code' | 'Codex' | 'Gemini' | 'antigravity' | 'Manus' | 'Genspark' | 'Other Tools';
+// Re-export types from the database types for consistency
+export type { Tool, Product } from '@/types/database';
 
-export interface Product {
-  id: string;
-  name: string;
-  tagline: string;
-  description: string;
-  url: string;
-  iconUrl: string;
-  bannerUrl?: string;
-  demoUrl?: string;
-  videoUrl?: string;
-  aiPrompt?: string;
-  tools: Tool[];
-  timeToBuild: string;
-  votes: number;
-  createdAt: string;
-  creatorName: string;
-  creatorAvatar: string;
-}
+// Keep dummy products for fallback/demo purposes
+import type { Product } from '@/types/database';
 
 export const dummyProducts: Product[] = [
   {
@@ -33,7 +18,9 @@ export const dummyProducts: Product[] = [
     tools: ['Lovable', 'Claude Code'],
     timeToBuild: '2 hours',
     votes: 284,
+    userId: 'demo-user-1',
     createdAt: '2024-01-15',
+    updatedAt: '2024-01-15',
     creatorName: 'Sarah Chen',
     creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=sarah',
   },
@@ -47,7 +34,9 @@ export const dummyProducts: Product[] = [
     tools: ['Cursor', 'Claude Code', 'v0'],
     timeToBuild: '4 hours',
     votes: 198,
+    userId: 'demo-user-2',
     createdAt: '2024-01-14',
+    updatedAt: '2024-01-14',
     creatorName: 'Alex Rivera',
     creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=alex',
   },
@@ -61,7 +50,9 @@ export const dummyProducts: Product[] = [
     tools: ['Replit', 'Gemini'],
     timeToBuild: '1 day',
     votes: 156,
+    userId: 'demo-user-3',
     createdAt: '2024-01-13',
+    updatedAt: '2024-01-13',
     creatorName: 'Jordan Lee',
     creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=jordan',
   },
@@ -75,7 +66,9 @@ export const dummyProducts: Product[] = [
     tools: ['Lovable', 'Claude Code', 'v0'],
     timeToBuild: '30 minutes',
     votes: 142,
+    userId: 'demo-user-4',
     createdAt: '2024-01-12',
+    updatedAt: '2024-01-12',
     creatorName: 'Emma Watson',
     creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=emma',
   },
@@ -89,7 +82,9 @@ export const dummyProducts: Product[] = [
     tools: ['volt.new', 'Devin'],
     timeToBuild: '6 hours',
     votes: 128,
+    userId: 'demo-user-5',
     createdAt: '2024-01-11',
+    updatedAt: '2024-01-11',
     creatorName: 'Mike Johnson',
     creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=mike',
   },
@@ -103,7 +98,9 @@ export const dummyProducts: Product[] = [
     tools: ['Cursor', 'Lovable'],
     timeToBuild: '3 hours',
     votes: 115,
+    userId: 'demo-user-6',
     createdAt: '2024-01-10',
+    updatedAt: '2024-01-10',
     creatorName: 'Lisa Park',
     creatorAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=lisa',
   },

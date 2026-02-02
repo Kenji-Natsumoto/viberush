@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-import type { Tool } from "@/data/dummyProducts";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreateProduct } from "@/hooks/useProducts";
+import type { Tool } from "@/types/database";
 
 interface SubmitModalProps {
   isOpen: boolean;
@@ -17,6 +19,17 @@ const AVAILABLE_TOOLS: Tool[] = ["Lovable", "v0", "volt.new", "Emergent", "Repli
 const TIME_OPTIONS = ["30 minutes", "1 hour", "2 hours", "4 hours", "1 day", "2+ days"];
 
 export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
+  const { user } = useAuth();
+  const createProduct = useCreateProduct();
+  
+  const [name, setName] = useState("");
+  const [tagline, setTagline] = useState("");
+  const [description, setDescription] = useState("");
+  const [url, setUrl] = useState("");
+  const [demoUrl, setDemoUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [bannerUrl, setBannerUrl] = useState("");
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>("");
 
@@ -26,7 +39,47 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
     );
   };
 
+  const resetForm = () => {
+    setName("");
+    setTagline("");
+    setDescription("");
+    setUrl("");
+    setDemoUrl("");
+    setVideoUrl("");
+    setAiPrompt("");
+    setBannerUrl("");
+    setSelectedTools([]);
+    setSelectedTime("");
+  };
+
+  const handleSubmit = async () => {
+    if (!name || !tagline || !description || !url || selectedTools.length === 0 || !selectedTime) {
+      return;
+    }
+
+    try {
+      await createProduct.mutateAsync({
+        name,
+        tagline,
+        description,
+        url,
+        demoUrl: demoUrl || undefined,
+        videoUrl: videoUrl || undefined,
+        aiPrompt: aiPrompt || undefined,
+        bannerUrl: bannerUrl || undefined,
+        tools: selectedTools,
+        timeToBuild: selectedTime,
+      });
+      resetForm();
+      onClose();
+    } catch (error) {
+      // Error is handled in the mutation
+    }
+  };
+
   if (!isOpen) return null;
+
+  const isFormValid = name && tagline && description && url && selectedTools.length > 0 && selectedTime;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -53,6 +106,16 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
 
         {/* Content */}
         <div className="px-6 py-5 space-y-5 max-h-[70vh] overflow-y-auto">
+          {/* Login Required Message */}
+          {!user && (
+            <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+              <span className="text-yellow-600 dark:text-yellow-400 text-sm">⚠️</span>
+              <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                Please <a href="/auth" className="underline font-medium">sign in</a> to submit your app.
+              </p>
+            </div>
+          )}
+
           {/* Reassuring Message */}
           <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-lg">
             <span className="text-green-600 dark:text-green-400 text-sm">✨</span>
@@ -65,10 +128,12 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           <div className="space-y-2">
             <Label htmlFor="name" className="flex items-center gap-2 text-sm font-medium">
               <Type className="h-3.5 w-3.5 text-muted-foreground" />
-              App Name
+              App Name *
             </Label>
             <Input
               id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               placeholder="VibeFlow"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -82,6 +147,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
             </Label>
             <Input
               id="demoUrl"
+              value={demoUrl}
+              onChange={(e) => setDemoUrl(e.target.value)}
               placeholder="https://yourapp.lovable.app"
               className="bg-background border-primary/30 focus:border-primary"
             />
@@ -96,6 +163,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
             </Label>
             <Input
               id="videoUrl"
+              value={videoUrl}
+              onChange={(e) => setVideoUrl(e.target.value)}
               placeholder="https://www.loom.com/share/..."
               className="bg-background border-orange-500/30 focus:border-orange-500"
             />
@@ -106,10 +175,12 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           <div className="space-y-2">
             <Label htmlFor="url" className="flex items-center gap-2 text-sm font-medium">
               <Link className="h-3.5 w-3.5 text-muted-foreground" />
-              App URL
+              App URL *
             </Label>
             <Input
               id="url"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
               placeholder="https://yourapp.com"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -119,10 +190,12 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           <div className="space-y-2">
             <Label htmlFor="tagline" className="flex items-center gap-2 text-sm font-medium">
               <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-              Tagline
+              Tagline *
             </Label>
             <Input
               id="tagline"
+              value={tagline}
+              onChange={(e) => setTagline(e.target.value)}
               placeholder="A short, catchy description"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -131,10 +204,12 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description" className="text-sm font-medium">
-              Description
+              Description *
             </Label>
             <Textarea
               id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder="Tell us about your app..."
               rows={3}
               className="bg-secondary border-transparent focus:border-border resize-none"
@@ -151,6 +226,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
             </Label>
             <Textarea
               id="aiPrompt"
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
               placeholder="Share the prompt that created this app. Help other vibe coders learn your magic!"
               rows={4}
               className="bg-background border-purple-500/30 focus:border-purple-500 resize-none"
@@ -159,8 +236,10 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
               🪄 Your prompt is a treasure map for other builders. Share the magic!
             </p>
           </div>
+
+          {/* Tools Used */}
           <div className="space-y-2">
-            <Label className="text-sm font-medium">Tools Used</Label>
+            <Label className="text-sm font-medium">Tools Used *</Label>
             <div className="flex flex-wrap gap-2">
               {AVAILABLE_TOOLS.map((tool) => (
                 <button
@@ -183,7 +262,7 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-sm font-medium">
               <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-              Time to Build
+              Time to Build *
             </Label>
             <div className="flex flex-wrap gap-2">
               {TIME_OPTIONS.map((time) => (
@@ -211,6 +290,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
             </Label>
             <Input
               id="banner"
+              value={bannerUrl}
+              onChange={(e) => setBannerUrl(e.target.value)}
               placeholder="https://yourapp.com/banner.png"
               className="bg-secondary border-transparent focus:border-border"
             />
@@ -222,8 +303,12 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            Submit App
+          <Button 
+            onClick={handleSubmit}
+            disabled={!user || !isFormValid || createProduct.isPending}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            {createProduct.isPending ? "Submitting..." : "Submit App"}
           </Button>
         </div>
       </div>

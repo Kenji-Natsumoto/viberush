@@ -6,9 +6,11 @@ import { ToolBadge } from "@/components/ToolBadge";
 import { UpvoteButton } from "@/components/UpvoteButton";
 import { VibeScoreButton } from "@/components/VibeScoreButton";
 import { EditProductModal } from "@/components/EditProductModal";
-import { dummyProducts } from "@/data/dummyProducts";
 import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
+import { useProduct } from "@/hooks/useProducts";
+import { dummyProducts } from "@/data/dummyProducts";
+import type { Product } from "@/types/database";
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +19,23 @@ const ProductDetail = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const product = dummyProducts.find((p) => p.id === id);
+  // Try to fetch from database first
+  const { data: dbProduct, isLoading } = useProduct(id);
+  
+  // Fallback to dummy data if not in database
+  const dummyProduct = dummyProducts.find((p) => p.id === id);
+  const product: Product | null = dbProduct || dummyProduct || null;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header onSubmitClick={() => {}} />
+        <div className="container mx-auto px-4 py-16 text-center">
+          <div className="animate-pulse">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -33,10 +51,10 @@ const ProductDetail = () => {
     );
   }
 
-  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42);
+  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42) || 50;
   
-  // TODO: Replace with actual creator ID from database when connected
-  const isOwner = user !== null; // For demo, any logged-in user can edit
+  // Check if current user is the owner
+  const isOwner = user && user.id === product.userId;
 
   const handleCopyPrompt = async () => {
     if (product.aiPrompt) {
@@ -227,13 +245,13 @@ const ProductDetail = () => {
         {/* Creator Info */}
         <div className="flex items-center gap-4 mt-8 p-4 bg-card border border-border rounded-xl">
           <img
-            src={product.creatorAvatar}
-            alt={product.creatorName}
+            src={product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`}
+            alt={product.creatorName || 'Creator'}
             className="w-12 h-12 rounded-full"
           />
           <div>
             <p className="text-sm text-muted-foreground">Created by</p>
-            <p className="font-medium text-foreground">{product.creatorName}</p>
+            <p className="font-medium text-foreground">{product.creatorName || 'Vibe Coder'}</p>
           </div>
           <p className="ml-auto text-sm text-muted-foreground">
             {new Date(product.createdAt).toLocaleDateString("en-US", {
@@ -251,7 +269,6 @@ const ProductDetail = () => {
           product={product}
           onSave={(updatedProduct) => {
             console.log("Product updated:", updatedProduct);
-            // TODO: Connect to Supabase to persist changes
           }}
         />
       </main>
