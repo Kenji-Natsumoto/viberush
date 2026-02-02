@@ -38,7 +38,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform"
+                  href="https://forms.gle/xDHYJWqsXEpYbpmD6"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-muted-foreground hover:text-foreground transition-colors"
