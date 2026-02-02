@@ -90,7 +90,7 @@ export function Header({ onSubmitClick }: HeaderProps) {
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
-                      ログアウト
+                      Sign Out
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -74,7 +74,7 @@ const ProductDetail = () => {
 
   const handleShareToX = () => {
     const timeToBuildText = product.timeToBuild || "a few hours";
-    const shareText = `AIと対話して${timeToBuildText}で完成！${product.name} を #VibeRush で公開しました 🚀`;
+    const shareText = `Built ${product.name} in ${timeToBuildText} with AI! Check it out on #VibeRush 🚀`;
     const shareUrl = window.location.href;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, "_blank", "noopener,noreferrer");
