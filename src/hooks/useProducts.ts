@@ -165,9 +165,10 @@ export function useUpdateProduct() {
         .update(updateData)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
+      if (!data) throw new Error('Product not found or you do not have permission to edit it');
       return dbProductToProduct(data as DbProduct);
     },
     onSuccess: (_, variables) => {
