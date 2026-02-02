@@ -12,8 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 
 const authSchema = z.object({
-  email: z.string().email('有効なメールアドレスを入力してください'),
-  password: z.string().min(6, 'パスワードは6文字以上必要です'),
+  email: z.string().email('Please enter a valid email address'),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
 type AuthFormData = z.infer<typeof authSchema>;
@@ -50,21 +50,21 @@ export default function Auth() {
           if (error.message.includes('Invalid login credentials')) {
             toast({
               variant: 'destructive',
-              title: 'ログイン失敗',
-              description: 'メールアドレスまたはパスワードが正しくありません',
+              title: 'Login Failed',
+              description: 'Invalid email or password',
             });
           } else {
             toast({
               variant: 'destructive',
-              title: 'エラー',
+              title: 'Error',
               description: error.message,
             });
           }
           return;
         }
         toast({
-          title: 'ログイン成功',
-          description: 'ようこそ！',
+          title: 'Login Successful',
+          description: 'Welcome back!',
         });
         navigate('/');
       } else {
@@ -73,21 +73,21 @@ export default function Auth() {
           if (error.message.includes('User already registered')) {
             toast({
               variant: 'destructive',
-              title: '登録失敗',
-              description: 'このメールアドレスは既に登録されています',
+              title: 'Registration Failed',
+              description: 'This email is already registered',
             });
           } else {
             toast({
               variant: 'destructive',
-              title: 'エラー',
+              title: 'Error',
               description: error.message,
             });
           }
           return;
         }
         toast({
-          title: '登録完了',
-          description: '確認メールをお送りしました。メールを確認してください。',
+          title: 'Registration Complete',
+          description: 'Please check your email to confirm your account.',
         });
       }
     } finally {
@@ -113,18 +113,18 @@ export default function Auth() {
             </span>
           </div>
           <CardTitle className="text-xl">
-            {isLogin ? 'ログイン' : 'アカウント作成'}
+            {isLogin ? 'Sign In' : 'Create Account'}
           </CardTitle>
           <CardDescription>
             {isLogin
-              ? 'メールアドレスとパスワードでログイン'
-              : '新しいアカウントを作成'}
+              ? 'Sign in with your email and password'
+              : 'Create a new account to get started'}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">メールアドレス</Label>
+              <Label htmlFor="email">Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -140,7 +140,7 @@ export default function Auth() {
               )}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">パスワード</Label>
+              <Label htmlFor="password">Password</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -157,19 +157,19 @@ export default function Auth() {
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {isLogin ? 'ログイン' : 'アカウント作成'}
+              {isLogin ? 'Sign In' : 'Create Account'}
             </Button>
           </form>
           <div className="mt-4 text-center text-sm">
             <span className="text-muted-foreground">
-              {isLogin ? 'アカウントをお持ちでない方は' : '既にアカウントをお持ちの方は'}
+              {isLogin ? "Don't have an account?" : 'Already have an account?'}
             </span>{' '}
             <button
               type="button"
               onClick={toggleMode}
               className="text-primary font-medium hover:underline"
             >
-              {isLogin ? '新規登録' : 'ログイン'}
+              {isLogin ? 'Sign Up' : 'Sign In'}
             </button>
           </div>
         </CardContent>
