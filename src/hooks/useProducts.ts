@@ -160,16 +160,22 @@ export function useUpdateProduct() {
       if (input.linkedinUrl !== undefined) updateData.linkedin_url = input.linkedinUrl || null;
       if (input.githubUrl !== undefined) updateData.github_url = input.githubUrl || null;
 
-      const { data, error } = await supabase
+      // IMPORTANT:
+      // Do NOT request `return=representation` on UPDATE (via `.select().single()`), because with RLS
+      // PostgREST may return 0 rows for the representation even when the UPDATE succeeded.
+      // That causes errors like: "Cannot coerce the result to a single JSON object".
+      const { error, count } = await supabase
         .from('products')
-        .update(updateData)
-        .eq('id', id)
-        .select()
-        .maybeSingle();
+        .update(updateData, { count: 'exact' })
+        .eq('id', id);
 
       if (error) throw error;
-      if (!data) throw new Error('Product not found or you do not have permission to edit it');
-      return dbProductToProduct(data as DbProduct);
+      // When RLS blocks UPDATE, Postgres will typically update 0 rows (no error). Detect that case.
+      if (typeof count === 'number' && count === 0) {
+        throw new Error("No rows were updated. Make sure you're logged in as the owner of this app.");
+      }
+
+      return { id };
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
