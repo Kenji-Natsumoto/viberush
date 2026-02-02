@@ -44,6 +44,8 @@ const badgeVariants = cva(
           "border-[#3B82F6]/30 bg-[#3B82F6]/90 text-white hover:bg-[#3B82F6]",
         genspark:
           "border-[#F97316]/30 bg-[#F97316]/90 text-white hover:bg-[#F97316]",
+        bolt:
+          "border-[#FACC15]/30 bg-[#FACC15]/90 text-black hover:bg-[#FACC15]",
         tool:
           "border-border/50 bg-secondary/80 text-secondary-foreground",
       },

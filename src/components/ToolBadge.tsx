@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
-import type { Tool } from "@/data/dummyProducts";
+import type { Tool } from "@/types/database";
 
-const toolVariantMap: Record<Tool, "lovable" | "v0" | "voltnew" | "emergent" | "replit" | "devin" | "cursor" | "windsurf" | "claudecode" | "codex" | "gemini" | "antigravity" | "manus" | "genspark" | "tool"> = {
+const toolVariantMap: Record<Tool, "lovable" | "v0" | "voltnew" | "emergent" | "replit" | "devin" | "cursor" | "windsurf" | "claudecode" | "codex" | "gemini" | "antigravity" | "manus" | "genspark" | "bolt" | "tool"> = {
   Lovable: "lovable",
   v0: "v0",
   "volt.new": "voltnew",
@@ -16,6 +16,7 @@ const toolVariantMap: Record<Tool, "lovable" | "v0" | "voltnew" | "emergent" | "
   antigravity: "antigravity",
   Manus: "manus",
   Genspark: "genspark",
+  Bolt: "bolt",
   "Other Tools": "tool",
 };
 

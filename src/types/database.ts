@@ -14,6 +14,7 @@ export type Tool =
   | 'antigravity' 
   | 'Manus' 
   | 'Genspark' 
+  | 'Bolt'
   | 'Other Tools';
 
 export interface DbProduct {
@@ -31,6 +32,10 @@ export interface DbProduct {
   time_to_build: string;
   votes_count: number;
   user_id: string;
+  contact_email: string;
+  x_url?: string | null;
+  linkedin_url?: string | null;
+  github_url?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -51,6 +56,10 @@ export interface Product {
   timeToBuild: string;
   votes: number;
   userId: string;
+  contactEmail: string;
+  xUrl?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
   createdAt: string;
   updatedAt: string;
   // Creator info (joined from profiles or computed)
@@ -75,6 +84,10 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
     timeToBuild: dbProduct.time_to_build,
     votes: dbProduct.votes_count,
     userId: dbProduct.user_id,
+    contactEmail: dbProduct.contact_email,
+    xUrl: dbProduct.x_url ?? undefined,
+    linkedinUrl: dbProduct.linkedin_url ?? undefined,
+    githubUrl: dbProduct.github_url ?? undefined,
     createdAt: dbProduct.created_at,
     updatedAt: dbProduct.updated_at,
     // Default creator info - can be enhanced with profile data
@@ -96,6 +109,10 @@ export interface CreateProductInput {
   aiPrompt?: string;
   tools: Tool[];
   timeToBuild: string;
+  contactEmail: string;
+  xUrl?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
 }
 
 // Product update input
@@ -111,4 +128,8 @@ export interface UpdateProductInput {
   aiPrompt?: string;
   tools?: Tool[];
   timeToBuild?: string;
+  contactEmail?: string;
+  xUrl?: string;
+  linkedinUrl?: string;
+  githubUrl?: string;
 }
