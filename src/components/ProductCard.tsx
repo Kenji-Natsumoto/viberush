@@ -20,8 +20,9 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
   
   // Check if current user is the owner
   const isOwner = user && (creatorId ? user.id === creatorId : user.id === product.userId);
-  // Generate a random vibe score based on product id for demo
-  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42) || 50;
+  // Generate a consistent vibe score between 35-85 based on product id
+  const hashCode = product.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  const vibeScore = (hashCode % 51) + 35; // 35-85 range
 
   return (
     <>
