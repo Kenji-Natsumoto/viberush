@@ -48,6 +48,9 @@ export function HeroSection({ onSubmitClick }: HeroSectionProps) {
             size="lg"
             variant="outline"
             className="gap-2 px-6"
+            onClick={() => {
+              document.getElementById('launches')?.scrollIntoView({ behavior: 'smooth' });
+            }}
           >
             Browse Today's Launches
           </Button>
