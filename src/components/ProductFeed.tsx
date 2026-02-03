@@ -18,9 +18,23 @@ export function ProductFeed() {
     updatedAt: p.createdAt,
   }));
 
+  // Custom sort orders for demo
+  const newOrder = ['LaunchKit', 'CodeBuddy', 'VoiceNote', 'VibeRush'];
+  const fastestOrder = ['VibeRush', 'VoiceNote', 'LaunchKit', 'CodeBuddy'];
+
   const sortedProducts = [...products].sort((a, b) => {
     if (sortBy === "votes") return b.votes - a.votes;
-    if (sortBy === "newest") return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    if (sortBy === "newest") {
+      const aIndex = newOrder.indexOf(a.name);
+      const bIndex = newOrder.indexOf(b.name);
+      // If not in list, put at the end
+      return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+    }
+    if (sortBy === "time") {
+      const aIndex = fastestOrder.indexOf(a.name);
+      const bIndex = fastestOrder.indexOf(b.name);
+      return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+    }
     return 0;
   });
 
