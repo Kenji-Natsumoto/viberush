@@ -24,6 +24,12 @@ CREATE TABLE IF NOT EXISTS public.products (
   time_to_build TEXT NOT NULL DEFAULT '1 hour',
   votes_count INTEGER NOT NULL DEFAULT 0,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  contact_email TEXT,
+  x_url TEXT,
+  linkedin_url TEXT,
+  github_url TEXT,
+  proxy_creator_name TEXT,
+  proxy_avatar_url TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
