@@ -31,7 +31,7 @@ export function ProductFeed() {
   ];
 
   return (
-    <section className="max-w-3xl mx-auto px-4 pb-16">
+    <section id="launches" className="max-w-3xl mx-auto px-4 pb-16 scroll-mt-20">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
