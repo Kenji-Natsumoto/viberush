@@ -5,16 +5,16 @@ export function LiveIndicator() {
   const [viewerCount, setViewerCount] = useState(0);
 
   useEffect(() => {
-    // Generate initial random count between 20-80
-    const initialCount = Math.floor(Math.random() * 60) + 20;
+    // Generate initial random count between 3-8
+    const initialCount = Math.floor(Math.random() * 6) + 3;
     setViewerCount(initialCount);
 
     // Simulate fluctuation every 5-10 seconds
     const interval = setInterval(() => {
       setViewerCount((prev) => {
-        const change = Math.floor(Math.random() * 7) - 3; // -3 to +3
+        const change = Math.floor(Math.random() * 3) - 1; // -1 to +1
         const newCount = prev + change;
-        return Math.max(15, Math.min(120, newCount)); // Keep between 15-120
+        return Math.max(3, Math.min(8, newCount)); // Keep between 3-8
       });
     }, Math.random() * 5000 + 5000);
 

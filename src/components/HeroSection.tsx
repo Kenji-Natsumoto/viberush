@@ -56,15 +56,15 @@ export function HeroSection({ onSubmitClick }: HeroSectionProps) {
         {/* Stats */}
         <div className="flex items-center justify-center gap-8 mt-12 pt-8 border-t border-border">
           <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">2,847</p>
+            <p className="text-2xl font-bold text-foreground">12+</p>
             <p className="text-sm text-muted-foreground">Apps Launched</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">12.4K</p>
+            <p className="text-2xl font-bold text-foreground">48</p>
             <p className="text-sm text-muted-foreground">Makers</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">89.2K</p>
+            <p className="text-2xl font-bold text-foreground">350+</p>
             <p className="text-sm text-muted-foreground">Upvotes</p>
           </div>
         </div>
