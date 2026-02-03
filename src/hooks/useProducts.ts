@@ -139,9 +139,12 @@ export function useCreateProduct() {
 export function useUpdateProduct() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({ id, ...input }: UpdateProductInput & { id: string }) => {
+      if (!user) throw new Error('Must be logged in to edit a product');
+
       const updateData: Record<string, unknown> = {};
       
       if (input.name !== undefined) updateData.name = input.name;
@@ -167,12 +170,31 @@ export function useUpdateProduct() {
       const { error, count } = await supabase
         .from('products')
         .update(updateData, { count: 'exact' })
-        .eq('id', id);
+        .eq('id', id)
+        // Make ownership requirement explicit client-side too.
+        // (RLS should enforce this regardless, but this helps us diagnose failures.)
+        .eq('user_id', user.id);
 
       if (error) throw error;
-      // When RLS blocks UPDATE, Postgres will typically update 0 rows (no error). Detect that case.
+      // When RLS blocks UPDATE, PostgREST can respond with 0 updated rows and no error.
+      // Diagnose whether this is an ownership mismatch or a missing/incorrect UPDATE policy.
       if (typeof count === 'number' && count === 0) {
-        throw new Error("No rows were updated. Make sure you're logged in as the owner of this app.");
+        const { data: ownerRow, error: ownerErr } = await supabase
+          .from('products')
+          .select('user_id')
+          .eq('id', id)
+          .maybeSingle();
+
+        if (ownerErr) throw ownerErr;
+        if (!ownerRow) throw new Error('Product not found');
+
+        if (ownerRow.user_id !== user.id) {
+          throw new Error("You're logged in with a different account than the owner of this app.");
+        }
+
+        throw new Error(
+          'Your Supabase RLS policy is blocking UPDATE on products. Please ensure an UPDATE policy exists: USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id).'
+        );
       }
 
       return { id };
