@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin } from "lucide-react";
+import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -66,6 +66,10 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
   const [xUrl, setXUrl] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [githubUrl, setGithubUrl] = useState("");
+  
+  // Proxy creator fields
+  const [proxyCreatorName, setProxyCreatorName] = useState("");
+  const [proxyAvatarUrl, setProxyAvatarUrl] = useState("");
 
   const toggleTool = (tool: Tool) => {
     setSelectedTools((prev) =>
@@ -88,6 +92,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
     setXUrl("");
     setLinkedinUrl("");
     setGithubUrl("");
+    setProxyCreatorName("");
+    setProxyAvatarUrl("");
   };
 
   const handleSubmit = async () => {
@@ -111,6 +117,8 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
         xUrl: xUrl || undefined,
         linkedinUrl: linkedinUrl || undefined,
         githubUrl: githubUrl || undefined,
+        proxyCreatorName: proxyCreatorName || undefined,
+        proxyAvatarUrl: proxyAvatarUrl || undefined,
       });
       resetForm();
       onClose();
@@ -327,6 +335,50 @@ export function SubmitModal({ isOpen, onClose }: SubmitModalProps) {
                   {time}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* Creator Info Section (for Proxy Posting) */}
+          <div className="space-y-4 p-4 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 rounded-xl border border-amber-500/20">
+            <h3 className="text-sm font-semibold text-amber-600 dark:text-amber-400">
+              Creator Info (Optional - for Proxy Posting)
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Submitting on behalf of someone else? Add their info below.
+            </p>
+            
+            {/* Display Creator Name */}
+            <div className="space-y-2">
+              <Label htmlFor="proxyCreatorName" className="flex items-center gap-2 text-sm font-medium">
+                <User className="h-3.5 w-3.5 text-muted-foreground" />
+                Display Creator Name
+              </Label>
+              <Input
+                id="proxyCreatorName"
+                value={proxyCreatorName}
+                onChange={(e) => setProxyCreatorName(e.target.value)}
+                placeholder="e.g. VoiceNote Team"
+                className="bg-background border-amber-500/30 focus:border-amber-500"
+              />
+              <p className="text-xs text-muted-foreground">Leave empty to use your profile name.</p>
+            </div>
+
+            {/* Creator Avatar URL */}
+            <div className="space-y-2">
+              <Label htmlFor="proxyAvatarUrl" className="flex items-center gap-2 text-sm font-medium">
+                <Upload className="h-3.5 w-3.5 text-muted-foreground" />
+                Creator Avatar URL
+              </Label>
+              <Input
+                id="proxyAvatarUrl"
+                value={proxyAvatarUrl}
+                onChange={(e) => setProxyAvatarUrl(e.target.value)}
+                placeholder="https://..."
+                className="bg-background border-amber-500/30 focus:border-amber-500"
+              />
+              <p className="text-xs text-muted-foreground">
+                Right-click the logo on their site → Copy Image Address. Leave empty to use your profile avatar.
+              </p>
             </div>
           </div>
 

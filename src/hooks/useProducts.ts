@@ -111,6 +111,8 @@ export function useCreateProduct() {
           x_url: input.xUrl || null,
           linkedin_url: input.linkedinUrl || null,
           github_url: input.githubUrl || null,
+          proxy_creator_name: input.proxyCreatorName || null,
+          proxy_avatar_url: input.proxyAvatarUrl || null,
         })
         .select()
         .single();
@@ -162,6 +164,8 @@ export function useUpdateProduct() {
       if (input.xUrl !== undefined) updateData.x_url = input.xUrl || null;
       if (input.linkedinUrl !== undefined) updateData.linkedin_url = input.linkedinUrl || null;
       if (input.githubUrl !== undefined) updateData.github_url = input.githubUrl || null;
+      if (input.proxyCreatorName !== undefined) updateData.proxy_creator_name = input.proxyCreatorName || null;
+      if (input.proxyAvatarUrl !== undefined) updateData.proxy_avatar_url = input.proxyAvatarUrl || null;
 
       // IMPORTANT:
       // Do NOT request `return=representation` on UPDATE (via `.select().single()`), because with RLS

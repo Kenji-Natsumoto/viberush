@@ -36,6 +36,8 @@ export interface DbProduct {
   x_url?: string | null;
   linkedin_url?: string | null;
   github_url?: string | null;
+  proxy_creator_name?: string | null;
+  proxy_avatar_url?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -60,15 +62,25 @@ export interface Product {
   xUrl?: string;
   linkedinUrl?: string;
   githubUrl?: string;
+  proxyCreatorName?: string;
+  proxyAvatarUrl?: string;
   createdAt: string;
   updatedAt: string;
-  // Creator info (joined from profiles or computed)
+  // Creator display info (computed from proxy or profile)
   creatorName?: string;
   creatorAvatar?: string;
 }
 
 // Transform database product to frontend product
 export function dbProductToProduct(dbProduct: DbProduct): Product {
+  // Default avatar based on user_id
+  const defaultAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${dbProduct.user_id}`;
+  
+  // Use proxy values if provided, otherwise fall back to defaults
+  // In future, these defaults can be enhanced with profile data
+  const creatorName = dbProduct.proxy_creator_name || 'Vibe Coder';
+  const creatorAvatar = dbProduct.proxy_avatar_url || defaultAvatar;
+
   return {
     id: dbProduct.id,
     name: dbProduct.name,
@@ -88,11 +100,13 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
     xUrl: dbProduct.x_url ?? undefined,
     linkedinUrl: dbProduct.linkedin_url ?? undefined,
     githubUrl: dbProduct.github_url ?? undefined,
+    proxyCreatorName: dbProduct.proxy_creator_name ?? undefined,
+    proxyAvatarUrl: dbProduct.proxy_avatar_url ?? undefined,
     createdAt: dbProduct.created_at,
     updatedAt: dbProduct.updated_at,
-    // Default creator info - can be enhanced with profile data
-    creatorName: 'Vibe Coder',
-    creatorAvatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${dbProduct.user_id}`,
+    // Computed display values
+    creatorName,
+    creatorAvatar,
   };
 }
 
@@ -113,6 +127,8 @@ export interface CreateProductInput {
   xUrl?: string;
   linkedinUrl?: string;
   githubUrl?: string;
+  proxyCreatorName?: string;
+  proxyAvatarUrl?: string;
 }
 
 // Product update input
@@ -132,4 +148,6 @@ export interface UpdateProductInput {
   xUrl?: string;
   linkedinUrl?: string;
   githubUrl?: string;
+  proxyCreatorName?: string;
+  proxyAvatarUrl?: string;
 }
