@@ -64,7 +64,7 @@ export function FeaturedBuilders() {
               Community
             </span>
             <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-              Featured Builders
+              Featured Makers
             </h2>
           </div>
           <div className="flex justify-center gap-10 sm:gap-16 pt-4">
@@ -93,7 +93,7 @@ export function FeaturedBuilders() {
             Community
           </span>
           <h2 className="text-xl sm:text-2xl font-bold text-foreground">
-            Featured Builders
+            Featured Makers
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
             Meet the creators behind the most vibed apps
