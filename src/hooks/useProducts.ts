@@ -324,10 +324,14 @@ export function useToggleVote() {
         variant: "destructive",
       });
     },
-    onSettled: () => {
+    onSettled: (data) => {
       // Refetch to ensure consistency with server
       queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
       queryClient.invalidateQueries({ queryKey: ['user-votes'] });
+      // Also invalidate the single product query for detail pages
+      if (data?.productId) {
+        queryClient.invalidateQueries({ queryKey: ['product', data.productId] });
+      }
     },
   });
 }
