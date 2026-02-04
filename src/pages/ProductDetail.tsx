@@ -59,7 +59,6 @@ const ProductDetail = () => {
     );
   }
 
-  const vibeScore = Math.floor(parseInt(product.id) * 17 + 42) || 50;
   
   // Check if current user is the owner
   const isOwner = user && user.id === product.userId;
@@ -156,7 +155,7 @@ const ProductDetail = () => {
                   Edit App
                 </Button>
               )}
-              <VibeScoreButton initialScore={vibeScore} productId={product.id} />
+              <VibeScoreButton score={product.vibeScore} productId={product.id} />
               <UpvoteButton initialVotes={product.votes} productId={product.id} />
               
               {product.demoUrl && (
