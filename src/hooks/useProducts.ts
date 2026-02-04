@@ -335,3 +335,122 @@ export function useToggleVote() {
     },
   });
 }
+
+// ============ Vibe Score Hooks ============
+
+export function useUserVibeClicks() {
+  const { user } = useAuth();
+
+  return useQuery({
+    queryKey: ['user-vibe-clicks', user?.id],
+    queryFn: async (): Promise<Set<string>> => {
+      if (!user) return new Set();
+
+      const { data, error } = await supabase
+        .from('vibe_clicks')
+        .select('product_id')
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+      return new Set((data || []).map((v) => v.product_id));
+    },
+    enabled: !!user,
+  });
+}
+
+export function useToggleVibeClick() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  const { toast } = useToast();
+
+  return useMutation({
+    mutationFn: async ({ productId, hasClicked }: { productId: string; hasClicked: boolean }) => {
+      if (!user) throw new Error('Must be logged in to vibe');
+
+      if (hasClicked) {
+        // Remove vibe click
+        const { error, count } = await supabase
+          .from('vibe_clicks')
+          .delete({ count: 'exact' })
+          .eq('product_id', productId)
+          .eq('user_id', user.id);
+        if (error) throw error;
+
+        if (typeof count === 'number' && count === 0) {
+          throw new Error(
+            "Couldn't remove your vibe. Supabase RLS may be blocking DELETE on the vibe_clicks table."
+          );
+        }
+      } else {
+        // Add vibe click
+        const { error } = await supabase
+          .from('vibe_clicks')
+          .insert({ product_id: productId, user_id: user.id });
+        if (error) throw error;
+      }
+      
+      return { productId, hasClicked };
+    },
+    onMutate: async ({ productId, hasClicked }) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: PRODUCTS_KEY });
+      await queryClient.cancelQueries({ queryKey: ['user-vibe-clicks', user?.id] });
+
+      // Snapshot previous values
+      const previousProducts = queryClient.getQueryData<Product[]>(PRODUCTS_KEY);
+      const previousUserVibeClicks = queryClient.getQueryData<Set<string>>(['user-vibe-clicks', user?.id]);
+
+      // Optimistically update products
+      queryClient.setQueryData<Product[]>(PRODUCTS_KEY, (old) => {
+        if (!old) return old;
+        return old.map((product) =>
+          product.id === productId
+            ? { ...product, vibeScore: product.vibeScore + (hasClicked ? -1 : 1) }
+            : product
+        );
+      });
+
+      // Optimistically update single product query
+      queryClient.setQueryData<Product | null>(['product', productId], (old) => {
+        if (!old) return old;
+        return { ...old, vibeScore: old.vibeScore + (hasClicked ? -1 : 1) };
+      });
+
+      // Optimistically update user vibe clicks
+      queryClient.setQueryData<Set<string>>(['user-vibe-clicks', user?.id], (old) => {
+        const newSet = new Set(old);
+        if (hasClicked) {
+          newSet.delete(productId);
+        } else {
+          newSet.add(productId);
+        }
+        return newSet;
+      });
+
+      return { previousProducts, previousUserVibeClicks };
+    },
+    onError: (error: Error, variables, context) => {
+      // Rollback on error
+      if (context?.previousProducts) {
+        queryClient.setQueryData(PRODUCTS_KEY, context.previousProducts);
+      }
+      if (context?.previousUserVibeClicks) {
+        queryClient.setQueryData(['user-vibe-clicks', user?.id], context.previousUserVibeClicks);
+      }
+      console.error('Vibe click error:', error);
+      toast({
+        title: "Vibe Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+    onSettled: (data) => {
+      // Refetch to ensure consistency with server
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
+      queryClient.invalidateQueries({ queryKey: ['user-vibe-clicks'] });
+      if (data?.productId) {
+        queryClient.invalidateQueries({ queryKey: ['product', data.productId] });
+      }
+    },
+  });
+}

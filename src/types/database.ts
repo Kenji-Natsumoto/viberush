@@ -31,6 +31,7 @@ export interface DbProduct {
   tools_used: Tool[];
   time_to_build: string;
   votes_count: number;
+  vibe_score: number;
   user_id: string;
   contact_email: string;
   x_url?: string | null;
@@ -57,6 +58,7 @@ export interface Product {
   tools: Tool[];
   timeToBuild: string;
   votes: number;
+  vibeScore: number;
   userId: string;
   contactEmail: string;
   xUrl?: string;
@@ -95,6 +97,7 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
     tools: dbProduct.tools_used,
     timeToBuild: dbProduct.time_to_build,
     votes: dbProduct.votes_count,
+    vibeScore: dbProduct.vibe_score ?? 0,
     userId: dbProduct.user_id,
     contactEmail: dbProduct.contact_email,
     xUrl: dbProduct.x_url ?? undefined,
