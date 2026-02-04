@@ -4,8 +4,8 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useProducts } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Featured builders configuration - these names match proxy_creator_name in products
-const FEATURED_BUILDER_NAMES = [
+// Fallback featured builder names (used when no DB featured flag is set)
+const FALLBACK_FEATURED_NAMES = [
   "Ruth Aju",
   "friezenberg", 
   "I AM PATFROG",
@@ -21,21 +21,39 @@ interface FeaturedBuilder {
 export function FeaturedBuilders() {
   const { products, isLoading } = useProducts();
 
-  // Extract featured builders from products
-  const featuredBuilders: FeaturedBuilder[] = FEATURED_BUILDER_NAMES
-    .map((name) => {
-      const product = products.find(
-        (p) => p.creatorName?.toLowerCase() === name.toLowerCase()
-      );
-      if (!product) return null;
-      return {
-        name: product.creatorName || name,
-        avatarUrl: product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
+  // Extract featured builders - prioritize is_featured from DB, fallback to static names
+  const featuredBuilders: FeaturedBuilder[] = (() => {
+    // First check for products marked as featured in DB
+    const dbFeatured = products
+      .filter((p) => p.isFeatured)
+      .map((product) => ({
+        name: product.creatorName || 'Vibe Coder',
+        avatarUrl: product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`,
         productId: product.id,
         productName: product.name,
-      };
-    })
-    .filter((builder): builder is FeaturedBuilder => builder !== null);
+      }));
+
+    // If we have DB featured products, use those
+    if (dbFeatured.length > 0) {
+      return dbFeatured;
+    }
+
+    // Fallback to static list
+    return FALLBACK_FEATURED_NAMES
+      .map((name) => {
+        const product = products.find(
+          (p) => p.creatorName?.toLowerCase() === name.toLowerCase()
+        );
+        if (!product) return null;
+        return {
+          name: product.creatorName || name,
+          avatarUrl: product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${name}`,
+          productId: product.id,
+          productName: product.name,
+        };
+      })
+      .filter((builder): builder is FeaturedBuilder => builder !== null);
+  })();
 
   if (isLoading) {
     return (
