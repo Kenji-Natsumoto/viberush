@@ -253,12 +253,20 @@ export function useToggleVote() {
 
       if (hasVoted) {
         // Remove vote
-        const { error } = await supabase
+        const { error, count } = await supabase
           .from('votes')
-          .delete()
+          .delete({ count: 'exact' })
           .eq('product_id', productId)
           .eq('user_id', user.id);
         if (error) throw error;
+
+        // With RLS, PostgREST may return 204 even when 0 rows were affected.
+        // If count is 0, the row still exists but DELETE is blocked (missing/incorrect RLS policy).
+        if (typeof count === 'number' && count === 0) {
+          throw new Error(
+            '投票を取り消せませんでした。SupabaseのRLSがvotesテーブルのDELETEをブロックしている可能性があります（DELETEポリシー: USING (auth.uid() = user_id)）。'
+          );
+        }
       } else {
         // Add vote
         const { error } = await supabase
