@@ -26,6 +26,10 @@ export const TOOL_CATEGORIES: { label: string; tools: Tool[] }[] = [
     label: "Deployment", 
     tools: ["Vercel", "Netlify"] 
   },
+  {
+    label: "Languages",
+    tools: ["Python", "TypeScript", "JavaScript", "Rust", "Go", "SQL"]
+  },
   { 
     label: "Other", 
     tools: ["Other Tools"] 
@@ -74,6 +78,13 @@ export const toolColors: Record<Tool, { bg: string; text: string; border: string
   // Deployment
   Vercel: { bg: "bg-[#000000]", text: "text-white", border: "border-[#000000]" },
   Netlify: { bg: "bg-[#00C7B7]", text: "text-white", border: "border-[#00C7B7]" },
+  // Languages - deeper/richer colors with distinct styling
+  Python: { bg: "bg-[#306998]", text: "text-white", border: "border-[#FFD43B]" },
+  TypeScript: { bg: "bg-[#235A97]", text: "text-white", border: "border-[#3178C6]" },
+  JavaScript: { bg: "bg-[#323330]", text: "text-[#F7DF1E]", border: "border-[#F7DF1E]" },
+  Rust: { bg: "bg-[#000000]", text: "text-[#DEA584]", border: "border-[#DEA584]" },
+  Go: { bg: "bg-[#00ADD8]", text: "text-white", border: "border-[#00ADD8]" },
+  SQL: { bg: "bg-[#336791]", text: "text-white", border: "border-[#336791]" },
   // Other
   "Other Tools": { bg: "bg-secondary", text: "text-secondary-foreground", border: "border-border" },
 };
