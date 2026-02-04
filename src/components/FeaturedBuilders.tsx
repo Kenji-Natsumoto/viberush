@@ -57,16 +57,21 @@ export function FeaturedBuilders() {
 
   if (isLoading) {
     return (
-      <section className="py-8 px-4 sm:px-6 lg:px-8 border-b border-border">
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[hsl(35,30%,97%)] to-[hsl(35,25%,95%)] dark:from-[hsl(35,10%,12%)] dark:to-[hsl(35,8%,10%)]">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-lg font-semibold text-foreground mb-6 text-center">
-            Featured Builders
-          </h2>
-          <div className="flex justify-center gap-8">
+          <div className="text-center mb-8">
+            <span className="inline-block px-3 py-1 text-xs font-medium tracking-wider uppercase text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 rounded-full mb-3">
+              Community
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+              Featured Builders
+            </h2>
+          </div>
+          <div className="flex justify-center gap-10 sm:gap-16">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="flex flex-col items-center gap-2">
-                <Skeleton className="h-16 w-16 rounded-full" />
-                <Skeleton className="h-4 w-20" />
+              <div key={i} className="flex flex-col items-center gap-3">
+                <Skeleton className="h-20 w-20 sm:h-24 sm:w-24 rounded-full" />
+                <Skeleton className="h-4 w-24" />
               </div>
             ))}
           </div>
@@ -80,37 +85,62 @@ export function FeaturedBuilders() {
   }
 
   return (
-    <section className="py-8 px-4 sm:px-6 lg:px-8 border-b border-border bg-muted/30">
+    <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[hsl(35,30%,97%)] to-[hsl(35,25%,95%)] dark:from-[hsl(35,10%,12%)] dark:to-[hsl(35,8%,10%)] border-y border-amber-200/50 dark:border-amber-800/30">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-lg font-semibold text-foreground mb-6 text-center">
-          Featured Builders
-        </h2>
+        {/* Section Header */}
+        <div className="text-center mb-10">
+          <span className="inline-block px-3 py-1 text-xs font-medium tracking-wider uppercase text-amber-700 dark:text-amber-400 bg-amber-100 dark:bg-amber-900/30 rounded-full mb-3">
+            Community
+          </span>
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground">
+            Featured Builders
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Meet the creators behind the most vibed apps
+          </p>
+        </div>
         
         <ScrollArea className="w-full">
-          <div className="flex justify-center gap-8 sm:gap-12 pb-4">
+          <div className="flex justify-center gap-10 sm:gap-16 lg:gap-20 pb-4">
             {featuredBuilders.map((builder) => (
               <Link
                 key={builder.productId}
                 to={`/product/${builder.productId}`}
-                className="group flex flex-col items-center gap-3 min-w-[80px]"
+                className="group flex flex-col items-center gap-4 min-w-[100px]"
               >
                 <div className="relative">
-                  <Avatar className="h-16 w-16 sm:h-20 sm:w-20 ring-2 ring-border transition-all duration-300 group-hover:ring-primary group-hover:ring-offset-2 group-hover:ring-offset-background group-hover:-translate-y-1 group-hover:shadow-lg">
-                    <AvatarImage
-                      src={builder.avatarUrl}
-                      alt={builder.name}
-                      className="object-cover"
-                    />
-                    <AvatarFallback className="text-lg font-medium bg-primary/10 text-primary">
-                      {builder.name.charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  {/* Subtle glow effect on hover */}
-                  <div className="absolute inset-0 rounded-full bg-primary/20 opacity-0 blur-xl transition-opacity duration-300 group-hover:opacity-100" />
+                  {/* Outer decorative ring */}
+                  <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-amber-300 via-orange-300 to-amber-400 dark:from-amber-600 dark:via-orange-500 dark:to-amber-600 opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500" />
+                  
+                  {/* Avatar container */}
+                  <div className="relative">
+                    <Avatar className="h-20 w-20 sm:h-24 sm:w-24 ring-[3px] ring-amber-200/80 dark:ring-amber-700/50 bg-background transition-all duration-300 group-hover:ring-amber-400 dark:group-hover:ring-amber-500 group-hover:-translate-y-2 group-hover:shadow-xl group-hover:shadow-amber-500/20">
+                      <AvatarImage
+                        src={builder.avatarUrl}
+                        alt={builder.name}
+                        className="object-cover"
+                      />
+                      <AvatarFallback className="text-xl font-semibold bg-gradient-to-br from-amber-100 to-orange-100 dark:from-amber-900 dark:to-orange-900 text-amber-800 dark:text-amber-200">
+                        {builder.name.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    
+                    {/* Floating sparkle indicator */}
+                    <div className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110">
+                      <span className="text-[10px]">✨</span>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-200 text-center max-w-[100px] truncate">
-                  {builder.name}
-                </span>
+                
+                {/* Builder name */}
+                <div className="text-center">
+                  <span className="text-sm font-semibold text-foreground group-hover:text-amber-700 dark:group-hover:text-amber-400 transition-colors duration-200 block max-w-[120px] truncate">
+                    {builder.name}
+                  </span>
+                  <span className="text-xs text-muted-foreground mt-0.5 block opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    View project →
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
