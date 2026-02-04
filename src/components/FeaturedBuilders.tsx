@@ -85,7 +85,7 @@ export function FeaturedBuilders() {
   }
 
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[hsl(35,20%,93%)] to-[hsl(35,18%,90%)] dark:from-[hsl(35,10%,12%)] dark:to-[hsl(35,8%,10%)] border-y border-amber-200/50 dark:border-amber-800/30">
+    <section className="py-14 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-[hsl(35,20%,93%)] to-[hsl(35,18%,90%)] dark:from-[hsl(35,10%,12%)] dark:to-[hsl(35,8%,10%)] border-y border-amber-200/50 dark:border-amber-800/30">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-10">
