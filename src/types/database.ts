@@ -71,6 +71,7 @@ export interface DbProduct {
   github_url?: string | null;
   proxy_creator_name?: string | null;
   proxy_avatar_url?: string | null;
+  is_featured: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -98,6 +99,7 @@ export interface Product {
   githubUrl?: string;
   proxyCreatorName?: string;
   proxyAvatarUrl?: string;
+  isFeatured: boolean;
   createdAt: string;
   updatedAt: string;
   // Creator display info (computed from proxy or profile)
@@ -137,6 +139,7 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
     githubUrl: dbProduct.github_url ?? undefined,
     proxyCreatorName: dbProduct.proxy_creator_name ?? undefined,
     proxyAvatarUrl: dbProduct.proxy_avatar_url ?? undefined,
+    isFeatured: dbProduct.is_featured ?? false,
     createdAt: dbProduct.created_at,
     updatedAt: dbProduct.updated_at,
     // Computed display values
