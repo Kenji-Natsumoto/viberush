@@ -108,18 +108,18 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         tagline,
         description,
         url,
-        demoUrl: demoUrl || undefined,
-        videoUrl: videoUrl || undefined,
-        aiPrompt: aiPrompt || undefined,
-        bannerUrl: bannerUrl || undefined,
+        demoUrl,  // Pass empty string to clear, hook converts to null
+        videoUrl,
+        aiPrompt,
+        bannerUrl,
         tools: selectedTools,
         timeToBuild: selectedTime,
-        contactEmail: contactEmail || undefined,
-        xUrl: xUrl || undefined,
-        linkedinUrl: linkedinUrl || undefined,
-        githubUrl: githubUrl || undefined,
-        proxyCreatorName: proxyCreatorName || undefined,
-        proxyAvatarUrl: proxyAvatarUrl || undefined,
+        contactEmail,
+        xUrl,
+        linkedinUrl,
+        githubUrl,
+        proxyCreatorName,
+        proxyAvatarUrl,
       });
       
       // Also call the legacy onSave if provided
