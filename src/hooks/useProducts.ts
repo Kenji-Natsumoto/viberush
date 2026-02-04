@@ -264,7 +264,7 @@ export function useToggleVote() {
         // If count is 0, the row still exists but DELETE is blocked (missing/incorrect RLS policy).
         if (typeof count === 'number' && count === 0) {
           throw new Error(
-            '投票を取り消せませんでした。SupabaseのRLSがvotesテーブルのDELETEをブロックしている可能性があります（DELETEポリシー: USING (auth.uid() = user_id)）。'
+            "Couldn't remove your vote. Supabase RLS may be blocking DELETE on the votes table (expected policy: FOR DELETE USING (auth.uid() = user_id))."
           );
         }
       } else {
