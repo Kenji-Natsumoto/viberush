@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useUpdateProduct } from "@/hooks/useProducts";
+import { TOOL_CATEGORIES, toolColors, TIME_OPTIONS } from "@/lib/toolConfig";
 import type { Tool, Product } from "@/types/database";
 
 interface EditProductModalProps {
@@ -14,30 +15,6 @@ interface EditProductModalProps {
   product: Product | null;
   onSave?: (updatedProduct: Partial<Product>) => void;
 }
-
-const AVAILABLE_TOOLS: Tool[] = ["Lovable", "Cursor", "Bolt", "Replit", "v0", "Windsurf", "Claude Code", "Codex", "Gemini", "Devin", "volt.new", "Emergent", "antigravity", "Manus", "Genspark", "Other Tools"];
-
-const TIME_OPTIONS = ["30 minutes", "1 hour", "2 hours", "4 hours", "1 day", "2+ days"];
-
-// Brand colors for each tool
-const toolColors: Record<Tool, { bg: string; text: string; border: string }> = {
-  Lovable: { bg: "bg-[#FF007A]", text: "text-white", border: "border-[#FF007A]" },
-  v0: { bg: "bg-[#000000]", text: "text-white", border: "border-[#000000]" },
-  "volt.new": { bg: "bg-[#F97316]", text: "text-white", border: "border-[#F97316]" },
-  Emergent: { bg: "bg-[#6366F1]", text: "text-white", border: "border-[#6366F1]" },
-  Replit: { bg: "bg-[#EF4444]", text: "text-white", border: "border-[#EF4444]" },
-  Devin: { bg: "bg-[#0066FF]", text: "text-white", border: "border-[#0066FF]" },
-  Cursor: { bg: "bg-[#00D4FF]", text: "text-black", border: "border-[#00D4FF]" },
-  Windsurf: { bg: "bg-[#14B8A6]", text: "text-white", border: "border-[#14B8A6]" },
-  "Claude Code": { bg: "bg-[#2D2D2D]", text: "text-white", border: "border-[#2D2D2D]" },
-  Codex: { bg: "bg-[#10A37F]", text: "text-white", border: "border-[#10A37F]" },
-  Gemini: { bg: "bg-[#4285F4]", text: "text-white", border: "border-[#4285F4]" },
-  antigravity: { bg: "bg-[#8B5CF6]", text: "text-white", border: "border-[#8B5CF6]" },
-  Manus: { bg: "bg-[#3B82F6]", text: "text-white", border: "border-[#3B82F6]" },
-  Genspark: { bg: "bg-[#F97316]", text: "text-white", border: "border-[#F97316]" },
-  Bolt: { bg: "bg-[#FACC15]", text: "text-black", border: "border-[#FACC15]" },
-  "Other Tools": { bg: "bg-secondary", text: "text-secondary-foreground", border: "border-border" },
-};
 
 // X (Twitter) icon component
 const XIcon = ({ className }: { className?: string }) => (
@@ -60,7 +37,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
   const [selectedTools, setSelectedTools] = useState<Tool[]>([]);
   const [selectedTime, setSelectedTime] = useState<string>("");
   
-  // New fields
+  // Contact fields
   const [contactEmail, setContactEmail] = useState("");
   const [xUrl, setXUrl] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
@@ -108,7 +85,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         tagline,
         description,
         url,
-        demoUrl,  // Pass empty string to clear, hook converts to null
+        demoUrl,
         videoUrl,
         aiPrompt,
         bannerUrl,
@@ -122,7 +99,6 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         proxyAvatarUrl,
       });
       
-      // Also call the legacy onSave if provided
       if (onSave) {
         onSave({
           id: product.id,
@@ -299,29 +275,34 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
             </p>
           </div>
 
-          {/* Vibe Tools */}
-          <div className="space-y-2">
+          {/* Vibe Tools - Categorized */}
+          <div className="space-y-3">
             <Label className="text-sm font-medium">Vibe Tools <span className="text-xs text-muted-foreground">(Select all that apply)</span></Label>
-            <div className="flex flex-wrap gap-2">
-              {AVAILABLE_TOOLS.map((tool) => {
-                const isSelected = selectedTools.includes(tool);
-                const colors = toolColors[tool];
-                return (
-                  <button
-                    key={tool}
-                    onClick={() => toggleTool(tool)}
-                    className={cn(
-                      "px-3 py-1.5 text-sm font-medium rounded-lg border transition-all",
-                      isSelected
-                        ? `${colors.bg} ${colors.text} ${colors.border}`
-                        : "bg-secondary text-muted-foreground border-transparent hover:text-foreground hover:border-border"
-                    )}
-                  >
-                    {tool}
-                  </button>
-                );
-              })}
-            </div>
+            {TOOL_CATEGORIES.map((category) => (
+              <div key={category.label} className="space-y-2">
+                <p className="text-xs text-muted-foreground font-medium">{category.label}</p>
+                <div className="flex flex-wrap gap-2">
+                  {category.tools.map((tool) => {
+                    const isSelected = selectedTools.includes(tool);
+                    const colors = toolColors[tool];
+                    return (
+                      <button
+                        key={tool}
+                        onClick={() => toggleTool(tool)}
+                        className={cn(
+                          "px-3 py-1.5 text-sm font-medium rounded-lg border transition-all",
+                          isSelected
+                            ? `${colors.bg} ${colors.text} ${colors.border}`
+                            : "bg-secondary text-muted-foreground border-transparent hover:text-foreground hover:border-border"
+                        )}
+                      >
+                        {tool}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Time to Build */}
@@ -481,7 +462,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
             Cancel
           </Button>
           <Button 
-            onClick={handleSave} 
+            onClick={handleSave}
             disabled={updateProduct.isPending}
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
