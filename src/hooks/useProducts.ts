@@ -266,18 +266,60 @@ export function useToggleVote() {
           .insert({ product_id: productId, user_id: user.id });
         if (error) throw error;
       }
+      
+      return { productId, hasVoted };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
-      queryClient.invalidateQueries({ queryKey: ['user-votes'] });
+    onMutate: async ({ productId, hasVoted }) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: PRODUCTS_KEY });
+      await queryClient.cancelQueries({ queryKey: ['user-votes', user?.id] });
+
+      // Snapshot previous values
+      const previousProducts = queryClient.getQueryData<Product[]>(PRODUCTS_KEY);
+      const previousUserVotes = queryClient.getQueryData<Set<string>>(['user-votes', user?.id]);
+
+      // Optimistically update products
+      queryClient.setQueryData<Product[]>(PRODUCTS_KEY, (old) => {
+        if (!old) return old;
+        return old.map((product) =>
+          product.id === productId
+            ? { ...product, votes: product.votes + (hasVoted ? -1 : 1) }
+            : product
+        );
+      });
+
+      // Optimistically update user votes
+      queryClient.setQueryData<Set<string>>(['user-votes', user?.id], (old) => {
+        const newSet = new Set(old);
+        if (hasVoted) {
+          newSet.delete(productId);
+        } else {
+          newSet.add(productId);
+        }
+        return newSet;
+      });
+
+      return { previousProducts, previousUserVotes };
     },
-    onError: (error: Error) => {
+    onError: (error: Error, variables, context) => {
+      // Rollback on error
+      if (context?.previousProducts) {
+        queryClient.setQueryData(PRODUCTS_KEY, context.previousProducts);
+      }
+      if (context?.previousUserVotes) {
+        queryClient.setQueryData(['user-votes', user?.id], context.previousUserVotes);
+      }
       console.error('Vote error:', error);
       toast({
         title: "Vote Failed",
         description: error.message,
         variant: "destructive",
       });
+    },
+    onSettled: () => {
+      // Refetch to ensure consistency with server
+      queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
+      queryClient.invalidateQueries({ queryKey: ['user-votes'] });
     },
   });
 }
