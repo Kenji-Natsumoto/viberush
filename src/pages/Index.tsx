@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
+import { FeaturedBuilders } from "@/components/FeaturedBuilders";
 import { ProductFeed } from "@/components/ProductFeed";
 import { FAQSection } from "@/components/FAQSection";
 import { Footer } from "@/components/Footer";
@@ -17,6 +18,7 @@ const Index = () => {
       <Header onSubmitClick={openSubmitModal} />
       <main>
         <HeroSection onSubmitClick={openSubmitModal} />
+        <FeaturedBuilders />
         <ProductFeed />
         <FAQSection />
       </main>
