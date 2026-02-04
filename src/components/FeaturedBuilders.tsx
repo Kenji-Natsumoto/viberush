@@ -4,12 +4,15 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useProducts } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Fallback featured builder names (used when no DB featured flag is set)
+// Fallback featured builder names (used when DB has fewer than MIN_FEATURED)
 const FALLBACK_FEATURED_NAMES = [
   "Ruth Aju",
   "friezenberg", 
   "I AM PATFROG",
 ];
+
+// Minimum number of featured makers to display
+const MIN_FEATURED = 3;
 
 interface FeaturedBuilder {
   name: string;
@@ -21,9 +24,9 @@ interface FeaturedBuilder {
 export function FeaturedBuilders() {
   const { products, isLoading } = useProducts();
 
-  // Extract featured builders - prioritize is_featured from DB, fallback to static names
+  // Extract featured builders - combine DB featured with fallback to ensure minimum count
   const featuredBuilders: FeaturedBuilder[] = (() => {
-    // First check for products marked as featured in DB
+    // Get products marked as featured in DB
     const dbFeatured = products
       .filter((p) => p.isFeatured)
       .map((product) => ({
@@ -33,13 +36,16 @@ export function FeaturedBuilders() {
         productName: product.name,
       }));
 
-    // If we have DB featured products, use those
-    if (dbFeatured.length > 0) {
+    // If we have enough DB featured, use those
+    if (dbFeatured.length >= MIN_FEATURED) {
       return dbFeatured;
     }
 
-    // Fallback to static list
-    return FALLBACK_FEATURED_NAMES
+    // Otherwise, supplement with fallback names (excluding already featured creators)
+    const featuredNames = new Set(dbFeatured.map((b) => b.name.toLowerCase()));
+    
+    const fallbackBuilders = FALLBACK_FEATURED_NAMES
+      .filter((name) => !featuredNames.has(name.toLowerCase()))
       .map((name) => {
         const product = products.find(
           (p) => p.creatorName?.toLowerCase() === name.toLowerCase()
@@ -53,6 +59,10 @@ export function FeaturedBuilders() {
         };
       })
       .filter((builder): builder is FeaturedBuilder => builder !== null);
+
+    // Combine DB featured + fallback, up to MIN_FEATURED
+    const combined = [...dbFeatured, ...fallbackBuilders];
+    return combined.slice(0, Math.max(MIN_FEATURED, dbFeatured.length));
   })();
 
   if (isLoading) {
