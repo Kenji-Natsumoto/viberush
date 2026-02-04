@@ -40,6 +40,13 @@ export type Tool =
   // Deployment
   | 'Vercel'
   | 'Netlify'
+  // Languages
+  | 'Python'
+  | 'TypeScript'
+  | 'JavaScript'
+  | 'Rust'
+  | 'Go'
+  | 'SQL'
   | 'Other Tools';
 
 export interface DbProduct {
