@@ -93,7 +93,7 @@ export function ProductFeed() {
       <div className="flex items-center gap-2 mb-6 px-3 py-2 bg-orange-500/10 rounded-lg border border-orange-500/20">
         <Flame className="h-4 w-4 text-orange-500 shrink-0" />
         <p className="text-sm text-muted-foreground">
-          <span className="font-medium text-foreground">Vibe Score</span> — ユーザーの熱狂度を示す指標です。気に入ったアプリに🔥を送ろう！
+          <span className="font-medium text-foreground">Vibe Score</span> — A measure of user excitement. Send 🔥 to apps you love!
         </p>
       </div>
 
