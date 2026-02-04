@@ -41,8 +41,14 @@ export function ProductFeed() {
       return parseTime(a.timeToBuild) - parseTime(b.timeToBuild);
     }
     if (sortBy === "hottest") {
-      // Sort by vibe_score descending (most vibed first)
-      return b.vibeScore - a.vibeScore;
+      // Time-weighted hottest: vibe_score / hours since creation
+      // Newer apps with high vibe scores rank higher
+      const getHotnessScore = (vibeScore: number, createdAt: string): number => {
+        const hoursAgo = (Date.now() - new Date(createdAt).getTime()) / (1000 * 60 * 60);
+        // Add 1 to avoid division by zero, use sqrt to soften time decay
+        return vibeScore / Math.sqrt(hoursAgo + 1);
+      };
+      return getHotnessScore(b.vibeScore, b.createdAt) - getHotnessScore(a.vibeScore, a.createdAt);
     }
     return 0;
   });
