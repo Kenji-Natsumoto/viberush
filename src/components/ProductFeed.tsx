@@ -1,11 +1,11 @@
 import { ProductCard } from "./ProductCard";
-import { Calendar, TrendingUp, Clock, Loader2 } from "lucide-react";
+import { Calendar, TrendingUp, Clock, Loader2, Flame } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useProducts } from "@/hooks/useProducts";
 import { dummyProducts } from "@/data/dummyProducts";
 
-type SortOption = "votes" | "newest" | "time";
+type SortOption = "votes" | "newest" | "time" | "hottest";
 
 export function ProductFeed() {
   const [sortBy, setSortBy] = useState<SortOption>("votes");
@@ -18,28 +18,38 @@ export function ProductFeed() {
     updatedAt: p.createdAt,
   }));
 
-  // Custom sort orders for demo
-  const newOrder = ['LaunchKit', 'CodeBuddy', 'VoiceNote', 'VibeRush'];
-  const fastestOrder = ['VibeRush', 'VoiceNote', 'LaunchKit', 'CodeBuddy'];
-
   const sortedProducts = [...products].sort((a, b) => {
     if (sortBy === "votes") return b.votes - a.votes;
     if (sortBy === "newest") {
-      const aIndex = newOrder.indexOf(a.name);
-      const bIndex = newOrder.indexOf(b.name);
-      // If not in list, put at the end
-      return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+      // Sort by created_at descending (newest first)
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     }
     if (sortBy === "time") {
-      const aIndex = fastestOrder.indexOf(a.name);
-      const bIndex = fastestOrder.indexOf(b.name);
-      return (aIndex === -1 ? 999 : aIndex) - (bIndex === -1 ? 999 : bIndex);
+      // Sort by time_to_build ascending (fastest first)
+      // Parse time strings like "2 hours", "30 minutes", "1 day"
+      const parseTime = (time: string): number => {
+        const match = time.match(/(\d+)\s*(minute|hour|day|week)/i);
+        if (!match) return Infinity;
+        const value = parseInt(match[1]);
+        const unit = match[2].toLowerCase();
+        if (unit.startsWith('minute')) return value;
+        if (unit.startsWith('hour')) return value * 60;
+        if (unit.startsWith('day')) return value * 60 * 24;
+        if (unit.startsWith('week')) return value * 60 * 24 * 7;
+        return Infinity;
+      };
+      return parseTime(a.timeToBuild) - parseTime(b.timeToBuild);
+    }
+    if (sortBy === "hottest") {
+      // Sort by vibe_score descending (most vibed first)
+      return b.vibeScore - a.vibeScore;
     }
     return 0;
   });
 
   const sortOptions: { key: SortOption; label: string; icon: React.ReactNode }[] = [
     { key: "votes", label: "Top", icon: <TrendingUp className="h-3.5 w-3.5" /> },
+    { key: "hottest", label: "Hottest", icon: <Flame className="h-3.5 w-3.5" /> },
     { key: "newest", label: "New", icon: <Calendar className="h-3.5 w-3.5" /> },
     { key: "time", label: "Fastest", icon: <Clock className="h-3.5 w-3.5" /> },
   ];
@@ -47,7 +57,7 @@ export function ProductFeed() {
   return (
     <section id="launches" className="max-w-3xl mx-auto px-4 pb-16 scroll-mt-20">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-xl font-semibold text-foreground">Today's Launches</h2>
           <p className="text-sm text-muted-foreground">
@@ -77,6 +87,14 @@ export function ProductFeed() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Vibe Score explanation */}
+      <div className="flex items-center gap-2 mb-6 px-3 py-2 bg-orange-500/10 rounded-lg border border-orange-500/20">
+        <Flame className="h-4 w-4 text-orange-500 shrink-0" />
+        <p className="text-sm text-muted-foreground">
+          <span className="font-medium text-foreground">Vibe Score</span> — ユーザーの熱狂度を示す指標です。気に入ったアプリに🔥を送ろう！
+        </p>
       </div>
 
       {/* Loading State */}
