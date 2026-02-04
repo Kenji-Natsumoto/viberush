@@ -1,20 +1,45 @@
 // Database types for Supabase
 export type Tool = 
+  // AI Coding Assistants
   | 'Lovable' 
-  | 'v0' 
-  | 'volt.new' 
-  | 'Emergent' 
-  | 'Replit' 
-  | 'Devin' 
   | 'Cursor' 
+  | 'Bolt'
+  | 'Replit' 
+  | 'v0' 
   | 'Windsurf' 
   | 'Claude Code' 
   | 'Codex' 
   | 'Gemini' 
+  | 'Devin'
+  | 'volt.new' 
+  | 'Emergent' 
   | 'antigravity' 
   | 'Manus' 
   | 'Genspark' 
-  | 'Bolt'
+  // Frontend/Framework
+  | 'React'
+  | 'Next.js'
+  | 'Tailwind CSS'
+  | 'Shadcn UI'
+  | 'Expo'
+  // Backend/Database
+  | 'Supabase'
+  | 'Firebase'
+  | 'AWS Amplify'
+  | 'Clerk'
+  // Automation/Integration
+  | 'n8n'
+  | 'Make'
+  | 'Zapier'
+  | 'Dify'
+  | 'LangChain'
+  | 'Flowise'
+  | 'Stripe'
+  // AI Agents
+  | 'CrewAI'
+  // Deployment
+  | 'Vercel'
+  | 'Netlify'
   | 'Other Tools';
 
 export interface DbProduct {

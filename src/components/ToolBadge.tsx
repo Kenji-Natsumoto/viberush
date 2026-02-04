@@ -1,34 +1,24 @@
 import { Badge } from "@/components/ui/badge";
 import type { Tool } from "@/types/database";
-
-const toolVariantMap: Record<Tool, "lovable" | "v0" | "voltnew" | "emergent" | "replit" | "devin" | "cursor" | "windsurf" | "claudecode" | "codex" | "gemini" | "antigravity" | "manus" | "genspark" | "bolt" | "tool"> = {
-  Lovable: "lovable",
-  v0: "v0",
-  "volt.new": "voltnew",
-  Emergent: "emergent",
-  Replit: "replit",
-  Devin: "devin",
-  Cursor: "cursor",
-  Windsurf: "windsurf",
-  "Claude Code": "claudecode",
-  Codex: "codex",
-  Gemini: "gemini",
-  antigravity: "antigravity",
-  Manus: "manus",
-  Genspark: "genspark",
-  Bolt: "bolt",
-  "Other Tools": "tool",
-};
+import { toolColors } from "@/lib/toolConfig";
+import { cn } from "@/lib/utils";
 
 interface ToolBadgeProps {
   tool: Tool;
 }
 
 export function ToolBadge({ tool }: ToolBadgeProps) {
-  const variant = toolVariantMap[tool] || "tool";
+  const colors = toolColors[tool] || toolColors["Other Tools"];
   
   return (
-    <Badge variant={variant} className="text-[10px] font-medium">
+    <Badge 
+      className={cn(
+        "text-[10px] font-medium border",
+        colors.bg,
+        colors.text,
+        colors.border
+      )}
+    >
       {tool}
     </Badge>
   );
