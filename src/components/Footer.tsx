@@ -1,7 +1,15 @@
 import { Link } from "react-router-dom";
-import { Zap, Heart } from "lucide-react";
+import { Zap, Heart, Download } from "lucide-react";
 
 export function Footer() {
+  const handleLogoDownload = () => {
+    const link = document.createElement('a');
+    link.href = '/viberush-logo.svg';
+    link.download = 'viberush-logo.svg';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   return (
     <footer className="border-t border-border bg-card/50 backdrop-blur-sm">
       <div className="max-w-6xl mx-auto px-4 py-12">
@@ -22,6 +30,13 @@ export function Footer() {
             <p className="text-xs text-muted-foreground flex items-center gap-1">
               Made with <Heart className="h-3 w-3 text-destructive fill-destructive" /> by Vibe Coders
             </p>
+            <button
+              onClick={handleLogoDownload}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 mt-2"
+            >
+              <Download className="h-3 w-3" />
+              Download Logo (SVG)
+            </button>
           </div>
 
           {/* Links */}
