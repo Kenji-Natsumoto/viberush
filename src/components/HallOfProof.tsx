@@ -1,7 +1,9 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Clock, Globe, Radio } from "lucide-react";
 import { useProducts } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ToolBadge } from "@/components/ToolBadge";
 import { TOOL_CATEGORIES } from "@/lib/toolConfig";
 import type { Product, Tool } from "@/types/database";
 
@@ -9,9 +11,6 @@ const AI_CODING_ASSISTANTS = TOOL_CATEGORIES.find(
   (cat) => cat.label === "AI Coding Assistants"
 )?.tools ?? [];
 
-function extractMainPlatform(tools: Tool[]): string {
-  return tools.find((tool) => AI_CODING_ASSISTANTS.includes(tool)) ?? "—";
-}
 
 function getProofIndicators(product: Product): string[] {
   const indicators: string[] = [];
@@ -23,7 +22,7 @@ function getProofIndicators(product: Product): string[] {
 const MAX_VISIBLE = 4;
 
 function ProofCard({ product }: { product: Product }) {
-  const mainPlatform = extractMainPlatform(product.tools);
+  const mainTool = product.tools.find((tool) => AI_CODING_ASSISTANTS.includes(tool));
   const proofIndicators = getProofIndicators(product);
 
   return (
@@ -47,22 +46,41 @@ function ProofCard({ product }: { product: Product }) {
         </div>
       </div>
 
+      {/* Proof indicators as prominent pills */}
       {proofIndicators.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-3">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {proofIndicators.map((ind) => (
-            <span key={ind} className="text-[11px] text-muted-foreground/70 bg-muted/50 dark:bg-muted/30 px-2 py-0.5 rounded">
+            <span
+              key={ind}
+              className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 rounded-full"
+            >
+              {ind === "Publicly Accessible" ? <Globe className="h-3 w-3" /> : <Radio className="h-3 w-3" />}
               {ind}
             </span>
           ))}
         </div>
       )}
 
-      <div className="space-y-1 mb-3 text-xs text-muted-foreground">
-        <p>Built with: <span className="text-foreground/80">{mainPlatform}</span></p>
-        <p>Time to build: <span className="text-foreground/80">{product.timeToBuild || "—"}</span></p>
+      {/* Built with - reuse ToolBadge for consistency with rankings */}
+      <div className="flex flex-wrap items-center gap-1.5 mb-2">
+        <span className="text-xs text-muted-foreground">Built with:</span>
+        {mainTool ? (
+          <ToolBadge tool={mainTool} />
+        ) : (
+          <span className="text-xs text-foreground/80">—</span>
+        )}
       </div>
 
-      <p className="text-xs text-muted-foreground/60">by {product.creatorName || "Vibe Coder"}</p>
+      {/* Time to build - distinct warm pill */}
+      <div className="flex items-center gap-1.5 mb-3">
+        <span className="text-xs text-muted-foreground">Time:</span>
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 rounded-full">
+          <Clock className="h-3 w-3" />
+          {product.timeToBuild || "—"}
+        </span>
+      </div>
+
+      <p className="text-xs font-medium text-foreground/90">by {product.creatorName || "Vibe Coder"}</p>
     </Link>
   );
 }
