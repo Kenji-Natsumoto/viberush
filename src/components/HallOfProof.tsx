@@ -43,7 +43,7 @@ function ProofCard({ product }: ProofCardProps) {
   const proofIndicators = getProofIndicators(product);
   
   return (
-    <div className="group bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-md p-5 transition-colors duration-150 hover:bg-[#E5E5E5] dark:hover:bg-muted/50">
+    <div className="group bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-md p-5 transition-colors duration-150 hover:bg-[#E5E5E5] dark:hover:bg-muted/50 w-72">
       {/* 1) Product Icon */}
       <div className="flex items-start gap-4 mb-3">
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
@@ -109,7 +109,7 @@ function ProofCard({ product }: ProofCardProps) {
 
 function ProofCardSkeleton() {
   return (
-    <div className="bg-[#FAFAFA] dark:bg-card border border-border/40 rounded-md p-5">
+    <div className="bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-md p-5 w-72">
       <div className="flex items-start gap-4 mb-3">
         <Skeleton className="w-12 h-12 rounded-lg" />
         <div className="flex-1">
@@ -153,7 +153,7 @@ export function HallOfProof() {
               Only proof from the top 1% of AI-native products
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center mx-auto w-fit">
+          <div className="flex flex-wrap justify-center gap-5">
             {[1, 2, 3, 4].map((i) => (
               <ProofCardSkeleton key={i} />
             ))}
@@ -182,7 +182,7 @@ export function HallOfProof() {
         </div>
         
         {/* Proof Gallery Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 justify-items-center mx-auto w-fit">
+        <div className="flex flex-wrap justify-center gap-5">
           {featuredProducts.map((product) => (
             <ProofCard key={product.id} product={product} />
           ))}
