@@ -80,7 +80,7 @@ function ProofCard({ product }: { product: Product }) {
         </span>
       </div>
 
-      <p className="text-xs font-medium text-foreground/90">by {product.creatorName || "Vibe Coder"}</p>
+      <p className="text-xs text-muted-foreground">Maker: <span className="font-medium text-foreground/90">{product.creatorName || "Vibe Coder"}</span></p>
     </Link>
   );
 }
