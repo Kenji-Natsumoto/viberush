@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TOOL_CATEGORIES } from "@/lib/toolConfig";
@@ -43,7 +44,10 @@ function ProofCard({ product }: ProofCardProps) {
   const proofIndicators = getProofIndicators(product);
   
   return (
-    <div className="group bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-md p-5 transition-colors duration-150 hover:bg-[#E5E5E5] dark:hover:bg-muted/50 w-72">
+    <Link 
+      to={`/product/${product.id}`}
+      className="group bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-md p-5 transition-colors duration-150 hover:bg-[#E5E5E5] dark:hover:bg-muted/50 w-72 block"
+    >
       {/* 1) Product Icon */}
       <div className="flex items-start gap-4 mb-3">
         <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
@@ -103,7 +107,7 @@ function ProofCard({ product }: ProofCardProps) {
       <p className="text-xs text-muted-foreground/60">
         by {product.creatorName || "Vibe Coder"}
       </p>
-    </div>
+    </Link>
   );
 }
 
