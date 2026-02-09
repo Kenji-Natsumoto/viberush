@@ -72,7 +72,7 @@ function MoreCard() {
     <div
       className="flex-shrink-0 w-64 sm:w-72 bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-sm p-5 flex items-center justify-center"
     >
-      <span className="text-sm font-medium text-muted-foreground">More Proof →</span>
+      <span className="text-sm font-medium text-muted-foreground">More Proof</span>
     </div>
   );
 }
