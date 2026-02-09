@@ -69,12 +69,11 @@ function ProofCard({ product }: { product: Product }) {
 
 function MoreCard() {
   return (
-    <Link
-      to="/hall-of-proof"
-      className="flex-shrink-0 w-64 sm:w-72 bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-sm p-5 transition-colors duration-150 hover:bg-[#E5E5E5] dark:hover:bg-muted/50 flex items-center justify-center block"
+    <div
+      className="flex-shrink-0 w-64 sm:w-72 bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-sm p-5 flex items-center justify-center"
     >
       <span className="text-sm font-medium text-muted-foreground">More Proof →</span>
-    </Link>
+    </div>
   );
 }
 
@@ -151,8 +150,6 @@ export function HallOfProof() {
           className="overflow-hidden"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
         >
           <div
             ref={trackRef}
