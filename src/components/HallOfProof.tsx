@@ -23,7 +23,7 @@ function getProofIndicators(product: Product): string[] {
   
   // If product has a URL, it's publicly accessible
   if (product.url) {
-    indicators.push("Publicly accessible");
+    indicators.push("Publicly Accessible");
   }
   
   // If product has a demo URL, it's live
@@ -43,34 +43,45 @@ function ProofCard({ product }: ProofCardProps) {
   const proofIndicators = getProofIndicators(product);
   
   return (
-    <div className="group bg-card border border-border/50 rounded-lg p-6 transition-all duration-200 hover:bg-muted/30 hover:border-border">
-      {/* 1) Product Name - Primary, largest text */}
-      <h3 className="text-lg font-semibold text-foreground truncate mb-2">
-        {product.name}
-      </h3>
-      
-      {/* 2) One-line Description - Present tense, what's running */}
-      <p className="text-sm text-muted-foreground line-clamp-1 mb-4">
-        {product.tagline}
-      </p>
-      
-      {/* 3) Build Context - Two factual lines */}
-      <div className="space-y-1 mb-4">
-        <p className="text-xs text-muted-foreground/80">
-          Built with: <span className="text-foreground/70">{mainPlatform}</span>
-        </p>
-        <p className="text-xs text-muted-foreground/80">
-          Time to build: <span className="text-foreground/70">{product.timeToBuild || "—"}</span>
-        </p>
+    <div className="group bg-[#FAFAFA] dark:bg-card border border-border/40 rounded-md p-5 transition-colors duration-150 hover:bg-[#F5F5F5] dark:hover:bg-muted/30">
+      {/* 1) Product Icon */}
+      <div className="flex items-start gap-4 mb-3">
+        <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+          {product.iconUrl ? (
+            <img 
+              src={product.iconUrl} 
+              alt={`${product.name} icon`}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-muted to-muted-foreground/20 flex items-center justify-center">
+              <span className="text-lg font-semibold text-muted-foreground">
+                {product.name.charAt(0)}
+              </span>
+            </div>
+          )}
+        </div>
+        
+        <div className="flex-1 min-w-0">
+          {/* 2) Product Name */}
+          <h3 className="text-base font-semibold text-foreground truncate">
+            {product.name}
+          </h3>
+          
+          {/* 3) Product Tagline */}
+          <p className="text-sm text-muted-foreground line-clamp-1 mt-0.5">
+            {product.tagline}
+          </p>
+        </div>
       </div>
       
-      {/* 4) Proof Indicators - Minimal, optional */}
+      {/* 4) Proof Indicators */}
       {proofIndicators.length > 0 && (
-        <div className="flex gap-3 mb-4">
+        <div className="flex flex-wrap gap-2 mb-3">
           {proofIndicators.map((indicator) => (
             <span 
               key={indicator} 
-              className="text-[10px] text-muted-foreground/60 uppercase tracking-wider"
+              className="text-[11px] text-muted-foreground/70 bg-muted/50 dark:bg-muted/30 px-2 py-0.5 rounded"
             >
               {indicator}
             </span>
@@ -78,8 +89,18 @@ function ProofCard({ product }: ProofCardProps) {
         </div>
       )}
       
-      {/* 5) Maker - Secondary metadata at bottom */}
-      <p className="text-xs text-muted-foreground/50">
+      {/* 5) Build Context */}
+      <div className="space-y-1 mb-3 text-xs text-muted-foreground">
+        <p>
+          Built with: <span className="text-foreground/80">{mainPlatform}</span>
+        </p>
+        <p>
+          Time to build: <span className="text-foreground/80">{product.timeToBuild || "—"}</span>
+        </p>
+      </div>
+      
+      {/* 6) Maker Name */}
+      <p className="text-xs text-muted-foreground/60">
         by {product.creatorName || "Vibe Coder"}
       </p>
     </div>
@@ -88,10 +109,19 @@ function ProofCard({ product }: ProofCardProps) {
 
 function ProofCardSkeleton() {
   return (
-    <div className="bg-card border border-border/50 rounded-lg p-6">
-      <Skeleton className="h-5 w-3/4 mb-2" />
-      <Skeleton className="h-4 w-full mb-4" />
-      <div className="space-y-1 mb-4">
+    <div className="bg-[#FAFAFA] dark:bg-card border border-border/40 rounded-md p-5">
+      <div className="flex items-start gap-4 mb-3">
+        <Skeleton className="w-12 h-12 rounded-lg" />
+        <div className="flex-1">
+          <Skeleton className="h-5 w-3/4 mb-1" />
+          <Skeleton className="h-4 w-full" />
+        </div>
+      </div>
+      <div className="flex gap-2 mb-3">
+        <Skeleton className="h-5 w-20 rounded" />
+        <Skeleton className="h-5 w-16 rounded" />
+      </div>
+      <div className="space-y-1 mb-3">
         <Skeleton className="h-3 w-1/2" />
         <Skeleton className="h-3 w-1/3" />
       </div>
@@ -103,19 +133,19 @@ function ProofCardSkeleton() {
 export function HallOfProof() {
   const { products, isLoading } = useProducts();
 
-  // Select featured products: is_featured === true, newest first, max 5
+  // Select featured products: is_featured === true, newest first, max 10
   const featuredProducts = useMemo(() => {
     return products
       .filter((p) => p.isFeatured)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 5);
+      .slice(0, 10);
   }, [products]);
 
   if (isLoading) {
     return (
       <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
             <h2 className="text-2xl font-bold text-foreground mb-2">
               Hall of Proof
             </h2>
@@ -123,8 +153,8 @@ export function HallOfProof() {
               Only proof from the top 1% of AI-native products
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((i) => (
               <ProofCardSkeleton key={i} />
             ))}
           </div>
@@ -140,9 +170,9 @@ export function HallOfProof() {
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <h2 className="text-2xl font-bold text-foreground mb-2">
             Hall of Proof
           </h2>
@@ -152,7 +182,7 @@ export function HallOfProof() {
         </div>
         
         {/* Proof Gallery Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {featuredProducts.map((product) => (
             <ProofCard key={product.id} product={product} />
           ))}
