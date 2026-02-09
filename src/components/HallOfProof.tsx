@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -103,6 +103,8 @@ function ProofCardSkeleton() {
 
 export function HallOfProof() {
   const { products, isLoading } = useProducts();
+  const [isPaused, setIsPaused] = useState(false);
+  const trackRef = useRef<HTMLDivElement>(null);
 
   const featuredProducts = useMemo(() => {
     return products
@@ -112,6 +114,10 @@ export function HallOfProof() {
 
   const visibleProducts = featuredProducts.slice(0, MAX_VISIBLE);
   const hasMore = featuredProducts.length > MAX_VISIBLE;
+
+  const allCards = hasMore
+    ? [...visibleProducts, null]
+    : visibleProducts;
 
   if (isLoading) {
     return (
@@ -141,11 +147,35 @@ export function HallOfProof() {
           <p className="text-sm text-muted-foreground">Only proof from the top 1% of AI-native products</p>
         </div>
 
-        <div className="flex gap-5 overflow-x-auto scrollbar-hide justify-center pb-2">
-          {visibleProducts.map((product) => (
-            <ProofCard key={product.id} product={product} />
-          ))}
-          {hasMore && <MoreCard />}
+        <div
+          className="overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
+        >
+          <div
+            ref={trackRef}
+            className="flex gap-5 w-max hall-of-proof-scroll"
+            style={{ animationPlayState: isPaused ? "paused" : "running" }}
+          >
+            {/* Original set */}
+            {allCards.map((item, i) =>
+              item ? (
+                <ProofCard key={`a-${item.id}`} product={item} />
+              ) : (
+                <MoreCard key={`a-more`} />
+              )
+            )}
+            {/* Duplicate set for seamless loop */}
+            {allCards.map((item, i) =>
+              item ? (
+                <ProofCard key={`b-${item.id}`} product={item} />
+              ) : (
+                <MoreCard key={`b-more`} />
+              )
+            )}
+          </div>
         </div>
       </div>
     </section>
