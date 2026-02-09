@@ -114,9 +114,7 @@ export function HallOfProof() {
   const visibleProducts = featuredProducts.slice(0, MAX_VISIBLE);
   const hasMore = featuredProducts.length > MAX_VISIBLE;
 
-  const allCards = hasMore
-    ? [...visibleProducts, null]
-    : visibleProducts;
+  const allCards = [...visibleProducts, null];
 
   if (isLoading) {
     return (
