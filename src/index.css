@@ -162,3 +162,17 @@
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Hall of Proof infinite scroll */
+@keyframes hall-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.hall-of-proof-scroll {
+  animation: hall-scroll 30s linear infinite;
+}
