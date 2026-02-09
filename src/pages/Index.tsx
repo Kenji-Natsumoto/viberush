@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { StatsSection } from "@/components/StatsSection";
-import { FeaturedBuilders } from "@/components/FeaturedBuilders";
+import { HallOfProof } from "@/components/HallOfProof";
 import { ProductFeed } from "@/components/ProductFeed";
 import { FAQSection } from "@/components/FAQSection";
 import { Footer } from "@/components/Footer";
@@ -20,7 +20,7 @@ const Index = () => {
       <main>
         <HeroSection onSubmitClick={openSubmitModal} />
         <StatsSection />
-        <FeaturedBuilders />
+        <HallOfProof />
         <ProductFeed />
         <FAQSection />
       </main>
