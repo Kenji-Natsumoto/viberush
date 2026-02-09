@@ -74,7 +74,7 @@ function ProofCard({ product }: { product: Product }) {
       {/* Time to build - distinct warm pill */}
       <div className="flex items-center gap-1.5 mb-3">
         <span className="text-xs text-muted-foreground">Time:</span>
-        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 rounded-full">
+        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-foreground bg-white dark:bg-white/90 px-2 py-0.5 rounded-full">
           <Clock className="h-3 w-3" />
           {product.timeToBuild || "—"}
         </span>
