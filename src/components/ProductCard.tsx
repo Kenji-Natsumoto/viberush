@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Clock, ExternalLink, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { ToolBadge } from "./ToolBadge";
 import { UpvoteButton } from "./UpvoteButton";
 import { VibeScoreButton } from "./VibeScoreButton";
@@ -46,33 +47,42 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
               {product.name}
             </h3>
             <a
-              href={product.url}
+              href={product.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
+              className={cn(
+                "opacity-0 group-hover:opacity-100 transition-opacity",
+                !product.url && "hidden"
+              )}
               onClick={(e) => e.stopPropagation()}
             >
               <ExternalLink className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
             </a>
           </div>
           
-          <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
-            {product.tagline}
-          </p>
+          {product.tagline && (
+            <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
+              {product.tagline}
+            </p>
+          )}
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Tool Badges */}
-            <div className="flex flex-wrap gap-1">
-              {product.tools.map((tool) => (
-                <ToolBadge key={tool} tool={tool} />
-              ))}
-            </div>
+            {product.tools.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {product.tools.map((tool) => (
+                  <ToolBadge key={tool} tool={tool} />
+                ))}
+              </div>
+            )}
 
             {/* Time to Build */}
-            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock className="h-3 w-3" />
-              <span>{product.timeToBuild}</span>
-            </div>
+            {product.timeToBuild && (
+              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Clock className="h-3 w-3" />
+                <span>{product.timeToBuild}</span>
+              </div>
+            )}
           </div>
         </div>
 

@@ -52,20 +52,20 @@ export type Tool =
 export interface DbProduct {
   id: string;
   name: string;
-  tagline: string;
+  tagline: string | null;
   description: string;
-  url: string;
+  url: string | null;
   icon_url: string;
   banner_url?: string | null;
   demo_url?: string | null;
   video_url?: string | null;
   ai_prompt?: string | null;
   tools_used: Tool[];
-  time_to_build: string;
+  time_to_build: string | null;
   votes_count: number;
   vibe_score: number;
   user_id: string;
-  contact_email: string;
+  contact_email: string | null;
   x_url?: string | null;
   linkedin_url?: string | null;
   github_url?: string | null;
@@ -120,20 +120,20 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
   return {
     id: dbProduct.id,
     name: dbProduct.name,
-    tagline: dbProduct.tagline,
+    tagline: dbProduct.tagline ?? '',
     description: dbProduct.description,
-    url: dbProduct.url,
+    url: dbProduct.url ?? '',
     iconUrl: dbProduct.icon_url,
     bannerUrl: dbProduct.banner_url ?? undefined,
     demoUrl: dbProduct.demo_url ?? undefined,
     videoUrl: dbProduct.video_url ?? undefined,
     aiPrompt: dbProduct.ai_prompt ?? undefined,
-    tools: dbProduct.tools_used,
-    timeToBuild: dbProduct.time_to_build,
+    tools: dbProduct.tools_used ?? [],
+    timeToBuild: dbProduct.time_to_build ?? '',
     votes: dbProduct.votes_count,
     vibeScore: dbProduct.vibe_score ?? 0,
     userId: dbProduct.user_id,
-    contactEmail: dbProduct.contact_email,
+    contactEmail: dbProduct.contact_email ?? '',
     xUrl: dbProduct.x_url ?? undefined,
     linkedinUrl: dbProduct.linkedin_url ?? undefined,
     githubUrl: dbProduct.github_url ?? undefined,
@@ -148,24 +148,25 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
   };
 }
 
-// Product creation input
+// Product creation input (only 3 required fields for quick submit)
 export interface CreateProductInput {
   name: string;
-  tagline: string;
   description: string;
-  url: string;
+  proxyCreatorName: string;
+  // All below are optional (for details step)
+  tagline?: string;
+  url?: string;
   iconUrl?: string;
   bannerUrl?: string;
   demoUrl?: string;
   videoUrl?: string;
   aiPrompt?: string;
-  tools: Tool[];
-  timeToBuild: string;
-  contactEmail: string;
+  tools?: Tool[];
+  timeToBuild?: string;
+  contactEmail?: string;
   xUrl?: string;
   linkedinUrl?: string;
   githubUrl?: string;
-  proxyCreatorName?: string;
   proxyAvatarUrl?: string;
 }
 

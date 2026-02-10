@@ -73,7 +73,9 @@ const ProductDetail = () => {
 
   const handleShareToX = () => {
     const timeToBuildText = product.timeToBuild || "a few hours";
-    const shareText = `Built ${product.name} in ${timeToBuildText} with AI! Check it out on #VibeRush 🚀`;
+    const shareText = product.url
+      ? `Built ${product.name} in ${timeToBuildText} with AI! Check it out on #VibeRush 🚀`
+      : `Built ${product.name} in ${timeToBuildText} with AI! #VibeRush 🚀`;
     const shareUrl = window.location.href;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(twitterUrl, "_blank", "noopener,noreferrer");
@@ -119,26 +121,32 @@ const ProductDetail = () => {
                   <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
                     {product.name}
                   </h1>
-                  <a
-                    href={product.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <ExternalLink className="h-5 w-5" />
-                  </a>
-                </div>
-                <p className="text-lg text-muted-foreground mb-4">
-                  {product.tagline}
-                </p>
+                    {product.url && (
+                      <a
+                        href={product.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-foreground"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                      </a>
+                    )}
+                  </div>
+                {product.tagline && (
+                  <p className="text-lg text-muted-foreground mb-4">
+                    {product.tagline}
+                  </p>
+                )}
                 <div className="flex flex-wrap items-center gap-2 mb-4">
-                  {product.tools.map((tool) => (
+                  {product.tools.length > 0 && product.tools.map((tool) => (
                     <ToolBadge key={tool} tool={tool} />
                   ))}
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Clock className="h-4 w-4" />
-                    <span>{product.timeToBuild}</span>
-                  </div>
+                  {product.timeToBuild && (
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <Clock className="h-4 w-4" />
+                      <span>{product.timeToBuild}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

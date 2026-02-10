@@ -96,22 +96,23 @@ export function useCreateProduct() {
         .from('products')
         .insert({
           name: input.name,
-          tagline: input.tagline,
           description: input.description,
-          url: input.url,
+          proxy_creator_name: input.proxyCreatorName,
+          user_id: user.id,
+          // Optional fields - only set if provided
+          tagline: input.tagline || null,
+          url: input.url || null,
           icon_url: input.iconUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${input.name}&backgroundColor=6366f1`,
           banner_url: input.bannerUrl || null,
           demo_url: input.demoUrl || null,
           video_url: input.videoUrl || null,
           ai_prompt: input.aiPrompt || null,
-          tools_used: input.tools,
-          time_to_build: input.timeToBuild,
-          user_id: user.id,
-          contact_email: input.contactEmail,
+          tools_used: input.tools || [],
+          time_to_build: input.timeToBuild || null,
+          contact_email: input.contactEmail || null,
           x_url: input.xUrl || null,
           linkedin_url: input.linkedinUrl || null,
           github_url: input.githubUrl || null,
-          proxy_creator_name: input.proxyCreatorName || null,
           proxy_avatar_url: input.proxyAvatarUrl || null,
         })
         .select()
@@ -123,8 +124,8 @@ export function useCreateProduct() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
       toast({
-        title: "App Submitted! 🎉",
-        description: "Your app is now live on VibeRush!",
+        title: "Shipped! 🎉",
+        description: "Your proof is now live on VibeRush!",
       });
     },
     onError: (error: Error) => {
