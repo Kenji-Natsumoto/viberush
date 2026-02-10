@@ -101,7 +101,7 @@ export function useCreateProduct() {
           user_id: user.id,
           // Optional fields - only set if provided
           tagline: input.tagline || '',
-          url: input.url || null,
+          url: input.url || '',
           icon_url: input.iconUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${input.name}&backgroundColor=6366f1`,
           banner_url: input.bannerUrl || null,
           demo_url: input.demoUrl || null,
