@@ -100,7 +100,7 @@ export function useCreateProduct() {
           proxy_creator_name: input.proxyCreatorName,
           user_id: user.id,
           // Optional fields - only set if provided
-          tagline: input.tagline || null,
+          tagline: input.tagline || '',
           url: input.url || null,
           icon_url: input.iconUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${input.name}&backgroundColor=6366f1`,
           banner_url: input.bannerUrl || null,
