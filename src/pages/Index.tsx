@@ -7,12 +7,18 @@ import { ProductFeed } from "@/components/ProductFeed";
 import { FAQSection } from "@/components/FAQSection";
 import { Footer } from "@/components/Footer";
 import { SubmitModal } from "@/components/SubmitModal";
+import { DetailsModal } from "@/components/DetailsModal";
 
 const Index = () => {
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [detailsProductId, setDetailsProductId] = useState<string | null>(null);
 
   const openSubmitModal = () => setIsSubmitModalOpen(true);
   const closeSubmitModal = () => setIsSubmitModalOpen(false);
+
+  const handleOpenDetails = (productId: string) => {
+    setDetailsProductId(productId);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -25,7 +31,16 @@ const Index = () => {
         <FAQSection />
       </main>
       <Footer />
-      <SubmitModal isOpen={isSubmitModalOpen} onClose={closeSubmitModal} />
+      <SubmitModal
+        isOpen={isSubmitModalOpen}
+        onClose={closeSubmitModal}
+        onOpenDetails={handleOpenDetails}
+      />
+      <DetailsModal
+        isOpen={!!detailsProductId}
+        onClose={() => setDetailsProductId(null)}
+        productId={detailsProductId}
+      />
     </div>
   );
 };
