@@ -13,6 +13,7 @@ import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
 import Brand from "./pages/Brand";
 import NotFound from "./pages/NotFound";
+import ShortUrlRedirect from "./pages/ShortUrlRedirect";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/s/:code" element={<ShortUrlRedirect />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
