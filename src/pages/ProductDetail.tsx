@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
@@ -10,6 +10,7 @@ import { EditProductModal } from "@/components/EditProductModal";
 import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProduct } from "@/hooks/useProducts";
+import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
 
@@ -29,6 +30,8 @@ const ProductDetail = () => {
 
   // Try to fetch from database first
   const { data: dbProduct, isLoading } = useProduct(id);
+  const { data: shortCode } = useShortUrl(id);
+  const createShortUrl = useCreateShortUrl();
   
   // Fallback to dummy data if not in database
   const dummyProduct = dummyProducts.find((p) => p.id === id);
@@ -196,6 +199,23 @@ const ProductDetail = () => {
               >
                 <Share2 className="h-4 w-4" />
                 Share on X
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (shortCode) {
+                    const shortUrl = `${window.location.origin}/s/${shortCode}`;
+                    navigator.clipboard.writeText(shortUrl);
+                  } else if (id) {
+                    createShortUrl.mutate(id);
+                  }
+                }}
+                disabled={createShortUrl.isPending}
+                className="gap-2"
+              >
+                <Link2 className="h-4 w-4" />
+                {createShortUrl.isPending ? 'Creating...' : shortCode ? 'Copy Short URL' : 'Get Short URL'}
               </Button>
             </div>
 
