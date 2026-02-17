@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
+import { ImageUpload } from "@/components/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -354,21 +355,15 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
               <p className="text-xs text-muted-foreground">Leave empty to use your profile name.</p>
             </div>
 
-            {/* Creator Avatar URL */}
+            {/* Creator Avatar */}
             <div className="space-y-2">
-              <Label htmlFor="edit-proxyAvatarUrl" className="flex items-center gap-2 text-sm font-medium">
+              <Label className="flex items-center gap-2 text-sm font-medium">
                 <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-                Creator Avatar URL
+                Creator Avatar
               </Label>
-              <Input
-                id="edit-proxyAvatarUrl"
-                value={proxyAvatarUrl}
-                onChange={(e) => setProxyAvatarUrl(e.target.value)}
-                placeholder="https://..."
-                className="bg-background border-amber-500/30 focus:border-amber-500"
-              />
+              <ImageUpload value={proxyAvatarUrl} onChange={setProxyAvatarUrl} placeholder="https://... or upload" />
               <p className="text-xs text-muted-foreground">
-                Right-click the logo on their site → Copy Image Address. Leave empty to use your profile avatar.
+                Upload an avatar or paste a URL. Leave empty to use your profile avatar.
               </p>
             </div>
           </div>
@@ -442,17 +437,11 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
 
           {/* Banner Image */}
           <div className="space-y-2">
-            <Label htmlFor="edit-banner" className="flex items-center gap-2 text-sm font-medium">
+            <Label className="flex items-center gap-2 text-sm font-medium">
               <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-              Banner Image URL (optional)
+              Banner Image (optional)
             </Label>
-            <Input
-              id="edit-banner"
-              value={bannerUrl}
-              onChange={(e) => setBannerUrl(e.target.value)}
-              placeholder="https://yourapp.com/banner.png"
-              className="bg-secondary border-transparent focus:border-border"
-            />
+            <ImageUpload value={bannerUrl} onChange={setBannerUrl} placeholder="https://... or upload" />
           </div>
         </div>
 
