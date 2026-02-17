@@ -72,6 +72,8 @@ export interface DbProduct {
   proxy_creator_name?: string | null;
   proxy_avatar_url?: string | null;
   is_featured: boolean;
+  owner_id?: string | null;
+  claim_status?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -100,6 +102,8 @@ export interface Product {
   proxyCreatorName?: string;
   proxyAvatarUrl?: string;
   isFeatured: boolean;
+  ownerId?: string;
+  claimStatus: string;
   createdAt: string;
   updatedAt: string;
   // Creator display info (computed from proxy or profile)
@@ -140,6 +144,8 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
     proxyCreatorName: dbProduct.proxy_creator_name ?? undefined,
     proxyAvatarUrl: dbProduct.proxy_avatar_url ?? undefined,
     isFeatured: dbProduct.is_featured ?? false,
+    ownerId: dbProduct.owner_id ?? undefined,
+    claimStatus: dbProduct.claim_status ?? 'none',
     createdAt: dbProduct.created_at,
     updatedAt: dbProduct.updated_at,
     // Computed display values
