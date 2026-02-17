@@ -206,6 +206,18 @@ const ProductDetail = () => {
               )}
               
               {/* Claim ownership button */}
+              {!user && !product.ownerId && (
+                <Button
+                  variant="outline"
+                  asChild
+                  className="gap-2"
+                >
+                  <Link to="/auth">
+                    <Shield className="h-4 w-4" />
+                    Claim this Product
+                  </Link>
+                </Button>
+              )}
               {canClaim && (
                 <Button
                   variant="outline"
@@ -214,19 +226,19 @@ const ProductDetail = () => {
                   className="gap-2"
                 >
                   {requestClaim.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}
-                  所有権を申請
+                  Claim this Product
                 </Button>
               )}
               {isMyPendingClaim && (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary px-3 py-2 rounded-md">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  承認待ち
+                  <Clock className="h-4 w-4" />
+                  Claim pending verification from Kenji
                 </div>
               )}
               {isOwner && (
                 <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-2 rounded-md">
                   <ShieldCheck className="h-4 w-4" />
-                  認証済みオーナー
+                  Verified Owner
                 </div>
               )}
               
@@ -240,7 +252,7 @@ const ProductDetail = () => {
                     className="gap-1 bg-green-600 hover:bg-green-700 text-white"
                   >
                     {approveClaim.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-                    承認
+                    Verify
                   </Button>
                   <Button
                     size="sm"
@@ -248,9 +260,22 @@ const ProductDetail = () => {
                     onClick={() => id && rejectClaim.mutate(id)}
                     disabled={rejectClaim.isPending}
                   >
-                    却下
+                    Reject
                   </Button>
                 </div>
+              )}
+              {/* Admin: manually verify any unverified product */}
+              {isAdmin && !isPendingClaim && product.claimStatus !== 'verified' && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => id && approveClaim.mutate(id)}
+                  disabled={approveClaim.isPending}
+                  className="gap-1"
+                >
+                  {approveClaim.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <ShieldCheck className="h-3 w-3" />}
+                  Set Verified (Admin)
+                </Button>
               )}
               <VibeScoreButton score={product.vibeScore} productId={product.id} />
               <UpvoteButton initialVotes={product.votes} productId={product.id} />
