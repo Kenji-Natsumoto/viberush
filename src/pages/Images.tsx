@@ -40,9 +40,7 @@ const Images = () => {
   });
 
   const handleUpload = async (files: FileList) => {
-    for (const file of Array.from(files)) {
-      await upload(file);
-    }
+    await Promise.all(Array.from(files).map((file) => upload(file)));
     queryClient.invalidateQueries({ queryKey: ['user-images'] });
   };
 
