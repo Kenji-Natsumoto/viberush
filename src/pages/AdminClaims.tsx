@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useProducts } from "@/hooks/useProducts";
 import { useIsAdmin, useApproveClaim, useRejectClaim } from "@/hooks/useClaim";
 import { useAuth } from "@/contexts/AuthContext";
-import { Check, X, Shield, Loader2, ArrowLeft } from "lucide-react";
+import { Check, X, Shield, ShieldCheck, Loader2, ArrowLeft } from "lucide-react";
 
 const AdminClaims = () => {
   const { user } = useAuth();
@@ -96,38 +96,61 @@ const AdminClaims = () => {
           )}
         </section>
 
-        {/* Verified Claims */}
-        <section>
+        {/* All Products - Admin can manually verify */}
+        <section className="mb-10">
           <h2 className="text-lg font-semibold text-foreground mb-4">
-            認証済み ({verifiedProducts.length})
+            全プロダクト（手動認証）
           </h2>
-          {verifiedProducts.length === 0 ? (
-            <div className="text-muted-foreground bg-card border border-border rounded-xl p-6 text-center">
-              認証済みのアプリはありません
-            </div>
+          {isLoading ? (
+            <div className="text-muted-foreground">読み込み中...</div>
           ) : (
             <div className="space-y-3">
-              {verifiedProducts.map((product) => (
-                <div key={product.id} className="flex items-center gap-4 bg-card border border-border rounded-xl p-4">
-                  <img
-                    src={product.iconUrl}
-                    alt={product.name}
-                    className="w-12 h-12 rounded-xl object-cover border border-border"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <Link to={`/product/${product.id}`} className="font-medium text-foreground hover:underline">
-                      {product.name}
-                    </Link>
-                    <p className="text-sm text-muted-foreground truncate">
-                      オーナーID: {product.ownerId?.slice(0, 8)}...
-                    </p>
+              {products
+                .filter((p) => p.claimStatus !== 'pending')
+                .map((product) => (
+                  <div key={product.id} className="flex items-center gap-4 bg-card border border-border rounded-xl p-4">
+                    <img
+                      src={product.iconUrl}
+                      alt={product.name}
+                      className="w-12 h-12 rounded-xl object-cover border border-border"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <Link to={`/product/${product.id}`} className="font-medium text-foreground hover:underline">
+                        {product.name}
+                      </Link>
+                      <p className="text-sm text-muted-foreground truncate">
+                        {product.ownerId ? `オーナーID: ${product.ownerId.slice(0, 8)}...` : 'オーナー未設定'}
+                      </p>
+                    </div>
+                    {product.claimStatus === 'verified' ? (
+                      <div className="flex items-center gap-2">
+                        <span className="flex items-center gap-1 text-sm text-primary">
+                          <Check className="h-4 w-4" />
+                          認証済み
+                        </span>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => rejectClaim.mutate(product.id)}
+                          disabled={rejectClaim.isPending}
+                          className="text-xs text-muted-foreground"
+                        >
+                          取消
+                        </Button>
+                      </div>
+                    ) : (
+                      <Button
+                        size="sm"
+                        onClick={() => approveClaim.mutate(product.id)}
+                        disabled={approveClaim.isPending}
+                        className="gap-1 bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        {approveClaim.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <ShieldCheck className="h-3 w-3" />}
+                        手動認証
+                      </Button>
+                    )}
                   </div>
-                  <div className="flex items-center gap-1 text-sm text-primary">
-                    <Check className="h-4 w-4" />
-                    認証済み
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </section>
