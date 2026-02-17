@@ -104,7 +104,7 @@ const ProductDetail = () => {
         <div className="bg-card border border-border rounded-2xl overflow-hidden mb-8">
           {/* Banner */}
           {product.bannerUrl && (
-            <div className="h-48 bg-gradient-to-r from-primary/20 to-accent/20 relative overflow-hidden">
+            <div className="relative w-full bg-gradient-to-r from-primary/20 to-accent/20 overflow-hidden" style={{ aspectRatio: '1584 / 396' }}>
               <img
                 src={product.bannerUrl}
                 alt={product.name}
