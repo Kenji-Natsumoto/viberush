@@ -144,10 +144,32 @@ const ProductDetail = () => {
                     )}
                   </div>
                 {product.tagline && (
-                  <p className="text-lg text-muted-foreground mb-4">
+                  <p className="text-lg text-muted-foreground mb-3">
                     {product.tagline}
                   </p>
                 )}
+                {/* Creator Info - inline */}
+                <div className="flex items-center gap-2 mb-4">
+                  <img
+                    src={product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`}
+                    alt={product.creatorName || 'Creator'}
+                    className="w-7 h-7 rounded-full"
+                    onError={(e) => {
+                      e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`;
+                    }}
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    by <span className="text-foreground font-medium">{product.creatorName || 'Vibe Coder'}</span>
+                  </span>
+                  <span className="text-sm text-muted-foreground">·</span>
+                  <span className="text-sm text-muted-foreground">
+                    {new Date(product.createdAt).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </span>
+                </div>
                 <div className="flex flex-wrap items-center gap-2 mb-4">
                   {product.tools.length > 0 && product.tools.map((tool) => (
                     <ToolBadge key={tool} tool={tool} />
@@ -349,28 +371,6 @@ const ProductDetail = () => {
           </div>
         )}
 
-        {/* Creator Info */}
-        <div className="flex items-center gap-4 mt-8 p-4 bg-card border border-border rounded-xl">
-          <img
-            src={product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`}
-            alt={product.creatorName || 'Creator'}
-            className="w-12 h-12 rounded-full"
-            onError={(e) => {
-              e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`;
-            }}
-          />
-          <div>
-            <p className="text-sm text-muted-foreground">Created by</p>
-            <p className="font-medium text-foreground">{product.creatorName || 'Vibe Coder'}</p>
-          </div>
-          <p className="ml-auto text-sm text-muted-foreground">
-            {new Date(product.createdAt).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </p>
-        </div>
 
         {/* Edit Modal */}
         <EditProductModal
