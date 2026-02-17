@@ -15,6 +15,7 @@ import Brand from "./pages/Brand";
 import NotFound from "./pages/NotFound";
 import ShortUrlRedirect from "./pages/ShortUrlRedirect";
 import Images from "./pages/Images";
+import AdminClaims from "./pages/AdminClaims";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/brand" element={<Brand />} />
             <Route path="/images" element={<Images />} />
+            <Route path="/admin/claims" element={<AdminClaims />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

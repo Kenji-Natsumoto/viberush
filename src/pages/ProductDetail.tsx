@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProductScreenshots } from "@/hooks/useProductScreenshots";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2, Image as ImageIcon, Shield, ShieldCheck, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
@@ -12,6 +12,7 @@ import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProduct } from "@/hooks/useProducts";
 import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
+import { useRequestClaim, useIsAdmin, useApproveClaim, useRejectClaim } from "@/hooks/useClaim";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
 
@@ -34,6 +35,10 @@ const ProductDetail = () => {
   const { data: shortCode } = useShortUrl(id);
   const createShortUrl = useCreateShortUrl();
   const { data: screenshots = [] } = useProductScreenshots(id);
+  const requestClaim = useRequestClaim();
+  const approveClaim = useApproveClaim();
+  const rejectClaim = useRejectClaim();
+  const isAdmin = useIsAdmin();
   
   // Fallback to dummy data if not in database
   const dummyProduct = dummyProducts.find((p) => p.id === id);
@@ -65,8 +70,11 @@ const ProductDetail = () => {
   }
 
   
-  // Check if current user is the owner
-  const isOwner = user && user.id === product.userId;
+  // Check if current user is the verified owner or admin
+  const isOwner = user && (user.id === product.ownerId && product.claimStatus === 'verified');
+  const canClaim = user && !product.ownerId && product.claimStatus === 'none';
+  const isPendingClaim = product.claimStatus === 'pending';
+  const isMyPendingClaim = user && product.ownerId === user.id && isPendingClaim;
 
   const handleCopyPrompt = async () => {
     if (product.aiPrompt) {
@@ -186,7 +194,7 @@ const ProductDetail = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
-              {isOwner && (
+              {(isOwner || isAdmin) && (
                 <Button
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
@@ -195,6 +203,54 @@ const ProductDetail = () => {
                   <Pencil className="h-4 w-4" />
                   Edit App
                 </Button>
+              )}
+              
+              {/* Claim ownership button */}
+              {canClaim && (
+                <Button
+                  variant="outline"
+                  onClick={() => id && requestClaim.mutate(id)}
+                  disabled={requestClaim.isPending}
+                  className="gap-2"
+                >
+                  {requestClaim.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}
+                  所有権を申請
+                </Button>
+              )}
+              {isMyPendingClaim && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary px-3 py-2 rounded-md">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  承認待ち
+                </div>
+              )}
+              {isOwner && (
+                <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-2 rounded-md">
+                  <ShieldCheck className="h-4 w-4" />
+                  認証済みオーナー
+                </div>
+              )}
+              
+              {/* Admin controls for pending claims */}
+              {isAdmin && isPendingClaim && (
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={() => id && approveClaim.mutate(id)}
+                    disabled={approveClaim.isPending}
+                    className="gap-1 bg-green-600 hover:bg-green-700 text-white"
+                  >
+                    {approveClaim.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
+                    承認
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={() => id && rejectClaim.mutate(id)}
+                    disabled={rejectClaim.isPending}
+                  >
+                    却下
+                  </Button>
+                </div>
               )}
               <VibeScoreButton score={product.vibeScore} productId={product.id} />
               <UpvoteButton initialVotes={product.votes} productId={product.id} />
