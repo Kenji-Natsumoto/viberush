@@ -107,6 +107,9 @@ const ProductDetail = () => {
                 src={product.bannerUrl}
                 alt={product.name}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.currentTarget.parentElement as HTMLElement).style.display = 'none';
+                }}
               />
             </div>
           )}
@@ -118,6 +121,9 @@ const ProductDetail = () => {
                 src={product.iconUrl}
                 alt={product.name}
                 className="w-20 h-20 rounded-2xl object-cover border border-border"
+                onError={(e) => {
+                  e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(product.name)}&backgroundColor=6366f1`;
+                }}
               />
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
@@ -325,6 +331,9 @@ const ProductDetail = () => {
             src={product.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`}
             alt={product.creatorName || 'Creator'}
             className="w-12 h-12 rounded-full"
+            onError={(e) => {
+              e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`;
+            }}
           />
           <div>
             <p className="text-sm text-muted-foreground">Created by</p>
