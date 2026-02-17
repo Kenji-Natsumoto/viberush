@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
+import { X, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
+import { ImageUploadField } from "@/components/ImageUploadField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -354,23 +355,17 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
               <p className="text-xs text-muted-foreground">Leave empty to use your profile name.</p>
             </div>
 
-            {/* Creator Avatar URL */}
-            <div className="space-y-2">
-              <Label htmlFor="edit-proxyAvatarUrl" className="flex items-center gap-2 text-sm font-medium">
-                <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-                Creator Avatar URL
-              </Label>
-              <Input
+            {/* Creator Avatar */}
+              <ImageUploadField
                 id="edit-proxyAvatarUrl"
+                label="Creator Avatar"
                 value={proxyAvatarUrl}
-                onChange={(e) => setProxyAvatarUrl(e.target.value)}
+                onChange={setProxyAvatarUrl}
+                folder="avatars"
                 placeholder="https://..."
-                className="bg-background border-amber-500/30 focus:border-amber-500"
+                hint="Leave empty to use your profile avatar."
+                previewClassName="h-14 w-14 rounded-full object-cover"
               />
-              <p className="text-xs text-muted-foreground">
-                Right-click the logo on their site → Copy Image Address. Leave empty to use your profile avatar.
-              </p>
-            </div>
           </div>
 
           {/* Contact & Social Section */}
@@ -441,19 +436,16 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
           </div>
 
           {/* Banner Image */}
-          <div className="space-y-2">
-            <Label htmlFor="edit-banner" className="flex items-center gap-2 text-sm font-medium">
-              <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-              Banner Image URL (optional)
-            </Label>
-            <Input
-              id="edit-banner"
-              value={bannerUrl}
-              onChange={(e) => setBannerUrl(e.target.value)}
-              placeholder="https://yourapp.com/banner.png"
-              className="bg-secondary border-transparent focus:border-border"
-            />
-          </div>
+          <ImageUploadField
+            id="edit-banner"
+            label="Banner Image (optional)"
+            value={bannerUrl}
+            onChange={setBannerUrl}
+            folder="banners"
+            placeholder="https://yourapp.com/banner.png"
+            hint="Recommended: 896×192px"
+            previewClassName="h-20 w-full rounded-lg object-cover"
+          />
         </div>
 
         {/* Footer */}

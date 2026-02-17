@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { X, Link, FileText, Play, Video, Upload, Clock, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
+import { X, Link, FileText, Play, Video, Clock, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
+import { ImageUploadField } from "@/components/ImageUploadField";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -183,28 +184,36 @@ export function DetailsModal({ isOpen, onClose, productId }: DetailsModalProps) 
 
           {activeSection === "branding" && (
             <>
-              <div className="space-y-2">
-                <Label htmlFor="det-iconUrl" className="flex items-center gap-2 text-sm font-medium">
-                  <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-                  Icon URL
-                </Label>
-                <Input id="det-iconUrl" value={iconUrl} onChange={(e) => setIconUrl(e.target.value)} placeholder="https://yourapp.com/icon.png" className="bg-secondary border-transparent focus:border-border" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="det-bannerUrl" className="flex items-center gap-2 text-sm font-medium">
-                  <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-                  Banner Image URL
-                </Label>
-                <Input id="det-bannerUrl" value={bannerUrl} onChange={(e) => setBannerUrl(e.target.value)} placeholder="https://yourapp.com/banner.png" className="bg-secondary border-transparent focus:border-border" />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="det-proxyAvatarUrl" className="flex items-center gap-2 text-sm font-medium">
-                  <User className="h-3.5 w-3.5 text-muted-foreground" />
-                  Maker Avatar URL
-                </Label>
-                <Input id="det-proxyAvatarUrl" value={proxyAvatarUrl} onChange={(e) => setProxyAvatarUrl(e.target.value)} placeholder="https://..." className="bg-secondary border-transparent focus:border-border" />
-                <p className="text-xs text-muted-foreground">Right-click the logo → Copy Image Address</p>
-              </div>
+              <ImageUploadField
+                id="det-iconUrl"
+                label="App Icon"
+                value={iconUrl}
+                onChange={setIconUrl}
+                folder="icons"
+                placeholder="https://yourapp.com/icon.png"
+                hint="Square image recommended (80×80px)"
+                previewClassName="h-16 w-16 rounded-xl object-cover"
+              />
+              <ImageUploadField
+                id="det-bannerUrl"
+                label="Banner Image"
+                value={bannerUrl}
+                onChange={setBannerUrl}
+                folder="banners"
+                placeholder="https://yourapp.com/banner.png"
+                hint="Recommended: 896×192px"
+                previewClassName="h-20 w-full rounded-lg object-cover"
+              />
+              <ImageUploadField
+                id="det-proxyAvatarUrl"
+                label="Maker Avatar"
+                value={proxyAvatarUrl}
+                onChange={setProxyAvatarUrl}
+                folder="avatars"
+                placeholder="https://..."
+                hint="Square image recommended (80×80px)"
+                previewClassName="h-14 w-14 rounded-full object-cover"
+              />
             </>
           )}
 
