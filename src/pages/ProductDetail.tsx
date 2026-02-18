@@ -146,7 +146,7 @@ const ProductDetail = () => {
               <img
                 src={product.iconUrl}
                 alt={product.name}
-                className="w-20 h-20 rounded-2xl object-cover border border-border"
+                className="w-20 h-20 rounded-[8px] object-cover border border-border"
                 onError={(e) => {
                   e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(product.name)}&backgroundColor=6366f1`;
                 }}

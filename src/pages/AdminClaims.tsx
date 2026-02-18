@@ -60,7 +60,7 @@ const AdminClaims = () => {
                   <img
                     src={product.iconUrl}
                     alt={product.name}
-                    className="w-12 h-12 rounded-xl object-cover border border-border"
+                    className="w-12 h-12 rounded-[6px] object-cover border border-border"
                   />
                   <div className="flex-1 min-w-0">
                     <Link to={`/product/${product.id}`} className="font-medium text-foreground hover:underline">
@@ -112,7 +112,7 @@ const AdminClaims = () => {
                     <img
                       src={product.iconUrl}
                       alt={product.name}
-                      className="w-12 h-12 rounded-xl object-cover border border-border"
+                      className="w-12 h-12 rounded-[6px] object-cover border border-border"
                     />
                     <div className="flex-1 min-w-0">
                       <Link to={`/product/${product.id}`} className="font-medium text-foreground hover:underline">

@@ -31,7 +31,7 @@ function ProofCard({ product }: { product: Product }) {
       className="group flex-shrink-0 w-64 sm:w-72 bg-[#F0F0F0] dark:bg-card border border-border/40 rounded-sm p-5 transition-colors duration-150 hover:bg-[#E5E5E5] dark:hover:bg-muted/50 block"
     >
       <div className="flex items-start gap-4 mb-3">
-        <div className="w-12 h-12 rounded-lg overflow-hidden bg-muted flex-shrink-0">
+        <div className="w-12 h-12 rounded-[6px] overflow-hidden bg-muted flex-shrink-0">
           {product.iconUrl ? (
             <img src={product.iconUrl} alt={`${product.name} icon`} className="w-full h-full object-cover" />
           ) : (
