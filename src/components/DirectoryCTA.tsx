@@ -1,0 +1,40 @@
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { useProducts } from "@/hooks/useProducts";
+
+export function DirectoryCTA() {
+  const { products } = useProducts();
+  const count = products.length;
+
+  return (
+    <section className="py-20 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto text-center">
+        <Link
+          to="/explore"
+          className="group relative block rounded-2xl border border-border bg-card p-10 sm:p-14 transition-all duration-300 hover:shadow-card-hover hover:border-foreground/10 hover:scale-[1.01]"
+        >
+          {/* Subtle top glow */}
+          <div className="absolute inset-x-0 -top-px h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+
+          <p className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4">
+            The Backstage Directory
+          </p>
+
+          <h2 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight leading-snug">
+            Discover all{" "}
+            <span className="tabular-nums">{count > 0 ? `${count}+` : "…"}</span>{" "}
+            Products in our Directory
+          </h2>
+
+          <div className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors duration-200">
+            Browse now
+            <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" />
+          </div>
+
+          {/* Subtle bottom glow */}
+          <div className="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+        </Link>
+      </div>
+    </section>
+  );
+}
