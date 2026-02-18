@@ -1,7 +1,6 @@
 // Re-export types from the database types for consistency
 export type { Tool, Product } from '@/types/database';
 
-// Keep dummy products for fallback/demo purposes
 import type { Product } from '@/types/database';
 
 export const dummyProducts: Product[] = [
