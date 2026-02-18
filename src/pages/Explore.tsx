@@ -8,6 +8,7 @@ import { ToolBadge } from "@/components/ToolBadge";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import {
   Select,
   SelectContent,
@@ -88,20 +89,25 @@ export default function Explore() {
             />
           </div>
 
-          {/* Category Filter */}
-          <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full sm:w-[200px] bg-secondary border-transparent">
-              <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
-              <SelectValue placeholder="Category" />
-            </SelectTrigger>
-            <SelectContent className="bg-popover z-50">
+          {/* Category Filter - Scrollable Chips */}
+          <div className="flex-1 overflow-x-auto scrollbar-hide pb-1 -mb-1">
+            <div className="flex gap-2">
               {CATEGORY_OPTIONS.map((cat) => (
-                <SelectItem key={cat} value={cat}>
+                <button
+                  key={cat}
+                  onClick={() => setCategory(cat)}
+                  className={cn(
+                    "px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 border",
+                    category === cat
+                      ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                      : "bg-secondary text-muted-foreground border-transparent hover:border-border"
+                  )}
+                >
                   {cat}
-                </SelectItem>
+                </button>
               ))}
-            </SelectContent>
-          </Select>
+            </div>
+          </div>
 
           {/* Sort */}
           <Select value={sort} onValueChange={(v) => setSort(v as SortOption)}>
