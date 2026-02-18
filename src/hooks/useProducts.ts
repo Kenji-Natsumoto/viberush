@@ -168,38 +168,46 @@ export function useUpdateProduct() {
       if (input.proxyCreatorName !== undefined) updateData.proxy_creator_name = input.proxyCreatorName || null;
       if (input.proxyAvatarUrl !== undefined) updateData.proxy_avatar_url = input.proxyAvatarUrl || null;
 
-      // IMPORTANT:
-      // Do NOT request `return=representation` on UPDATE (via `.select().single()`), because with RLS
-      // PostgREST may return 0 rows for the representation even when the UPDATE succeeded.
-      // That causes errors like: "Cannot coerce the result to a single JSON object".
+      // Try update as original submitter (user_id) first
       const { error, count } = await supabase
         .from('products')
         .update(updateData, { count: 'exact' })
         .eq('id', id)
-        // Make ownership requirement explicit client-side too.
-        // (RLS should enforce this regardless, but this helps us diagnose failures.)
         .eq('user_id', user.id);
 
       if (error) throw error;
-      // When RLS blocks UPDATE, PostgREST can respond with 0 updated rows and no error.
-      // Diagnose whether this is an ownership mismatch or a missing/incorrect UPDATE policy.
+
+      // If 0 rows updated, try as verified owner (owner_id)
       if (typeof count === 'number' && count === 0) {
-        const { data: ownerRow, error: ownerErr } = await supabase
+        const { error: ownerError, count: ownerCount } = await supabase
           .from('products')
-          .select('user_id')
+          .update(updateData, { count: 'exact' })
           .eq('id', id)
-          .maybeSingle();
+          .eq('owner_id', user.id);
 
-        if (ownerErr) throw ownerErr;
-        if (!ownerRow) throw new Error('Product not found');
+        if (ownerError) throw ownerError;
 
-        if (ownerRow.user_id !== user.id) {
-          throw new Error("You're logged in with a different account than the owner of this app.");
+        if (typeof ownerCount === 'number' && ownerCount === 0) {
+          // Check why it failed
+          const { data: ownerRow, error: ownerErr } = await supabase
+            .from('products')
+            .select('user_id, owner_id, claim_status')
+            .eq('id', id)
+            .maybeSingle();
+
+          if (ownerErr) throw ownerErr;
+          if (!ownerRow) throw new Error('Product not found');
+
+          console.log('[VibeRush Debug] Update failed:', { userId: user.id, product: ownerRow });
+
+          if (ownerRow.user_id !== user.id && ownerRow.owner_id !== user.id) {
+            throw new Error("You're logged in with a different account than the owner of this app.");
+          }
+
+          throw new Error(
+            'Your Supabase RLS policy is blocking UPDATE on products. Please ensure an UPDATE policy allows owner_id or user_id match.'
+          );
         }
-
-        throw new Error(
-          'Your Supabase RLS policy is blocking UPDATE on products. Please ensure an UPDATE policy exists: USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id).'
-        );
       }
 
       return { id };
