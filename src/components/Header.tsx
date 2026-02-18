@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap, Search, User, Plus, LogOut, LayoutDashboard } from 'lucide-react';
+import { Zap, Search, User, Plus, LogOut, LayoutDashboard, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -63,6 +63,15 @@ export function Header({ onSubmitClick }: HeaderProps) {
 
           {/* Actions */}
           <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/explore')}
+              className="hidden sm:flex gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              <Compass className="h-4 w-4" />
+              Explore
+            </Button>
             {user ? (
               <>
                 <Button

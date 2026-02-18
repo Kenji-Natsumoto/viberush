@@ -1,5 +1,7 @@
+import { Link } from "react-router-dom";
 import { ProductCard } from "./ProductCard";
-import { Flame, Calendar, Loader2 } from "lucide-react";
+import { Flame, Calendar, Loader2, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useProducts } from "@/hooks/useProducts";
@@ -120,6 +122,18 @@ export function ProductFeed() {
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-2">No apps shipped yet.</p>
           <p className="text-sm text-muted-foreground">Be the first to ship your proof 🚀</p>
+        </div>
+      )}
+
+      {/* View All */}
+      {!isLoading && sortedProducts.length > 0 && (
+        <div className="flex justify-center mt-8">
+          <Link to="/explore">
+            <Button variant="outline" size="sm" className="gap-2">
+              View All Products
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
         </div>
       )}
     </section>
