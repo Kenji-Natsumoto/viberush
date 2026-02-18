@@ -71,6 +71,7 @@ export interface DbProduct {
   github_url?: string | null;
   proxy_creator_name?: string | null;
   proxy_avatar_url?: string | null;
+  category: string;
   is_featured: boolean;
   owner_id?: string | null;
   claim_status?: string | null;
@@ -101,6 +102,7 @@ export interface Product {
   githubUrl?: string;
   proxyCreatorName?: string;
   proxyAvatarUrl?: string;
+  category: string;
   isFeatured: boolean;
   ownerId?: string;
   claimStatus: string;
@@ -143,6 +145,7 @@ export function dbProductToProduct(dbProduct: DbProduct): Product {
     githubUrl: dbProduct.github_url ?? undefined,
     proxyCreatorName: dbProduct.proxy_creator_name ?? undefined,
     proxyAvatarUrl: dbProduct.proxy_avatar_url ?? undefined,
+    category: dbProduct.category ?? 'Other',
     isFeatured: dbProduct.is_featured ?? false,
     ownerId: dbProduct.owner_id ?? undefined,
     claimStatus: dbProduct.claim_status ?? 'none',
@@ -180,6 +183,7 @@ export interface CreateProductInput {
 export interface UpdateProductInput {
   name?: string;
   tagline?: string;
+  category?: string;
   description?: string;
   url?: string;
   iconUrl?: string;

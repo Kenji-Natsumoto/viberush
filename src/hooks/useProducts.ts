@@ -160,6 +160,7 @@ export function useUpdateProduct() {
       if (input.videoUrl !== undefined) updateData.video_url = input.videoUrl || null;
       if (input.aiPrompt !== undefined) updateData.ai_prompt = input.aiPrompt || null;
       if (input.tools !== undefined) updateData.tools_used = input.tools;
+      if (input.category !== undefined) updateData.category = input.category;
       if (input.timeToBuild !== undefined) updateData.time_to_build = input.timeToBuild;
       if (input.contactEmail !== undefined) updateData.contact_email = input.contactEmail;
       if (input.xUrl !== undefined) updateData.x_url = input.xUrl || null;
