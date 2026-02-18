@@ -128,8 +128,8 @@ export function ProductFeed() {
       {/* View All */}
       {!isLoading && sortedProducts.length > 0 && (
         <div className="flex justify-center mt-8">
-          <Link to="/explore" className="relative rounded-lg overflow-hidden border-glow p-[2px]">
-            <span className="flex items-center gap-2 rounded-[calc(0.5rem-2px)] bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
+          <Link to="/explore" className="relative rounded-lg p-[2px] border-glow-wrapper">
+            <span className="relative z-10 flex items-center gap-2 rounded-[6px] bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-secondary">
               View All Products
               <ArrowRight className="h-4 w-4" />
             </span>
