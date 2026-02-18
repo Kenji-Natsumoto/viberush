@@ -1,7 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap, Search, User, Plus, LogOut, LayoutDashboard, Compass } from 'lucide-react';
+import { Zap, User, Plus, LogOut, LayoutDashboard, Compass } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -49,17 +48,6 @@ export function Header({ onSubmitClick }: HeaderProps) {
             </div>
           </div>
 
-          {/* Search */}
-          <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search apps..."
-                className="w-full pl-9 bg-secondary border-transparent focus:border-border"
-              />
-            </div>
-          </div>
 
           {/* Actions */}
           <div className="flex items-center gap-2">
