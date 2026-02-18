@@ -144,7 +144,7 @@ export default function Dashboard() {
                       onClick={() => setEditProduct(product)}
                     >
                       <Settings className="h-3.5 w-3.5" />
-                      Manage
+                      Edit App
                     </Button>
                   </div>
                 </CardContent>
