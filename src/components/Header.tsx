@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap, Search, User, Plus, LogOut } from 'lucide-react';
+import { Zap, Search, User, Plus, LogOut, LayoutDashboard } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -87,6 +87,10 @@ export function Header({ onSubmitClick }: HeaderProps) {
                   <DropdownMenuContent align="end" className="w-48">
                     <DropdownMenuItem className="text-muted-foreground text-sm" disabled>
                       {user.email}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      Dashboard
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                       <LogOut className="mr-2 h-4 w-4" />
