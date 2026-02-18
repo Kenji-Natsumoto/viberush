@@ -183,8 +183,45 @@
   100% { background-position: 300% 50%; }
 }
 
+/* For containers that use mask (no child content — e.g. absolute overlay) */
 .border-glow {
   padding: 2px;
+  background: linear-gradient(
+    90deg,
+    hsl(0 50% 65%),
+    hsl(30 50% 65%),
+    hsl(60 50% 65%),
+    hsl(120 50% 65%),
+    hsl(180 50% 65%),
+    hsl(240 50% 65%),
+    hsl(300 50% 65%),
+    hsl(360 50% 65%)
+  );
+  background-size: 300% 100%;
+  animation: border-glow-spin 6s linear infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* For elements with child content (buttons, links) — uses ::before pseudo */
+.border-glow-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.border-glow-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
   background: linear-gradient(
     90deg,
     hsl(0 50% 65%),
