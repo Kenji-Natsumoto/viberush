@@ -114,6 +114,8 @@ export default function Dashboard() {
                     <div className="min-w-0 flex-1">
                       <Link
                         to={`/product/${product.id}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="text-sm font-medium text-foreground hover:underline underline-offset-2 truncate block"
                       >
                         {product.name}
@@ -129,6 +131,8 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between">
                     <Link
                       to={`/product/${product.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
                     >
                       View <ArrowRight className="h-3 w-3" />
