@@ -11,19 +11,19 @@ const principles = [
     icon: Rocket,
     title: "Action First",
     description: "Build before you overthink. Don't fear failure—just start moving.",
-    accent: "from-orange-500 to-amber-500",
+    accent: "from-[hsl(42,100%,35%)] to-[hsl(35,90%,45%)]",
   },
   {
     icon: Zap,
     title: "Speed Over Perfection",
     description: "Ship at 80% and iterate. You can always improve later.",
-    accent: "from-cyan-400 to-blue-500",
+    accent: "from-[hsl(201,100%,50%)] to-[hsl(195,80%,42%)]",
   },
   {
     icon: Users,
     title: "Symbiosis with AI",
     description: "AI is not our enemy—it's our ultimate partner. We believe in co-creation.",
-    accent: "from-violet-500 to-purple-500",
+    accent: "from-[hsl(190,80%,45%)] to-[hsl(170,60%,40%)]",
   },
 ];
 
@@ -89,7 +89,7 @@ export default function About() {
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight text-foreground mb-6">
               10,000 builders.{" "}
-              <span className="bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[hsl(201,100%,50%)] via-[hsl(170,60%,50%)] to-[hsl(42,100%,42%)] bg-clip-text text-transparent">
                 March 30.
               </span>
             </h1>
