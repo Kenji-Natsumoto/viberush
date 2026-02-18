@@ -18,7 +18,7 @@ export function LogoSection() {
         {/* Light Background */}
         <div className="border border-border rounded-xl p-8 bg-white flex flex-col items-center">
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#8B5CF6]">
+            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#00A6FF]">
               <Zap className="h-7 w-7 text-white" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-[#18181B]">
@@ -31,7 +31,7 @@ export function LogoSection() {
         {/* Dark Background */}
         <div className="border border-border rounded-xl p-8 bg-[#09090B] flex flex-col items-center">
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#8B5CF6]">
+            <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-[#00A6FF]">
               <Zap className="h-7 w-7 text-white" />
             </div>
             <span className="text-2xl font-bold tracking-tight text-white">
@@ -56,7 +56,7 @@ export function LogoSection() {
         <ul className="space-y-2 text-sm text-muted-foreground">
           <li>• Maintain clear space around the logo equal to the height of the lightning bolt icon</li>
           <li>• Do not stretch, rotate, or distort the logo</li>
-          <li>• Use the purple background version on both light and dark backgrounds</li>
+          <li>• Use the blue background version on both light and dark backgrounds</li>
           <li>• Minimum size: 24px height for digital use</li>
         </ul>
       </div>

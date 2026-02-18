@@ -188,14 +188,14 @@
   padding: 2px;
   background: linear-gradient(
     90deg,
-    hsl(0 50% 65%),
-    hsl(30 50% 65%),
-    hsl(60 50% 65%),
-    hsl(120 50% 65%),
-    hsl(180 50% 65%),
-    hsl(240 50% 65%),
-    hsl(300 50% 65%),
-    hsl(360 50% 65%)
+    hsl(201 100% 50%),
+    hsl(190 80% 55%),
+    hsl(170 60% 50%),
+    hsl(100 40% 45%),
+    hsl(60 60% 50%),
+    hsl(45 80% 55%),
+    hsl(42 100% 50%),
+    hsl(35 90% 45%)
   );
   background-size: 300% 100%;
   animation: border-glow-spin 6s linear infinite;
@@ -224,14 +224,14 @@
   border-radius: inherit;
   background: linear-gradient(
     90deg,
-    hsl(0 50% 65%),
-    hsl(30 50% 65%),
-    hsl(60 50% 65%),
-    hsl(120 50% 65%),
-    hsl(180 50% 65%),
-    hsl(240 50% 65%),
-    hsl(300 50% 65%),
-    hsl(360 50% 65%)
+    hsl(201 100% 50%),
+    hsl(190 80% 55%),
+    hsl(170 60% 50%),
+    hsl(100 40% 45%),
+    hsl(60 60% 50%),
+    hsl(45 80% 55%),
+    hsl(42 100% 50%),
+    hsl(35 90% 45%)
   );
   background-size: 300% 100%;
   animation: border-glow-spin 6s linear infinite;
