@@ -40,7 +40,7 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
           <img
             src={product.iconUrl}
             alt={product.name}
-            className="w-14 h-14 rounded-xl object-cover border border-border"
+            className="w-14 h-14 rounded-[6px] object-cover border border-border"
             onError={(e) => {
               e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(product.name)}&backgroundColor=6366f1`;
             }}

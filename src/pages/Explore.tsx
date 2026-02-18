@@ -204,7 +204,7 @@ function ExploreCard({ product }: { product: Product }) {
         <img
           src={product.iconUrl}
           alt={product.name}
-          className="h-10 w-10 rounded-lg object-cover bg-muted shrink-0"
+          className="h-10 w-10 rounded-[6px] object-cover bg-muted shrink-0"
         />
         <div className="min-w-0 flex-1">
           <h3 className="text-sm font-medium text-foreground truncate group-hover:underline underline-offset-2">
