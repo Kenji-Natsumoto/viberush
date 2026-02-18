@@ -10,6 +10,7 @@ import {
   dbProductToProduct 
 } from '@/types/database';
 import { useToast } from '@/hooks/use-toast';
+import { getProductIconUrl } from '@/lib/iconUtils';
 
 const PRODUCTS_KEY = ['products'];
 
@@ -102,7 +103,7 @@ export function useCreateProduct() {
           // Optional fields - only set if provided
           tagline: input.tagline || '',
           url: input.url || '',
-          icon_url: input.iconUrl || `https://api.dicebear.com/7.x/shapes/svg?seed=${input.name}&backgroundColor=6366f1`,
+          icon_url: input.iconUrl || getProductIconUrl(input.name),
           banner_url: input.bannerUrl || '',
           demo_url: input.demoUrl || '',
           video_url: input.videoUrl || '',

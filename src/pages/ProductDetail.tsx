@@ -13,6 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useProduct } from "@/hooks/useProducts";
 import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
 import { useRequestClaim, useIsAdmin, useApproveClaim, useRejectClaim } from "@/hooks/useClaim";
+import { getProductIconUrl } from "@/lib/iconUtils";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
 
@@ -148,7 +149,7 @@ const ProductDetail = () => {
                 alt={product.name}
                 className="w-20 h-20 rounded-[8px] object-cover border border-border"
                 onError={(e) => {
-                  e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(product.name)}&backgroundColor=6366f1`;
+                  e.currentTarget.src = getProductIconUrl(product.name);
                 }}
               />
               <div className="flex-1">

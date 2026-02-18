@@ -9,6 +9,7 @@ import { EditProductModal } from "./EditProductModal";
 import { useAuth } from "@/contexts/AuthContext";
 import { useIsAdmin } from "@/hooks/useClaim";
 import type { Product } from "@/types/database";
+import { getProductIconUrl } from "@/lib/iconUtils";
 
 interface ProductCardProps {
   product: Product;
@@ -42,7 +43,7 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
             alt={product.name}
             className="w-14 h-14 rounded-[6px] object-cover border border-border"
             onError={(e) => {
-              e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(product.name)}&backgroundColor=6366f1`;
+              e.currentTarget.src = getProductIconUrl(product.name);
             }}
           />
         </div>

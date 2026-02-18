@@ -11,6 +11,7 @@ import { useProductScreenshots, useAddScreenshots, useDeleteScreenshot } from '@
 import { toast } from 'sonner';
 import type { Product } from '@/types/database';
 import { cn } from '@/lib/utils';
+import { getProductIconUrl } from '@/lib/iconUtils';
 
 // Per-product management card
 function ProductImageCard({ product }: { product: Product }) {
@@ -58,7 +59,7 @@ function ProductImageCard({ product }: { product: Product }) {
           alt={product.name}
           className="w-10 h-10 rounded-lg object-cover border border-border flex-shrink-0"
           onError={(e) => {
-            e.currentTarget.src = `https://api.dicebear.com/7.x/shapes/svg?seed=${encodeURIComponent(product.name)}&backgroundColor=6366f1`;
+            e.currentTarget.src = getProductIconUrl(product.name);
           }}
         />
         <div className="flex-1 min-w-0">

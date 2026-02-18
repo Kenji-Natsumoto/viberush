@@ -2,6 +2,7 @@
 export type { Tool, Product } from '@/types/database';
 
 import type { Product } from '@/types/database';
+import { getProductIconUrl } from '@/lib/iconUtils';
 
 export const dummyProducts: Product[] = [
   {
@@ -10,7 +11,7 @@ export const dummyProducts: Product[] = [
     tagline: 'AI-powered project management for indie hackers',
     description: 'A sleek project management tool that uses AI to automatically prioritize tasks and suggest workflows.',
     url: 'https://vibeflow.app',
-    iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=vibeflow&backgroundColor=6366f1',
+    iconUrl: getProductIconUrl('vibeflow'),
     demoUrl: 'https://vibeflow.app',
     videoUrl: 'https://www.loom.com/share/example',
     aiPrompt: 'Create an AI-powered project management tool for indie hackers. It should automatically prioritize tasks based on deadlines and importance, suggest optimal workflows, and have a clean, modern UI with dark mode support.',
@@ -34,7 +35,7 @@ export const dummyProducts: Product[] = [
     tagline: 'Your AI pair programmer in the browser',
     description: 'Real-time code assistance and debugging powered by Claude.',
     url: 'https://codebuddy.dev',
-    iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=codebuddy&backgroundColor=10b981',
+    iconUrl: getProductIconUrl('codebuddy'),
     tools: ['Cursor', 'Claude Code', 'v0'],
     category: 'AI & Automation',
     timeToBuild: '4 hours',
@@ -55,7 +56,7 @@ export const dummyProducts: Product[] = [
     tagline: 'Save, organize, and share your best prompts',
     description: 'A beautiful prompt library with version control and team collaboration.',
     url: 'https://promptvault.io',
-    iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=promptvault&backgroundColor=f59e0b',
+    iconUrl: getProductIconUrl('promptvault'),
     tools: ['Replit', 'Gemini'],
     category: 'Productivity & Focus',
     timeToBuild: '1 day',
@@ -76,7 +77,7 @@ export const dummyProducts: Product[] = [
     tagline: 'Ship your landing page in 10 minutes',
     description: 'AI-generated landing pages with conversion-optimized copy.',
     url: 'https://launchkit.co',
-    iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=launchkit&backgroundColor=ec4899',
+    iconUrl: getProductIconUrl('launchkit'),
     tools: ['Lovable', 'Claude Code', 'v0'],
     category: 'Creative & Design',
     timeToBuild: '30 minutes',
@@ -97,7 +98,7 @@ export const dummyProducts: Product[] = [
     tagline: 'Turn spreadsheets into beautiful dashboards',
     description: 'Upload a CSV and get an instant interactive dashboard with AI insights.',
     url: 'https://datastory.app',
-    iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=datastory&backgroundColor=3b82f6',
+    iconUrl: getProductIconUrl('datastory'),
     tools: ['volt.new', 'Devin'],
     category: 'Productivity & Focus',
     timeToBuild: '6 hours',
@@ -118,7 +119,7 @@ export const dummyProducts: Product[] = [
     tagline: 'Voice memos that transcribe and summarize themselves',
     description: 'Record ideas on the go and get organized summaries automatically.',
     url: 'https://voicenote.ai',
-    iconUrl: 'https://api.dicebear.com/7.x/shapes/svg?seed=voicenote&backgroundColor=8b5cf6',
+    iconUrl: getProductIconUrl('voicenote'),
     tools: ['Cursor', 'Lovable'],
     category: 'AI & Automation',
     timeToBuild: '3 hours',
