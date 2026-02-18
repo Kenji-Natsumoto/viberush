@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User } from "lucide-react";
+import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User, Tag } from "lucide-react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { useUpdateProduct } from "@/hooks/useProducts";
 import { TOOL_CATEGORIES, toolColors, TIME_OPTIONS } from "@/lib/toolConfig";
+import { PRODUCT_CATEGORIES } from "@/lib/categoryConfig";
 import type { Tool, Product } from "@/types/database";
 
 interface EditProductModalProps {
@@ -47,6 +48,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
   // Proxy creator fields
   const [proxyCreatorName, setProxyCreatorName] = useState("");
   const [proxyAvatarUrl, setProxyAvatarUrl] = useState("");
+  const [category, setCategory] = useState("Other");
 
   // Populate form when product changes
   useEffect(() => {
@@ -67,6 +69,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
       setGithubUrl(product.githubUrl || "");
       setProxyCreatorName(product.proxyCreatorName || "");
       setProxyAvatarUrl(product.proxyAvatarUrl || "");
+      setCategory(product.category || "Other");
     }
   }, [product]);
 
@@ -92,6 +95,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         bannerUrl,
         tools: selectedTools,
         timeToBuild: selectedTime,
+        category,
         contactEmail,
         xUrl,
         linkedinUrl,
@@ -253,6 +257,30 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
               rows={4}
               className="bg-secondary border-transparent focus:border-border resize-none"
             />
+          </div>
+
+          {/* Category */}
+          <div className="space-y-2">
+            <Label className="flex items-center gap-2 text-sm font-medium">
+              <Tag className="h-3.5 w-3.5 text-muted-foreground" />
+              Category
+            </Label>
+            <div className="flex flex-wrap gap-2">
+              {PRODUCT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setCategory(cat)}
+                  className={cn(
+                    "px-3 py-1.5 text-sm font-medium rounded-lg border transition-all",
+                    category === cat
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-secondary text-muted-foreground border-transparent hover:text-foreground hover:border-border"
+                  )}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
           {/* AI Prompt - Magic Section */}

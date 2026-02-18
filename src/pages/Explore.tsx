@@ -15,26 +15,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TOOL_CATEGORIES } from "@/lib/toolConfig";
+import { PRODUCT_CATEGORIES } from "@/lib/categoryConfig";
 import type { Product } from "@/types/database";
 
 type SortOption = "newest" | "alphabetical";
 
-// Derive categories from tool config
-const CATEGORY_OPTIONS = [
-  "All",
-  ...TOOL_CATEGORIES.map((c) => c.label),
-  "Uncategorized",
-];
-
-function getProductCategory(product: Product): string {
-  if (!product.tools || product.tools.length === 0) return "Uncategorized";
-  const firstTool = product.tools[0];
-  for (const cat of TOOL_CATEGORIES) {
-    if (cat.tools.includes(firstTool)) return cat.label;
-  }
-  return "Uncategorized";
-}
+const CATEGORY_OPTIONS = ["All", ...PRODUCT_CATEGORIES];
 
 export default function Explore() {
   const { products, isLoading } = useProducts();
@@ -55,9 +41,9 @@ export default function Explore() {
       );
     }
 
-    // Category filter
+    // Category filter (uses DB category field)
     if (category !== "All") {
-      result = result.filter((p) => getProductCategory(p) === category);
+      result = result.filter((p) => p.category === category);
     }
 
     // Sort
