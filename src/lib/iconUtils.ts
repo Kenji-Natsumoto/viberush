@@ -5,12 +5,12 @@
 
 // Muted Gold → Teal → Sky Blue backgrounds (low saturation, medium lightness)
 const ICON_BG_COLORS = [
-  'b09a6b', // muted gold
-  'a0926a', // warm sand
-  '8a9a7e', // sage
-  '7a9a92', // teal mist
-  '6a8fa5', // steel blue
-  '7d8ea0', // slate blue
+  '00A6FF', // Sky Blue (Primary)
+  '3C9BD4', // Muted Cyan
+  '5A8A9E', // Grey-Blue
+  '8C7D5A', // Olive/Gold transition
+  'B37D00', // Deep Gold
+  'D49600', // Bright Amber
 ];
 
 function hashSeed(seed: string): number {
