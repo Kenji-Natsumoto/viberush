@@ -176,3 +176,38 @@
 .hall-of-proof-scroll {
   animation: hall-scroll 30s linear infinite;
 }
+
+/* Directory CTA — glowing border that orbits the card */
+@keyframes border-glow-spin {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.border-glow {
+  padding: 1px;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--border)) 0%,
+    hsl(var(--foreground) / 0.35) 25%,
+    hsl(var(--foreground) / 0.6) 50%,
+    hsl(var(--foreground) / 0.35) 75%,
+    hsl(var(--border)) 100%
+  );
+  background-size: 300% 100%;
+  animation: border-glow-spin 4s ease-in-out infinite;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
