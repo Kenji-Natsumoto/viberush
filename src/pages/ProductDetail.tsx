@@ -70,11 +70,27 @@ const ProductDetail = () => {
   }
 
   
-  // Check if current user is the verified owner or admin
-  const isOwner = user && (user.id === product.ownerId && product.claimStatus === 'verified');
+  // Check if current user is the verified owner, original submitter, or admin
+  const isVerifiedOwner = user && product.ownerId === user.id && product.claimStatus === 'verified';
+  const isOriginalSubmitter = user && user.id === product.userId;
+  const isOwner = isVerifiedOwner || isOriginalSubmitter;
   const canClaim = user && !product.ownerId && product.claimStatus === 'none';
   const isPendingClaim = product.claimStatus === 'pending';
   const isMyPendingClaim = user && product.ownerId === user.id && isPendingClaim;
+
+  // Debug: temporary log for ownership troubleshooting
+  if (user) {
+    console.log('[VibeRush Debug] Edit visibility:', {
+      currentUserId: user.id,
+      productOwnerId: product.ownerId,
+      productUserId: product.userId,
+      claimStatus: product.claimStatus,
+      isAdmin,
+      isVerifiedOwner,
+      isOriginalSubmitter,
+      isOwner,
+    });
+  }
 
   const handleCopyPrompt = async () => {
     if (product.aiPrompt) {
@@ -196,12 +212,18 @@ const ProductDetail = () => {
             <div className="flex flex-wrap items-center gap-3 mb-6">
               {(isOwner || isAdmin) && (
                 <Button
-                  variant="outline"
+                  variant="default"
                   onClick={() => setIsEditModalOpen(true)}
-                  className="gap-2"
+                  className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
                 >
                   <Pencil className="h-4 w-4" />
                   Edit App
+                  {isVerifiedOwner && (
+                    <span className="ml-1 text-xs bg-primary-foreground/20 px-1.5 py-0.5 rounded-full">Owner</span>
+                  )}
+                  {isAdmin && !isVerifiedOwner && (
+                    <span className="ml-1 text-xs bg-primary-foreground/20 px-1.5 py-0.5 rounded-full">Admin</span>
+                  )}
                 </Button>
               )}
               
