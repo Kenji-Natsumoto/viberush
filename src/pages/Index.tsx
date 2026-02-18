@@ -29,8 +29,8 @@ const Index = () => {
         <StatsSection />
         <HallOfProof />
         <ProductFeed />
-        <DirectoryCTA />
         <FAQSection />
+        <DirectoryCTA />
       </main>
       <Footer />
       <SubmitModal
