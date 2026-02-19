@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User, Tag } from "lucide-react";
+import { X, Upload, Clock, Link, Type, FileText, Play, Video, Sparkles, Mail, Github, Linkedin, User, Tag, ImageIcon } from "lucide-react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { useUpdateProduct } from "@/hooks/useProducts";
 import { TOOL_CATEGORIES, toolColors, TIME_OPTIONS } from "@/lib/toolConfig";
 import { PRODUCT_CATEGORIES } from "@/lib/categoryConfig";
 import type { Tool, Product } from "@/types/database";
+import { getProductIconUrl } from "@/lib/iconUtils";
 
 interface EditProductModalProps {
   isOpen: boolean;
@@ -29,6 +30,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
   const updateProduct = useUpdateProduct();
   
   const [name, setName] = useState("");
+  const [iconUrl, setIconUrl] = useState("");
   const [tagline, setTagline] = useState("");
   const [description, setDescription] = useState("");
   const [url, setUrl] = useState("");
@@ -54,6 +56,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
   useEffect(() => {
     if (product) {
       setName(product.name);
+      setIconUrl(product.iconUrl || "");
       setTagline(product.tagline);
       setDescription(product.description);
       setUrl(product.url);
@@ -86,6 +89,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
       await updateProduct.mutateAsync({
         id: product.id,
         name,
+        iconUrl,
         tagline,
         description,
         url,
@@ -108,6 +112,7 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
         onSave({
           id: product.id,
           name,
+          iconUrl: iconUrl || undefined,
           tagline,
           description,
           url,
@@ -165,6 +170,34 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
             <p className="text-sm text-blue-700 dark:text-blue-300">
               Update your app details anytime. Changes are saved instantly!
             </p>
+          </div>
+
+          {/* Product Avatar - TOP PRIORITY */}
+          <div className="space-y-3 p-4 bg-gradient-to-r from-[hsl(201,100%,50%)]/10 to-[hsl(42,100%,35%)]/10 rounded-xl border border-[hsl(201,100%,50%)]/20">
+            <Label className="flex items-center gap-2 text-sm font-semibold text-foreground">
+              <ImageIcon className="h-4 w-4 text-[hsl(201,100%,50%)]" />
+              Product Avatar (Logo/Icon)
+            </Label>
+            <p className="text-xs text-muted-foreground">
+              This represents the identity of your product.
+            </p>
+            <div className="flex items-center gap-4">
+              {/* Circular Preview */}
+              <div className="flex-shrink-0">
+                <img
+                  src={iconUrl || getProductIconUrl(name || product?.name || 'default')}
+                  alt="Product Avatar"
+                  className="h-20 w-20 rounded-full object-cover border-2 border-border shadow-sm"
+                  onError={(e) => {
+                    e.currentTarget.src = getProductIconUrl(name || 'default');
+                  }}
+                />
+              </div>
+              {/* Upload */}
+              <div className="flex-1">
+                <ImageUpload value={iconUrl} onChange={setIconUrl} placeholder="https://... or upload" />
+              </div>
+            </div>
           </div>
 
           {/* App Name */}
