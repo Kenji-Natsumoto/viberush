@@ -7,6 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { EditProductModal } from "@/components/EditProductModal";
+import { GlobalMakerProfile } from "@/components/GlobalMakerProfile";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -48,6 +49,11 @@ export default function Dashboard() {
       <Header onSubmitClick={() => {}} />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-12">
+        {/* Global Maker Profile */}
+        <div className="mb-8">
+          <GlobalMakerProfile />
+        </div>
+
         {/* Page Title */}
         <div className="mb-10">
           <h1 className="text-2xl font-semibold text-foreground tracking-tight">
