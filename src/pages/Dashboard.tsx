@@ -49,11 +49,6 @@ export default function Dashboard() {
       <Header onSubmitClick={() => {}} />
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-12">
-        {/* Global Maker Profile */}
-        <div className="mb-8">
-          <GlobalMakerProfile />
-        </div>
-
         {/* Page Title */}
         <div className="mb-10">
           <h1 className="text-2xl font-semibold text-foreground tracking-tight">
@@ -158,6 +153,11 @@ export default function Dashboard() {
             ))}
           </div>
         )}
+
+        {/* Global Maker Profile */}
+        <div className="mt-12">
+          <GlobalMakerProfile />
+        </div>
       </main>
 
       <Footer />
