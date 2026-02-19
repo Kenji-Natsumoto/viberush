@@ -217,6 +217,7 @@ export function useUpdateProduct() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
       queryClient.invalidateQueries({ queryKey: ['product', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['my-products'] });
       toast({
         title: "Changes Saved! ✨",
         description: "Your app has been updated successfully.",
