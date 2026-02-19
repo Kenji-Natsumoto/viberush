@@ -34,7 +34,7 @@ export default function Chronicles() {
               <img
                 src={vrCover}
                 alt="VibeRush Chronicles"
-                className="w-[200px] h-[200px] object-cover rounded-lg shadow-lg mx-auto"
+                className="w-[180px] h-[180px] object-cover rounded-md shadow-lg mx-auto"
               />
             </div>
 
