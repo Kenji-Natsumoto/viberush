@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap, User, Plus, LogOut, LayoutDashboard, Compass } from 'lucide-react';
+import { Zap, User, Plus, LogOut, LayoutDashboard, Compass, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -59,6 +59,15 @@ export function Header({ onSubmitClick }: HeaderProps) {
             >
               <Compass className="h-4 w-4" />
               Explore
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/chronicles')}
+              className="hidden sm:flex gap-1.5 text-muted-foreground hover:text-foreground"
+            >
+              <BookOpen className="h-4 w-4" />
+              Chronicles
             </Button>
             {user ? (
               <>

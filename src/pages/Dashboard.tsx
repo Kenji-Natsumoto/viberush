@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Settings, Rocket, Plus, ArrowRight } from "lucide-react";
+import { Settings, Rocket, Plus, ArrowRight, BookOpen } from "lucide-react";
+import { useIsAdmin } from "@/hooks/useChronicles";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
@@ -38,6 +39,7 @@ export default function Dashboard() {
   const { user, loading: authLoading } = useAuth();
   const { data: products = [], isLoading } = useMyProducts();
   const [editProduct, setEditProduct] = useState<Product | null>(null);
+  const isAdmin = useIsAdmin();
 
   // Redirect to auth if not logged in
   if (!authLoading && !user) {
@@ -50,13 +52,23 @@ export default function Dashboard() {
 
       <main className="flex-1 max-w-5xl mx-auto w-full px-4 sm:px-6 py-12">
         {/* Page Title */}
-        <div className="mb-10">
-          <h1 className="text-2xl font-semibold text-foreground tracking-tight">
-            My Projects
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Products you own and manage on VibeRush.
-          </p>
+        <div className="flex items-center justify-between mb-10">
+          <div>
+            <h1 className="text-2xl font-semibold text-foreground tracking-tight">
+              My Projects
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Products you own and manage on VibeRush.
+            </p>
+          </div>
+          {isAdmin && (
+            <Link to="/dashboard/chronicles">
+              <Button variant="outline" size="sm" className="gap-1.5">
+                <BookOpen className="h-4 w-4" />
+                Manage Chronicles
+              </Button>
+            </Link>
+          )}
         </div>
 
         {/* Loading State */}

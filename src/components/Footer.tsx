@@ -44,6 +44,14 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link
+                  to="/chronicles"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Chronicles
+                </Link>
+              </li>
+              <li>
                 <a
                   href="https://forms.gle/xDHYJWqsXEpYbpmD6"
                   target="_blank"
