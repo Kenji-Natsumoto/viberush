@@ -18,6 +18,8 @@ import Images from "./pages/Images";
 import AdminClaims from "./pages/AdminClaims";
 import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
+import Chronicles from "./pages/Chronicles";
+import ChroniclesAdmin from "./pages/ChroniclesAdmin";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,8 @@ const App = () => (
             <Route path="/images" element={<Images />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/explore" element={<Explore />} />
+            <Route path="/chronicles" element={<Chronicles />} />
+            <Route path="/dashboard/chronicles" element={<ChroniclesAdmin />} />
             <Route path="/admin/claims" element={<AdminClaims />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
