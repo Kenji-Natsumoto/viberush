@@ -181,6 +181,9 @@ export function EditProductModal({ isOpen, onClose, product, onSave }: EditProdu
             <p className="text-xs text-muted-foreground">
               This represents the identity of your product.
             </p>
+            <p className="text-xs text-muted-foreground/70">
+              推奨サイズ: 200×200px以上（正方形）。未設定時は100×100pxの自動生成アイコンが使用されます。
+            </p>
             <div className="flex items-center gap-4">
               {/* Circular Preview */}
               <div className="flex-shrink-0">
