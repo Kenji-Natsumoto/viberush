@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import ReactMarkdown from 'react-markdown';
-import { Flame, BookOpen } from 'lucide-react';
+import vrCover from '@/assets/vr-chronicles-cover.jpg';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { useChronicles } from '@/hooks/useChronicles';
@@ -30,13 +30,12 @@ export default function Chronicles() {
 
           <div className="max-w-3xl mx-auto px-4 py-16 sm:py-24 text-center relative z-10">
             {/* Playful icon cluster */}
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg">
-                <BookOpen className="h-6 w-6 text-white" />
-              </div>
-              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center shadow-lg -ml-2 -mt-4">
-                <Flame className="h-5 w-5 text-white" />
-              </div>
+            <div className="mb-6">
+              <img
+                src={vrCover}
+                alt="VibeRush Chronicles"
+                className="w-[200px] h-[200px] object-cover rounded-lg shadow-lg mx-auto"
+              />
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
