@@ -34,12 +34,12 @@ export function GlobalMakerProfile() {
     }
   }, [user]);
 
-  const handleSave = async () => {
+  const saveToMetadata = async (url: string) => {
     if (!user) return;
     setSaving(true);
     try {
       const { error } = await supabase.auth.updateUser({
-        data: { global_avatar_url: avatarUrl },
+        data: { global_avatar_url: url },
       });
       if (error) throw error;
       toast.success("Global avatar saved!");
@@ -49,6 +49,17 @@ export function GlobalMakerProfile() {
       toast.error(err.message || "Failed to save avatar");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSave = () => saveToMetadata(avatarUrl);
+
+  // Auto-save when avatar URL changes (e.g. after upload)
+  const handleAvatarChange = (url: string) => {
+    setAvatarUrl(url);
+    // Auto-save if it looks like a valid uploaded URL (not empty, not partial typing)
+    if (url && url.startsWith("http")) {
+      saveToMetadata(url);
     }
   };
 
@@ -126,7 +137,7 @@ export function GlobalMakerProfile() {
             <Label className="text-sm font-medium">Global Creator Avatar</Label>
             <ImageUpload
               value={avatarUrl}
-              onChange={setAvatarUrl}
+              onChange={handleAvatarChange}
               placeholder="https://... or upload"
             />
           </div>
