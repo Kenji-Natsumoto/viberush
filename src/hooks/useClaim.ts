@@ -10,59 +10,39 @@ export function useIsAdmin() {
   return user?.id === ADMIN_ID;
 }
 
-export function useRequestClaim() {
+/**
+ * Admin transfers ownership of a proxy-submitted product to the real creator.
+ * Sets owner_id to the product's user_id (for self-submitted) or a specified user.
+ */
+export function useTransferOwnership() {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
   const { toast } = useToast();
 
   return useMutation({
-    mutationFn: async (productId: string) => {
-      if (!user) throw new Error('ログインが必要です');
-
-      // Use admin-only update won't work here since user isn't admin.
-      // Instead we need a separate mechanism. For now, we'll use a claims table approach
-      // or allow user to set claim_status to 'pending' via a permissive policy.
-      // Since the current RLS only allows admin or verified owner to UPDATE,
-      // we need to use a Supabase RPC or relax the policy.
-      // For simplicity, let's call an RPC function.
-      
-      // Fallback: direct update with owner_id set
-      const { error, count } = await supabase
+    mutationFn: async ({ productId, newOwnerId }: { productId: string; newOwnerId: string }) => {
+      const { error } = await supabase
         .from('products')
-        .update({ 
-          claim_status: 'pending',
-          owner_id: user.id 
-        }, { count: 'exact' })
-        .eq('id', productId)
-        .is('owner_id', null); // Only claim if no owner yet
+        .update({ owner_id: newOwnerId })
+        .eq('id', productId);
 
       if (error) throw error;
-      if (typeof count === 'number' && count === 0) {
-        throw new Error('このアプリは既に所有権が設定されています');
-      }
-
       return { productId };
     },
-    onSuccess: (_, productId) => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
-      queryClient.invalidateQueries({ queryKey: ['product', productId] });
-      toast({
-        title: "申請を送信しました 📩",
-        description: "管理者が確認後、所有権が承認されます。",
-      });
+      queryClient.invalidateQueries({ queryKey: ['product', variables.productId] });
+      toast({ title: "権限を譲渡しました ✅", description: "オーナーが更新されました。" });
     },
     onError: (error: Error) => {
-      console.error('Claim error:', error);
-      toast({
-        title: "申請に失敗しました",
-        description: error.message,
-        variant: "destructive",
-      });
+      toast({ title: "譲渡に失敗", description: error.message, variant: "destructive" });
     },
   });
 }
 
-export function useApproveClaim() {
+/**
+ * Admin revokes ownership (resets owner_id to null).
+ */
+export function useRevokeOwnership() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
@@ -70,44 +50,19 @@ export function useApproveClaim() {
     mutationFn: async (productId: string) => {
       const { error } = await supabase
         .from('products')
-        .update({ claim_status: 'verified' })
+        .update({ owner_id: null })
         .eq('id', productId);
 
       if (error) throw error;
       return { productId };
     },
-    onSuccess: (_, productId) => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
-      queryClient.invalidateQueries({ queryKey: ['product', productId] });
-      toast({ title: "承認しました ✅", description: "所有権が確認されました。" });
+      queryClient.invalidateQueries({ queryKey: ['product', result.productId] });
+      toast({ title: "権限を取消しました", description: "オーナーがリセットされました。" });
     },
     onError: (error: Error) => {
-      toast({ title: "承認に失敗", description: error.message, variant: "destructive" });
-    },
-  });
-}
-
-export function useRejectClaim() {
-  const queryClient = useQueryClient();
-  const { toast } = useToast();
-
-  return useMutation({
-    mutationFn: async (productId: string) => {
-      const { error } = await supabase
-        .from('products')
-        .update({ claim_status: 'none', owner_id: null })
-        .eq('id', productId);
-
-      if (error) throw error;
-      return { productId };
-    },
-    onSuccess: (_, productId) => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
-      queryClient.invalidateQueries({ queryKey: ['product', productId] });
-      toast({ title: "却下しました", description: "申請が却下されました。" });
-    },
-    onError: (error: Error) => {
-      toast({ title: "却下に失敗", description: error.message, variant: "destructive" });
+      toast({ title: "取消に失敗", description: error.message, variant: "destructive" });
     },
   });
 }

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProductScreenshots } from "@/hooks/useProductScreenshots";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2, Shield, ShieldCheck, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2 } from "lucide-react";
 import { ScreenshotGallery } from "@/components/ScreenshotGallery";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProduct } from "@/hooks/useProducts";
 import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
-import { useRequestClaim, useIsAdmin, useApproveClaim, useRejectClaim } from "@/hooks/useClaim";
+import { useIsAdmin } from "@/hooks/useClaim";
 import { getProductIconUrl } from "@/lib/iconUtils";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
@@ -37,9 +37,6 @@ const ProductDetail = () => {
   const { data: shortCode } = useShortUrl(id);
   const createShortUrl = useCreateShortUrl();
   const { data: screenshots = [] } = useProductScreenshots(id);
-  const requestClaim = useRequestClaim();
-  const approveClaim = useApproveClaim();
-  const rejectClaim = useRejectClaim();
   const isAdmin = useIsAdmin();
   
   // Fallback to dummy data if not in database
@@ -72,27 +69,12 @@ const ProductDetail = () => {
   }
 
   
-  // Check if current user is the verified owner, original submitter, or admin
-  const isVerifiedOwner = user && product.ownerId === user.id && product.claimStatus === 'verified';
+  // Edit permission: user_id or owner_id matches current user
   const isOriginalSubmitter = user && user.id === product.userId;
-  const isOwner = isVerifiedOwner || isOriginalSubmitter;
-  const canClaim = user && !product.ownerId && product.claimStatus === 'none';
-  const isPendingClaim = product.claimStatus === 'pending';
-  const isMyPendingClaim = user && product.ownerId === user.id && isPendingClaim;
+  const isTransferredOwner = user && product.ownerId === user.id;
+  const isOwner = isOriginalSubmitter || isTransferredOwner;
 
   // Debug: temporary log for ownership troubleshooting
-  if (user) {
-    console.log('[VibeRush Debug] Edit visibility:', {
-      currentUserId: user.id,
-      productOwnerId: product.ownerId,
-      productUserId: product.userId,
-      claimStatus: product.claimStatus,
-      isAdmin,
-      isVerifiedOwner,
-      isOriginalSubmitter,
-      isOwner,
-    });
-  }
 
   const handleCopyPrompt = async () => {
     if (product.aiPrompt) {
@@ -212,7 +194,7 @@ const ProductDetail = () => {
 
             {/* Action Buttons */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
-              {(isOwner || isAdmin) && (
+              {isOwner && (
                 <Button
                   variant="default"
                   onClick={() => setIsEditModalOpen(true)}
@@ -220,85 +202,6 @@ const ProductDetail = () => {
                 >
                   <Pencil className="h-4 w-4" />
                   Edit App
-                  {isVerifiedOwner && (
-                    <span className="ml-1 text-xs bg-primary-foreground/20 px-1.5 py-0.5 rounded-full">Owner</span>
-                  )}
-                  {isAdmin && !isVerifiedOwner && (
-                    <span className="ml-1 text-xs bg-primary-foreground/20 px-1.5 py-0.5 rounded-full">Admin</span>
-                  )}
-                </Button>
-              )}
-              
-              {/* Claim ownership button */}
-              {!user && !product.ownerId && (
-                <Button
-                  variant="outline"
-                  asChild
-                  className="gap-2"
-                >
-                  <Link to="/auth">
-                    <Shield className="h-4 w-4" />
-                    Claim this Product
-                  </Link>
-                </Button>
-              )}
-              {canClaim && (
-                <Button
-                  variant="outline"
-                  onClick={() => id && requestClaim.mutate(id)}
-                  disabled={requestClaim.isPending}
-                  className="gap-2"
-                >
-                  {requestClaim.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Shield className="h-4 w-4" />}
-                  Claim this Product
-                </Button>
-              )}
-              {isMyPendingClaim && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground bg-secondary px-3 py-2 rounded-md">
-                  <Clock className="h-4 w-4" />
-                  Claim pending verification from Kenji
-                </div>
-              )}
-              {isOwner && (
-                <div className="flex items-center gap-2 text-sm text-primary bg-primary/10 px-3 py-2 rounded-md">
-                  <ShieldCheck className="h-4 w-4" />
-                  Verified Owner
-                </div>
-              )}
-              
-              {/* Admin controls for pending claims */}
-              {isAdmin && isPendingClaim && (
-                <div className="flex items-center gap-2">
-                  <Button
-                    size="sm"
-                    onClick={() => id && approveClaim.mutate(id)}
-                    disabled={approveClaim.isPending}
-                    className="gap-1 bg-green-600 hover:bg-green-700 text-white"
-                  >
-                    {approveClaim.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}
-                    Verify
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={() => id && rejectClaim.mutate(id)}
-                    disabled={rejectClaim.isPending}
-                  >
-                    Reject
-                  </Button>
-                </div>
-              )}
-              {/* Admin: manually verify any unverified product */}
-              {isAdmin && !isPendingClaim && product.claimStatus !== 'verified' && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => id && approveClaim.mutate(id)}
-                  disabled={approveClaim.isPending}
-                  className="gap-1"
-                >
-                  {approveClaim.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <ShieldCheck className="h-3 w-3" />}
-                  Set Verified (Admin)
                 </Button>
               )}
               <VibeScoreButton score={product.vibeScore} productId={product.id} />
