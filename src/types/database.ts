@@ -114,14 +114,13 @@ export interface Product {
 }
 
 // Transform database product to frontend product
-export function dbProductToProduct(dbProduct: DbProduct): Product {
+export function dbProductToProduct(dbProduct: DbProduct, globalAvatarUrl?: string): Product {
   // Default avatar based on user_id
   const defaultAvatar = `https://api.dicebear.com/7.x/avataaars/svg?seed=${dbProduct.user_id}`;
   
-  // Use proxy values if provided, otherwise fall back to defaults
-  // In future, these defaults can be enhanced with profile data
+  // Priority: proxy_avatar_url > globalAvatarUrl (from user_metadata) > DiceBear default
   const creatorName = dbProduct.proxy_creator_name || 'Vibe Coder';
-  const creatorAvatar = dbProduct.proxy_avatar_url || defaultAvatar;
+  const creatorAvatar = dbProduct.proxy_avatar_url || globalAvatarUrl || defaultAvatar;
 
   return {
     id: dbProduct.id,

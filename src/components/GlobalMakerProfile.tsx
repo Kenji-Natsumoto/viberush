@@ -42,7 +42,24 @@ export function GlobalMakerProfile() {
         data: { global_avatar_url: url },
       });
       if (error) throw error;
-      toast.success("Global avatar saved!");
+
+      // Auto-apply to all owned products (same logic as bulk sync)
+      await supabase
+        .from("products")
+        .update({ proxy_avatar_url: url })
+        .eq("owner_id", user.id);
+
+      await supabase
+        .from("products")
+        .update({ proxy_avatar_url: url })
+        .eq("user_id", user.id)
+        .is("owner_id", null);
+
+      // Invalidate caches so UI reflects changes
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["my-products"] });
+
+      toast.success("Global avatar saved & applied to your products!");
       setJustSaved(true);
       setTimeout(() => setJustSaved(false), 3000);
     } catch (err: any) {
