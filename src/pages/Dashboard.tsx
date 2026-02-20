@@ -27,7 +27,7 @@ function useMyProducts() {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .eq("owner_id", user.id)
+        .or(`user_id.eq.${user.id},owner_id.eq.${user.id}`)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
