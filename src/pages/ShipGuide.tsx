@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Download, ExternalLink, Image, Layers, CheckCircle2, Sparkles, FileText, PenTool } from "lucide-react";
+import { Download, ExternalLink, Image, Layers, CheckCircle2, Sparkles, FileText, PenTool, ChevronRight } from "lucide-react";
 import bannerExample1 from "@/assets/banner-example-1.jpg";
 import bannerExample2 from "@/assets/banner-example-2.jpg";
 import bannerExample3 from "@/assets/banner-example-3.jpg";
@@ -8,6 +9,11 @@ import thumbnailGood from "@/assets/thumbnail-good.png";
 import thumbnailBad from "@/assets/thumbnail-bad.png";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCreateProduct } from "@/hooks/useProducts";
+import { fireConfetti } from "@/lib/confetti";
 
 const CHECKLIST_URL = "/ship-checklist.csv";
 const PSD_URL = "#photoshop-template";
@@ -39,6 +45,47 @@ const thumbnailTips = [
 ];
 
 export default function ShipGuide() {
+  const { user } = useAuth();
+  const createProduct = useCreateProduct();
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [makerName, setMakerName] = useState("");
+  const [shipped, setShipped] = useState(false);
+  const [shippedProductId, setShippedProductId] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const e: Record<string, string> = {};
+    if (!name.trim()) e.name = "Required";
+    if (!description.trim()) e.description = "Required";
+    if (!makerName.trim()) e.makerName = "Required";
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleShip = async () => {
+    if (!validate()) return;
+    try {
+      const product = await createProduct.mutateAsync({
+        name: name.trim(),
+        description: description.trim(),
+        proxyCreatorName: makerName.trim(),
+      });
+      fireConfetti();
+      setShipped(true);
+      setShippedProductId(product.id);
+    } catch {}
+  };
+
+  const handleReset = () => {
+    setName("");
+    setDescription("");
+    setMakerName("");
+    setShipped(false);
+    setShippedProductId(null);
+    setErrors({});
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Header onSubmitClick={() => {}} />
@@ -66,24 +113,88 @@ export default function ShipGuide() {
           <p className="text-muted-foreground mb-8 leading-relaxed">
             That's all it takes to publish your work to the world. No friction. No lengthy forms. Just three fields and you're live.
           </p>
-          {/* Mock form illustration */}
-          <Card className="border border-border bg-muted/30">
-            <CardContent className="p-6 sm:p-8 space-y-4">
-              {["Product Name", "Description", "Maker Name"].map((field) => (
-                <div key={field}>
+          {shipped ? (
+            <Card className="border border-border bg-muted/30">
+              <CardContent className="p-6 sm:p-8 text-center space-y-4">
+                <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto" />
+                <h3 className="text-xl font-bold text-foreground">Shipped! 🎉</h3>
+                <p className="text-sm text-muted-foreground">
+                  Your proof is now live on VibeRush. Add more details or ship another one.
+                </p>
+                <div className="flex items-center justify-center gap-3 pt-2">
+                  <Button variant="outline" onClick={handleReset}>
+                    Ship another
+                  </Button>
+                  {shippedProductId && (
+                    <Button asChild className="gap-1">
+                      <a href={`/product/${shippedProductId}`}>
+                        View your SHIP <ChevronRight className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border border-border bg-muted/30">
+              <CardContent className="p-6 sm:p-8 space-y-4">
+                {!user && (
+                  <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                    <span className="text-yellow-600 dark:text-yellow-400 text-sm">⚠️</span>
+                    <p className="text-sm text-yellow-700 dark:text-yellow-300">
+                      Please <a href="/auth" className="underline font-medium">sign in</a> to SHIP.
+                    </p>
+                  </div>
+                )}
+                <div>
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
-                    {field}
+                    Product Name
                   </label>
-                  <div className="h-10 rounded-md border border-border bg-background" />
+                  <Input
+                    value={name}
+                    onChange={(e) => { setName(e.target.value); setErrors(p => ({ ...p, name: "" })); }}
+                    placeholder="e.g. VibeFlow"
+                    className="bg-background"
+                  />
+                  {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                 </div>
-              ))}
-              <div className="pt-2">
-                <div className="h-9 w-28 rounded-md bg-primary/20 flex items-center justify-center">
-                  <span className="text-xs font-medium text-primary">SHIP →</span>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
+                    Description
+                  </label>
+                  <Textarea
+                    value={description}
+                    onChange={(e) => { setDescription(e.target.value); setErrors(p => ({ ...p, description: "" })); }}
+                    placeholder="What does your app do?"
+                    rows={3}
+                    className="bg-background resize-none"
+                  />
+                  {errors.description && <p className="text-xs text-destructive mt-1">{errors.description}</p>}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+                <div>
+                  <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
+                    Maker Name
+                  </label>
+                  <Input
+                    value={makerName}
+                    onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
+                    placeholder="e.g. Jane Doe"
+                    className="bg-background"
+                  />
+                  {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
+                </div>
+                <div className="pt-2">
+                  <Button
+                    onClick={handleShip}
+                    disabled={!user || createProduct.isPending}
+                    className="gap-2"
+                  >
+                    {createProduct.isPending ? "Shipping..." : "SHIP →"}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </section>
 
         {/* Section 2: Action First */}
