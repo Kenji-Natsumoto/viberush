@@ -1,16 +1,8 @@
 import { useProducts } from "@/hooks/useProducts";
-import { dummyProducts } from "@/data/dummyProducts";
 import { useMemo } from "react";
 
 export function StatsSection() {
-  const { products: dbProducts } = useProducts();
-  
-  // Use database products if available, otherwise fall back to dummy data
-  const products = dbProducts.length > 0 ? dbProducts : dummyProducts.map(p => ({
-    ...p,
-    userId: '',
-    updatedAt: p.createdAt,
-  }));
+  const { products } = useProducts();
 
   const stats = useMemo(() => {
     const now = new Date();
