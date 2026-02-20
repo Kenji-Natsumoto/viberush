@@ -72,26 +72,32 @@ export function GlobalMakerProfile() {
         data: { global_avatar_url: avatarUrl },
       });
 
-      // Batch update all user's products
-      const { error, count } = await supabase
+      // Only update products where this user is the verified owner,
+      // NOT products they submitted on behalf of others (proxy submissions).
+      // Strategy: update where owner_id matches (claimed products),
+      // OR where user_id matches AND owner_id is null (user's own unclaimed products).
+      const { error: err1, count: count1 } = await supabase
         .from("products")
         .update({ proxy_avatar_url: avatarUrl }, { count: "exact" })
-        .eq("user_id", user.id);
-
-      if (error) throw error;
-
-      // Also try owner_id match
-      await supabase
-        .from("products")
-        .update({ proxy_avatar_url: avatarUrl })
         .eq("owner_id", user.id);
+
+      const { error: err2, count: count2 } = await supabase
+        .from("products")
+        .update({ proxy_avatar_url: avatarUrl }, { count: "exact" })
+        .eq("user_id", user.id)
+        .is("owner_id", null);
+
+      if (err1) throw err1;
+      if (err2) throw err2;
+
+      const totalCount = (count1 ?? 0) + (count2 ?? 0);
 
       // Invalidate caches
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["my-products"] });
 
       toast.success(
-        `Avatar synced to ${count ?? 0} product${count !== 1 ? "s" : ""}!`
+        `Avatar synced to ${totalCount} product${totalCount !== 1 ? "s" : ""}!`
       );
     } catch (err: any) {
       toast.error(err.message || "Sync failed");
