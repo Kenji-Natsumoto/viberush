@@ -25,8 +25,8 @@ import ShipGuide from "./pages/ShipGuide";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 5,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 15000),
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 5000),
       staleTime: 1000 * 60 * 2, // 2 minutes
       gcTime: 1000 * 60 * 10,   // 10 minutes
       refetchOnWindowFocus: true,
