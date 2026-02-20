@@ -5,20 +5,12 @@ import { Button } from "@/components/ui/button";
 import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { useProducts } from "@/hooks/useProducts";
-import { dummyProducts } from "@/data/dummyProducts";
 
 type SortOption = "hottest" | "newest";
 
 export function ProductFeed() {
   const [sortBy, setSortBy] = useState<SortOption>("hottest");
-  const { products: dbProducts, isLoading, error } = useProducts();
-
-  // Use database products if available, otherwise fall back to dummy data
-  const products = dbProducts.length > 0 ? dbProducts : dummyProducts.map(p => ({
-    ...p,
-    userId: '',
-    updatedAt: p.createdAt,
-  }));
+  const { products, isLoading, error, refetch } = useProducts();
 
   // Get current week display
   const currentWeek = useMemo(() => {
@@ -97,9 +89,15 @@ export function ProductFeed() {
       )}
 
       {/* Error State */}
-      {error && (
+      {error && !isLoading && products.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted-foreground">Failed to load products. Using demo data.</p>
+          <p className="text-muted-foreground mb-3">Failed to load products.</p>
+          <button
+            onClick={() => refetch()}
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            Tap to retry
+          </button>
         </div>
       )}
 
