@@ -19,7 +19,10 @@ const authSchema = z.object({
 type AuthFormData = z.infer<typeof authSchema>;
 
 export default function Auth() {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('mode') !== 'signup';
+  });
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
