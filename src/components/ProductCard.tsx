@@ -7,7 +7,7 @@ import { UpvoteButton } from "./UpvoteButton";
 import { VibeScoreButton } from "./VibeScoreButton";
 import { EditProductModal } from "./EditProductModal";
 import { useAuth } from "@/contexts/AuthContext";
-import { useIsAdmin } from "@/hooks/useClaim";
+
 import type { Product } from "@/types/database";
 import { getProductIconUrl } from "@/lib/iconUtils";
 
@@ -20,12 +20,10 @@ interface ProductCardProps {
 export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
   const { user } = useAuth();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const isAdmin = useIsAdmin();
-  
-  // Check if current user is verified owner, original submitter, or admin
-  const isVerifiedOwner = user && product.ownerId === user.id && product.claimStatus === 'verified';
+  // Edit permission: user_id matches OR owner_id matches
   const isOriginalSubmitter = user && (creatorId ? user.id === creatorId : user.id === product.userId);
-  const isOwner = isVerifiedOwner || isOriginalSubmitter || isAdmin;
+  const isTransferredOwner = user && product.ownerId === user.id;
+  const isOwner = isOriginalSubmitter || isTransferredOwner;
 
   return (
     <>
