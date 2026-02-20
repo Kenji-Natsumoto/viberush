@@ -27,14 +27,23 @@ export function useProducts() {
   } = useQuery({
     queryKey: PRODUCTS_KEY,
     queryFn: async (): Promise<Product[]> => {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
-      if (error) throw error;
-      return (data as DbProduct[]).map((p) => dbProductToProduct(p));
+      try {
+        const { data, error } = await supabase
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .abortSignal(controller.signal);
+
+        if (error) throw error;
+        return (data as DbProduct[]).map((p) => dbProductToProduct(p));
+      } finally {
+        clearTimeout(timeout);
+      }
     },
+    networkMode: 'always',
   });
 
   // Set up real-time subscription

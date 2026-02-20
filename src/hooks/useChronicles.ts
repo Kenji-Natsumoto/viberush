@@ -35,14 +35,23 @@ export function useChronicles() {
   return useQuery({
     queryKey: CHRONICLES_KEY,
     queryFn: async (): Promise<Chronicle[]> => {
-      const { data, error } = await supabase
-        .from('chronicles')
-        .select('*')
-        .order('date', { ascending: false });
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 10000);
 
-      if (error) throw error;
-      return data as Chronicle[];
+      try {
+        const { data, error } = await supabase
+          .from('chronicles')
+          .select('*')
+          .order('date', { ascending: false })
+          .abortSignal(controller.signal);
+
+        if (error) throw error;
+        return data as Chronicle[];
+      } finally {
+        clearTimeout(timeout);
+      }
     },
+    networkMode: 'always',
   });
 }
 

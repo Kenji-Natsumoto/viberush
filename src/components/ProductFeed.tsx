@@ -115,8 +115,8 @@ export function ProductFeed() {
         </div>
       )}
 
-      {/* Empty State */}
-      {!isLoading && sortedProducts.length === 0 && (
+      {/* Empty State (only when no error) */}
+      {!isLoading && !error && sortedProducts.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground mb-2">No apps shipped yet.</p>
           <p className="text-sm text-muted-foreground">Be the first to ship your proof 🚀</p>
