@@ -1,6 +1,9 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Download, ExternalLink, Image, Layers, CheckCircle2, Sparkles, FileText, PenTool } from "lucide-react";
+import bannerExample1 from "@/assets/banner-example-1.jpg";
+import bannerExample2 from "@/assets/banner-example-2.jpg";
+import bannerExample3 from "@/assets/banner-example-3.jpg";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -173,14 +176,19 @@ export default function ShipGuide() {
           {/* Banner examples - placeholders */}
           <div className="space-y-3 mb-8">
             <p className="text-sm font-medium text-foreground">Examples of great banners:</p>
-            {[1, 2, 3].map((n) => (
-              <div
+            {[
+              { src: bannerExample1, alt: "DataPulse — dark blue gradient with laptop mockup showing analytics dashboard" },
+              { src: bannerExample2, alt: "TaskBoard — minimal teal geometric design on white background" },
+              { src: bannerExample3, alt: "FitForge — bold black and neon green with smartphone mockup" },
+            ].map((banner, n) => (
+              <img
                 key={n}
-                className="w-full rounded-lg border border-border bg-muted/30 flex items-center justify-center text-muted-foreground text-sm"
+                src={banner.src}
+                alt={banner.alt}
+                className="w-full rounded-lg border border-border object-cover"
                 style={{ aspectRatio: "1584/396" }}
-              >
-                Banner Example {n} — placeholder
-              </div>
+                loading="lazy"
+              />
             ))}
           </div>
 
