@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProductScreenshots } from "@/hooks/useProductScreenshots";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2, Image as ImageIcon, Shield, ShieldCheck, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2, Shield, ShieldCheck, Loader2 } from "lucide-react";
+import { ScreenshotGallery } from "@/components/ScreenshotGallery";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
@@ -414,26 +415,7 @@ const ProductDetail = () => {
         )}
 
         {/* Screenshots Gallery */}
-        {screenshots.length > 0 && (
-          <div className="bg-card border border-border rounded-2xl overflow-hidden mb-8">
-            <div className="px-6 py-4 border-b border-border">
-              <h2 className="font-semibold text-foreground flex items-center gap-2">
-                <ImageIcon className="h-5 w-5 text-muted-foreground" />
-                Screenshots ({screenshots.length})
-              </h2>
-            </div>
-            <div className="p-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {screenshots.map((ss) => (
-                <img
-                  key={ss.id}
-                  src={ss.url}
-                  alt="Screenshot"
-                  className="w-full rounded-lg border border-border object-cover"
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        <ScreenshotGallery screenshots={screenshots} />
 
         {/* Magic Prompt Section */}
         {product.aiPrompt && (
