@@ -9,7 +9,7 @@ import thumbnailBad from "@/assets/thumbnail-bad.png";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
-const CHECKLIST_URL = "https://docs.google.com/spreadsheets/d/PLACEHOLDER";
+const CHECKLIST_URL = "/ship-checklist.csv";
 const PSD_URL = "#photoshop-template";
 const AI_URL = "#illustrator-template";
 
