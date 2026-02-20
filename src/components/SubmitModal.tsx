@@ -127,7 +127,7 @@ export function SubmitModal({ isOpen, onClose, onOpenDetails }: SubmitModalProps
             <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
               <span className="text-yellow-600 dark:text-yellow-400 text-sm">⚠️</span>
               <p className="text-sm text-yellow-700 dark:text-yellow-300">
-                Please <a href="/auth" className="underline font-medium">sign in</a> to submit.
+                Please <a href="/auth?mode=signup" className="underline font-medium">sign up</a> to submit.
               </p>
             </div>
           )}
