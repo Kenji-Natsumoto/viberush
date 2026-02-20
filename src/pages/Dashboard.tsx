@@ -22,6 +22,8 @@ function useMyProducts() {
     queryFn: async (): Promise<Product[]> => {
       if (!user) return [];
 
+      const globalAvatarUrl = user.user_metadata?.global_avatar_url || undefined;
+
       const { data, error } = await supabase
         .from("products")
         .select("*")
@@ -29,7 +31,7 @@ function useMyProducts() {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return (data as DbProduct[]).map(dbProductToProduct);
+      return (data as DbProduct[]).map((p) => dbProductToProduct(p, globalAvatarUrl));
     },
     enabled: !!user,
   });

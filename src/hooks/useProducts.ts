@@ -33,7 +33,7 @@ export function useProducts() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return (data as DbProduct[]).map(dbProductToProduct);
+      return (data as DbProduct[]).map((p) => dbProductToProduct(p));
     },
   });
 
