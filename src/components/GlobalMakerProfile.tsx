@@ -53,7 +53,8 @@ export function GlobalMakerProfile() {
         .from("products")
         .update({ proxy_avatar_url: url })
         .eq("user_id", user.id)
-        .is("owner_id", null);
+        .is("owner_id", null)
+        .is("proxy_creator_name", null);
 
       // Invalidate caches so UI reflects changes
       queryClient.invalidateQueries({ queryKey: ["products"] });
@@ -102,7 +103,8 @@ export function GlobalMakerProfile() {
         .from("products")
         .update({ proxy_avatar_url: avatarUrl }, { count: "exact" })
         .eq("user_id", user.id)
-        .is("owner_id", null);
+        .is("owner_id", null)
+        .is("proxy_creator_name", null);
 
       if (err1) throw err1;
       if (err2) throw err2;
