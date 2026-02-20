@@ -168,10 +168,11 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Global Maker Profile */}
+        {/* Global Maker Profile - temporarily disabled for safety
         <div className="mt-12">
           <GlobalMakerProfile />
         </div>
+        */}
       </main>
 
       <Footer />
