@@ -4,6 +4,8 @@ import { Download, ExternalLink, Image, Layers, CheckCircle2, Sparkles, FileText
 import bannerExample1 from "@/assets/banner-example-1.jpg";
 import bannerExample2 from "@/assets/banner-example-2.jpg";
 import bannerExample3 from "@/assets/banner-example-3.jpg";
+import thumbnailGood from "@/assets/thumbnail-good.png";
+import thumbnailBad from "@/assets/thumbnail-bad.png";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -255,17 +257,23 @@ export default function ShipGuide() {
               <p className="text-sm font-medium text-foreground mb-2 flex items-center gap-1">
                 <CheckCircle2 className="h-4 w-4 text-primary" /> Good
               </p>
-              <div className="aspect-square rounded-lg border border-border bg-muted/30 flex items-center justify-center text-muted-foreground text-xs">
-                Clean icon — placeholder
-              </div>
+              <img
+                src={thumbnailGood}
+                alt="Good thumbnail example — clean minimal icon with clear brand mark"
+                className="aspect-square rounded-lg border border-border object-cover w-full"
+                loading="lazy"
+              />
             </div>
             <div>
               <p className="text-sm font-medium text-foreground mb-2 flex items-center gap-1">
                 <span className="text-destructive">✗</span> Avoid
               </p>
-              <div className="aspect-square rounded-lg border border-border bg-muted/30 flex items-center justify-center text-muted-foreground text-xs">
-                Cluttered icon — placeholder
-              </div>
+              <img
+                src={thumbnailBad}
+                alt="Bad thumbnail example — cluttered with too many elements and unreadable text"
+                className="aspect-square rounded-lg border border-border object-cover w-full"
+                loading="lazy"
+              />
             </div>
           </div>
 
