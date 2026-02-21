@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { EditProductModal } from "@/components/EditProductModal";
-import { GlobalMakerProfile } from "@/components/GlobalMakerProfile";
+import { MakerProfileEditor } from "@/components/MakerProfileEditor";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -171,11 +171,10 @@ export default function Dashboard() {
           </div>
         )}
 
-        {/* Global Maker Profile - temporarily disabled for safety
+        {/* Maker Profile Editor */}
         <div className="mt-12">
-          <GlobalMakerProfile />
+          <MakerProfileEditor />
         </div>
-        */}
       </main>
 
       <Footer />
