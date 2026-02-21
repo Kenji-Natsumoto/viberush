@@ -53,10 +53,11 @@ export function useMakerProfile(username: string | undefined) {
       }
 
       // Fetch all products by this maker (as user_id or owner_id)
+      // Include: self-submitted (no proxy name), self-submitted with matching proxy name, owned, or proxy name matching username
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select('*')
-        .or(`and(user_id.eq.${profileData.id},proxy_creator_name.is.null),and(user_id.eq.${profileData.id},proxy_creator_name.eq.),owner_id.eq.${profileData.id}`)
+        .or(`and(user_id.eq.${profileData.id},proxy_creator_name.is.null),and(user_id.eq.${profileData.id},proxy_creator_name.eq.),owner_id.eq.${profileData.id},proxy_creator_name.ilike.${profileData.username}`)
         .order('created_at', { ascending: false });
 
       if (productsError) throw productsError;
