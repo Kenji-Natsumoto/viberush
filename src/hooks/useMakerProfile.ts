@@ -36,7 +36,7 @@ export function useMakerProfile(username: string | undefined) {
       const { data: profileData, error: profileError } = await supabase
         .from('maker_profiles')
         .select('*')
-        .eq('username', username)
+        .ilike('username', username)
         .maybeSingle();
 
       if (profileError) throw profileError;
@@ -113,16 +113,18 @@ export function useMakerProfile(username: string | undefined) {
       const totalUpvotes = products.reduce((sum, p) => sum + p.votes, 0);
       const totalVibeScore = products.reduce((sum, p) => sum + p.vibeScore, 0);
 
-      // Use proxy_avatar_url from the first product that has one, or DiceBear
+      // Use proxy_avatar_url from the first product that has one,
+      // or fall back to the product's creatorAvatar (DiceBear seeded by user_id) for consistency with ProductDetail
       const avatarFromProduct = proxyProducts.find((p) => p.proxy_avatar_url)?.proxy_avatar_url;
       const displayName = proxyProducts[0].proxy_creator_name || username;
+      const fallbackAvatar = products[0]?.creatorAvatar;
 
       const profile: MakerProfile = {
         id: `virtual-${username}`,
         username: displayName,
         displayName,
         bio: '',
-        avatarUrl: avatarFromProduct || undefined,
+        avatarUrl: avatarFromProduct || fallbackAvatar || undefined,
         totalUpvotes,
         totalVibeScore,
         createdAt: proxyProducts[proxyProducts.length - 1].created_at,
