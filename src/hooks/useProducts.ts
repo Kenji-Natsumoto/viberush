@@ -91,31 +91,44 @@ export function useProduct(productId: string | undefined) {
       const dbProduct = data as DbProduct;
       let fallbackAvatar: string | undefined;
 
-      // If proxy_avatar_url is missing, try to find an avatar from:
-      // 1. maker_profiles (if owner_id or user_id has a profile)
-      // 2. Another product by the same proxy_creator_name that has an avatar
+      // Avatar fallback logic — scoped to avoid showing submitter's avatar for proxy products
       if (!dbProduct.proxy_avatar_url) {
-        const profileUserId = dbProduct.owner_id || dbProduct.user_id;
-        const { data: profile } = await supabase
-          .from('maker_profiles')
-          .select('avatar_url')
-          .eq('id', profileUserId)
-          .maybeSingle();
-
-        if (profile?.avatar_url) {
-          fallbackAvatar = profile.avatar_url;
-        } else if (dbProduct.proxy_creator_name) {
-          // Look for avatar from sibling products by same creator
-          const { data: sibling } = await supabase
-            .from('products')
-            .select('proxy_avatar_url')
-            .ilike('proxy_creator_name', dbProduct.proxy_creator_name)
-            .not('proxy_avatar_url', 'is', null)
-            .limit(1)
+        if (dbProduct.proxy_creator_name) {
+          // Proxy submission: only check owner_id profile (transferred ownership) or sibling products
+          // Do NOT use user_id (the submitter/curator) — that would show the wrong avatar
+          if (dbProduct.owner_id) {
+            const { data: ownerProfile } = await supabase
+              .from('maker_profiles')
+              .select('avatar_url')
+              .eq('id', dbProduct.owner_id)
+              .maybeSingle();
+            if (ownerProfile?.avatar_url) {
+              fallbackAvatar = ownerProfile.avatar_url;
+            }
+          }
+          if (!fallbackAvatar) {
+            // Look for avatar from sibling products by same creator
+            const { data: sibling } = await supabase
+              .from('products')
+              .select('proxy_avatar_url')
+              .ilike('proxy_creator_name', dbProduct.proxy_creator_name)
+              .not('proxy_avatar_url', 'is', null)
+              .limit(1)
+              .maybeSingle();
+            if (sibling?.proxy_avatar_url) {
+              fallbackAvatar = sibling.proxy_avatar_url;
+            }
+          }
+        } else {
+          // Non-proxy (direct submission): use user_id's maker profile avatar
+          const profileUserId = dbProduct.owner_id || dbProduct.user_id;
+          const { data: profile } = await supabase
+            .from('maker_profiles')
+            .select('avatar_url')
+            .eq('id', profileUserId)
             .maybeSingle();
-
-          if (sibling?.proxy_avatar_url) {
-            fallbackAvatar = sibling.proxy_avatar_url;
+          if (profile?.avatar_url) {
+            fallbackAvatar = profile.avatar_url;
           }
         }
       }
