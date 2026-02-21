@@ -12,6 +12,7 @@ import { EditProductModal } from "@/components/EditProductModal";
 import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
 import { useProduct } from "@/hooks/useProducts";
+import { useMakerUsername } from "@/hooks/useMakerUsername";
 import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
 import { useIsAdmin } from "@/hooks/useClaim";
 import { getProductIconUrl } from "@/lib/iconUtils";
@@ -42,6 +43,10 @@ const ProductDetail = () => {
   // Fallback to dummy data if not in database
   const dummyProduct = dummyProducts.find((p) => p.id === id);
   const product: Product | null = dbProduct || dummyProduct || null;
+
+  // Look up maker username from owner_id or user_id
+  const makerUserId = product?.ownerId || product?.userId;
+  const { data: makerUsername } = useMakerUsername(makerUserId);
 
   if (isLoading) {
     return (
@@ -168,8 +173,8 @@ const ProductDetail = () => {
                   />
                   <span className="text-sm text-muted-foreground">
                     by{' '}
-                    {product.proxyCreatorName ? (
-                      <Link to={`/maker/@${product.proxyCreatorName}`} className="text-foreground font-medium hover:underline">
+                    {makerUsername ? (
+                      <Link to={`/maker/@${makerUsername}`} className="text-foreground font-medium hover:underline">
                         {product.creatorName || 'Vibe Coder'}
                       </Link>
                     ) : (
