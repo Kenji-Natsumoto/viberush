@@ -167,7 +167,14 @@ const ProductDetail = () => {
                     }}
                   />
                   <span className="text-sm text-muted-foreground">
-                    by <span className="text-foreground font-medium">{product.creatorName || 'Vibe Coder'}</span>
+                    by{' '}
+                    {product.proxyCreatorName ? (
+                      <Link to={`/maker/@${product.proxyCreatorName}`} className="text-foreground font-medium hover:underline">
+                        {product.creatorName || 'Vibe Coder'}
+                      </Link>
+                    ) : (
+                      <span className="text-foreground font-medium">{product.creatorName || 'Vibe Coder'}</span>
+                    )}
                   </span>
                   <span className="text-sm text-muted-foreground">·</span>
                   <span className="text-sm text-muted-foreground">

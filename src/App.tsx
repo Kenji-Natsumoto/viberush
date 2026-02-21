@@ -21,6 +21,7 @@ import Explore from "./pages/Explore";
 import Chronicles from "./pages/Chronicles";
 import ChroniclesAdmin from "./pages/ChroniclesAdmin";
 import ShipGuide from "./pages/ShipGuide";
+import MakerProfile from "./pages/MakerProfile";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="/dashboard/chronicles" element={<ChroniclesAdmin />} />
             <Route path="/admin/claims" element={<AdminClaims />} />
             <Route path="/ship-guide" element={<ShipGuide />} />
+            <Route path="/maker/:username" element={<MakerProfile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
