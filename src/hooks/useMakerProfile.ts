@@ -5,6 +5,7 @@ import { DbProduct, Product, dbProductToProduct } from '@/types/database';
 export interface MakerProfile {
   id: string;
   username: string;
+  displayName: string;
   bio: string;
   xUrl?: string;
   linkedinUrl?: string;
@@ -69,9 +70,13 @@ export function useMakerProfile(username: string | undefined) {
         const totalUpvotes = products.reduce((sum, p) => sum + p.votes, 0);
         const totalVibeScore = products.reduce((sum, p) => sum + p.vibeScore, 0);
 
+        // Derive display name from products' proxy_creator_name or fallback to username
+        const displayName = products.find(p => p.proxyCreatorName)?.proxyCreatorName || profileData.username;
+
         const profile: MakerProfile = {
           id: profileData.id,
           username: profileData.username,
+          displayName,
           bio: profileData.bio || '',
           xUrl: profileData.x_url || undefined,
           linkedinUrl: profileData.linkedin_url || undefined,
@@ -115,6 +120,7 @@ export function useMakerProfile(username: string | undefined) {
       const profile: MakerProfile = {
         id: `virtual-${username}`,
         username: displayName,
+        displayName,
         bio: '',
         avatarUrl: avatarFromProduct || undefined,
         totalUpvotes,

@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, ExternalLink, Share2, Heart, Zap, Calendar, Users, Globe, Github, Linkedin, Rocket } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -151,7 +152,7 @@ const MakerProfile = () => {
   const handleShare = () => {
     const url = window.location.href;
     const text = data
-      ? `Check out @${data.profile.username}'s builds on VibeRush 🚀`
+      ? `Check out ${data.profile.displayName}'s builds on VibeRush 🚀`
       : 'Check out this maker on VibeRush!';
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
     window.open(twitterUrl, '_blank', 'noopener,noreferrer');
@@ -181,7 +182,7 @@ const MakerProfile = () => {
   const joinDate = new Date(profile.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
 
   // Dynamic SEO (document.title)
-  document.title = `${profile.username} — Maker Profile | VibeRush`;
+  document.title = `${profile.displayName} (@${profile.username}) — Maker Profile | VibeRush`;
 
   return (
     <div className="min-h-screen bg-background">
@@ -211,9 +212,10 @@ const MakerProfile = () => {
             />
 
             {/* Name & username */}
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-1">
-              @{profile.username}
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-0.5">
+              {profile.displayName}
             </h1>
+            <p className="text-sm text-muted-foreground">@{profile.username}</p>
 
             {/* Lineage badge */}
             {profile.invitedByUsername && (
@@ -228,7 +230,9 @@ const MakerProfile = () => {
 
             {/* Bio */}
             {profile.bio && (
-              <p className="text-muted-foreground max-w-lg mx-auto mt-3 leading-relaxed">{profile.bio}</p>
+              <div className="text-muted-foreground max-w-lg mx-auto mt-3 leading-relaxed text-left prose prose-sm prose-invert prose-p:my-1 prose-headings:text-foreground prose-headings:mt-3 prose-headings:mb-1 prose-strong:text-foreground prose-a:text-primary">
+                <ReactMarkdown>{profile.bio}</ReactMarkdown>
+              </div>
             )}
 
             {/* Stats */}
