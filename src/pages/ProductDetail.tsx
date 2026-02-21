@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 import { useParams, Link } from "react-router-dom";
 import { useProductScreenshots } from "@/hooks/useProductScreenshots";
 import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2 } from "lucide-react";
@@ -48,7 +50,26 @@ const ProductDetail = () => {
   // For proxy submissions, only link if ownership was transferred (ownerId set)
   // For regular submissions, use userId
   const makerUserId = product?.ownerId || (product?.proxyCreatorName ? undefined : product?.userId);
-  const { data: makerUsername } = useMakerUsername(makerUserId);
+  const { data: makerUsernameById } = useMakerUsername(makerUserId);
+
+  // For proxy submissions without owner_id, try matching proxy_creator_name to a maker_profiles username
+  const proxyName = product?.proxyCreatorName;
+  const shouldLookupByProxy = !makerUserId && !!proxyName;
+  const { data: makerProfileByProxy } = useQuery({
+    queryKey: ['maker-profile-by-proxy', proxyName],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from('maker_profiles')
+        .select('username')
+        .ilike('username', proxyName!)
+        .maybeSingle();
+      return data?.username ?? null;
+    },
+    enabled: shouldLookupByProxy,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const makerUsername = makerUsernameById ?? makerProfileByProxy;
 
   if (isLoading) {
     return (
