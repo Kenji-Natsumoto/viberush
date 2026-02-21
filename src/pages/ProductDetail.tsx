@@ -45,7 +45,9 @@ const ProductDetail = () => {
   const product: Product | null = dbProduct || dummyProduct || null;
 
   // Look up maker username from owner_id or user_id
-  const makerUserId = product?.ownerId || product?.userId;
+  // For proxy submissions, only link if ownership was transferred (ownerId set)
+  // For regular submissions, use userId
+  const makerUserId = product?.ownerId || (product?.proxyCreatorName ? undefined : product?.userId);
   const { data: makerUsername } = useMakerUsername(makerUserId);
 
   if (isLoading) {
