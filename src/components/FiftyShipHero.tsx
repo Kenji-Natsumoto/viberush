@@ -95,7 +95,7 @@ export function FiftyShipHero() {
 
         {/* Description - staggered fade in */}
         <div
-          className="max-w-2xl mx-auto space-y-4 text-sm sm:text-base leading-relaxed text-[hsl(0_0%_100%/0.7)] transition-all duration-700 ease-out delay-500"
+          className="max-w-2xl mx-auto space-y-4 text-sm sm:text-base leading-relaxed text-left text-[hsl(0_0%_100%/0.7)] transition-all duration-700 ease-out delay-500"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? "translateY(0)" : "translateY(16px)",
