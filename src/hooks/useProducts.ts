@@ -432,7 +432,9 @@ export function useAddVibeClick() {
 
   return useMutation({
     mutationFn: async ({ productId }: { productId: string }) => {
-      if (!user) throw new Error('Must be logged in to vibe');
+      // Check current session directly (handles anonymous sign-in race condition)
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) throw new Error('Must be logged in to vibe');
 
       const { error } = await supabase.rpc('add_vibe_click', {
         p_product_id: productId,
