@@ -1,5 +1,4 @@
 import { useCallback, useRef } from "react";
-import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserVibeClicks, useAddVibeClick } from "@/hooks/useProducts";
@@ -131,15 +130,29 @@ export function VibeScoreButton({ score, productId }: VibeScoreButtonProps) {
               <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-500/40 to-red-500/40 blur-md animate-pulse" />
             )}
 
-            {/* Icon */}
-            <Flame
+            {/* Icon - gradient filled flame */}
+            <svg
+              viewBox="0 0 24 24"
               className={cn(
                 "h-5 w-5 transition-all duration-200",
                 hasClicked || isAnimating
-                  ? "text-orange-400 scale-125 drop-shadow-[0_0_8px_rgba(255,165,0,0.8)]"
-                  : "text-orange-500"
+                  ? "scale-125 drop-shadow-[0_0_8px_rgba(255,165,0,0.8)]"
+                  : ""
               )}
-            />
+            >
+              <defs>
+                <linearGradient id={`flame-gradient-${productId}`} x1="0" y1="1" x2="0" y2="0">
+                  <stop offset="0%" stopColor="#FF4500" />
+                  <stop offset="50%" stopColor="#FF8C00" />
+                  <stop offset="100%" stopColor="#FFD700" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M12 2c.5 1.5.5 3 0 4.5C14.5 4 17 2.5 19 5c1 1.5 1.5 3.5 1 5.5-.5 2-2 3.5-3 4.5 1-1 1.5-2.5 1-4-.5-1.5-2-2.5-3-3-.5 2-1.5 3.5-3 4.5-1.5 1-3 1.5-5 1 2 1.5 4.5 2 7 1 0 1.5-.5 3-1.5 4S9 20 8 20c-2 0-3.5-1-4.5-2.5S2 14.5 2 13c0-2 1-3.5 2-4.5S6.5 6.5 8 6c-1 1.5-1 3 0 4.5C9 8 10 5.5 12 2z"
+                fill={`url(#flame-gradient-${productId})`}
+                stroke="none"
+              />
+            </svg>
 
             {/* Score */}
             <span
