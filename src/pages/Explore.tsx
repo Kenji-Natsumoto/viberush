@@ -22,7 +22,7 @@ import {
 import { PRODUCT_CATEGORIES } from "@/lib/categoryConfig";
 import type { Product } from "@/types/database";
 
-type SortOption = "newest" | "alphabetical";
+type SortOption = "newest" | "alphabetical" | "vibes" | "upvotes";
 
 const CATEGORY_OPTIONS = ["All", ...PRODUCT_CATEGORIES];
 
@@ -53,6 +53,10 @@ export default function Explore() {
     // Sort
     if (sort === "alphabetical") {
       result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sort === "vibes") {
+      result.sort((a, b) => b.vibeScore - a.vibeScore);
+    } else if (sort === "upvotes") {
+      result.sort((a, b) => b.votes - a.votes);
     } else {
       result.sort(
         (a, b) =>
@@ -123,6 +127,8 @@ export default function Explore() {
             </SelectTrigger>
             <SelectContent className="bg-popover z-50">
               <SelectItem value="newest">Newest First</SelectItem>
+              <SelectItem value="vibes">🔥 Vibe Score</SelectItem>
+              <SelectItem value="upvotes">▲ Most Upvoted</SelectItem>
               <SelectItem value="alphabetical">Alphabetical</SelectItem>
             </SelectContent>
           </Select>
