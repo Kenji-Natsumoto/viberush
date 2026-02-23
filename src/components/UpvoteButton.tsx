@@ -13,9 +13,11 @@ import {
 interface UpvoteButtonProps {
   initialVotes: number;
   productId: string;
+  size?: "default" | "sm";
 }
 
-export function UpvoteButton({ initialVotes, productId }: UpvoteButtonProps) {
+export function UpvoteButton({ initialVotes, productId, size = "default" }: UpvoteButtonProps) {
+  const isSmall = size === "sm";
   const { user, isAnonymous } = useAuth();
   const navigate = useNavigate();
   const { data: userVotes = new Set() } = useUserVotes();
@@ -43,16 +45,17 @@ export function UpvoteButton({ initialVotes, productId }: UpvoteButtonProps) {
             onClick={handleVote}
             disabled={toggleVote.isPending}
             className={cn(
-              "flex flex-col items-center justify-center min-w-[52px] px-3 py-2 rounded-lg border transition-all duration-200",
+              "flex flex-col items-center justify-center rounded-lg border transition-all duration-200",
               "hover:scale-105 active:scale-95",
+              isSmall ? "min-w-[36px] px-2 py-1" : "min-w-[52px] px-3 py-2",
               toggleVote.isPending && "opacity-50 cursor-not-allowed",
               hasVoted
                 ? "bg-upvote text-upvote-foreground border-upvote shadow-upvote"
                 : "bg-card text-muted-foreground border-border hover:border-upvote hover:text-upvote"
             )}
           >
-            <ChevronUp className="h-4 w-4" strokeWidth={2.5} />
-            <span className="text-sm font-semibold tabular-nums">{initialVotes}</span>
+            <ChevronUp className={isSmall ? "h-3 w-3" : "h-4 w-4"} strokeWidth={2.5} />
+            <span className={cn("font-semibold tabular-nums", isSmall ? "text-[10px]" : "text-sm")}>{initialVotes}</span>
           </button>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="text-xs max-w-[180px] text-center">
