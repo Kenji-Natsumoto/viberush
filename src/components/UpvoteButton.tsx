@@ -16,7 +16,7 @@ interface UpvoteButtonProps {
 }
 
 export function UpvoteButton({ initialVotes, productId }: UpvoteButtonProps) {
-  const { user } = useAuth();
+  const { user, isAnonymous } = useAuth();
   const navigate = useNavigate();
   const { data: userVotes = new Set() } = useUserVotes();
   const toggleVote = useToggleVote();
@@ -27,7 +27,7 @@ export function UpvoteButton({ initialVotes, productId }: UpvoteButtonProps) {
     e.preventDefault();
     e.stopPropagation();
     
-    if (!user) {
+    if (!user || isAnonymous) {
       navigate('/auth?mode=signup');
       return;
     }

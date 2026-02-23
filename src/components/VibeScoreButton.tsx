@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { useUserVibeClicks, useAddVibeClick } from "@/hooks/useProducts";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
   Tooltip,
   TooltipContent,
@@ -37,8 +36,7 @@ const PARTICLE_COLORS = [
 ];
 
 export function VibeScoreButton({ score, productId }: VibeScoreButtonProps) {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const { user, signInAnonymously } = useAuth();
   const { data: userVibeClicks } = useUserVibeClicks();
   const addVibeClick = useAddVibeClick();
 
@@ -66,16 +64,18 @@ export function VibeScoreButton({ score, productId }: VibeScoreButtonProps) {
     return newParticles;
   }, []);
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
 
-    if (!user) {
-      navigate('/auth?mode=signup');
-      return;
-    }
-
     if (addVibeClick.isPending) return;
+
+    // If not logged in, auto-sign-in anonymously
+    let currentUser = user;
+    if (!currentUser) {
+      currentUser = await signInAnonymously();
+      if (!currentUser) return; // sign-in failed
+    }
 
     // Particles every click
     clickCountRef.current += 1;
