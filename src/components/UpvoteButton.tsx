@@ -3,6 +3,12 @@ import { cn } from "@/lib/utils";
 import { useToggleVote, useUserVotes } from "@/hooks/useProducts";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface UpvoteButtonProps {
   initialVotes: number;
@@ -22,7 +28,7 @@ export function UpvoteButton({ initialVotes, productId }: UpvoteButtonProps) {
     e.stopPropagation();
     
     if (!user) {
-      navigate('/auth');
+      navigate('/auth?mode=signup');
       return;
     }
     
@@ -30,20 +36,29 @@ export function UpvoteButton({ initialVotes, productId }: UpvoteButtonProps) {
   };
 
   return (
-    <button
-      onClick={handleVote}
-      disabled={toggleVote.isPending}
-      className={cn(
-        "flex flex-col items-center justify-center min-w-[52px] px-3 py-2 rounded-lg border transition-all duration-200",
-        "hover:scale-105 active:scale-95",
-        toggleVote.isPending && "opacity-50 cursor-not-allowed",
-        hasVoted
-          ? "bg-upvote text-upvote-foreground border-upvote shadow-upvote"
-          : "bg-card text-muted-foreground border-border hover:border-upvote hover:text-upvote"
-      )}
-    >
-      <ChevronUp className="h-4 w-4" strokeWidth={2.5} />
-      <span className="text-sm font-semibold tabular-nums">{initialVotes}</span>
-    </button>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleVote}
+            disabled={toggleVote.isPending}
+            className={cn(
+              "flex flex-col items-center justify-center min-w-[52px] px-3 py-2 rounded-lg border transition-all duration-200",
+              "hover:scale-105 active:scale-95",
+              toggleVote.isPending && "opacity-50 cursor-not-allowed",
+              hasVoted
+                ? "bg-upvote text-upvote-foreground border-upvote shadow-upvote"
+                : "bg-card text-muted-foreground border-border hover:border-upvote hover:text-upvote"
+            )}
+          >
+            <ChevronUp className="h-4 w-4" strokeWidth={2.5} />
+            <span className="text-sm font-semibold tabular-nums">{initialVotes}</span>
+          </button>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="text-xs max-w-[180px] text-center">
+          <p>▲ Upvote — one vote per person</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
