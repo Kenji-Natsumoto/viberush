@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { FiftyShipHero } from "@/components/FiftyShipHero";
 import {
   Select,
   SelectContent,
@@ -65,6 +66,9 @@ export default function Explore() {
       <Header onSubmitClick={() => {}} />
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-4 sm:px-6 py-10">
+        {/* 50-SHIP Milestone Hero */}
+        <FiftyShipHero />
+
         {/* Page Title */}
         <div className="mb-8">
           <h1 className="text-2xl font-semibold text-foreground tracking-tight">
