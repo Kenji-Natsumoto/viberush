@@ -253,9 +253,9 @@ function ExploreCard({ product }: { product: Product }) {
       </div>
 
       {/* Vibe & Upvote */}
-      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
-        <VibeScoreButton score={product.vibeScore} productId={product.id} />
-        <UpvoteButton initialVotes={product.votes} productId={product.id} />
+      <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border">
+        <VibeScoreButton score={product.vibeScore} productId={product.id} size="sm" />
+        <UpvoteButton initialVotes={product.votes} productId={product.id} size="sm" />
       </div>
     </Link>
   );
