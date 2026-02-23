@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { X, Type, FileText, User, CheckCircle2, ChevronRight } from "lucide-react";
+import { X, Type, FileText, User, CheckCircle2, ChevronRight, Eye, Pencil } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,6 +22,7 @@ export function SubmitModal({ isOpen, onClose, onOpenDetails }: SubmitModalProps
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [makerName, setMakerName] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
   
   // Success state
   const [submittedProductId, setSubmittedProductId] = useState<string | null>(null);
@@ -41,6 +43,7 @@ export function SubmitModal({ isOpen, onClose, onOpenDetails }: SubmitModalProps
     setName("");
     setDescription("");
     setMakerName("");
+    setShowPreview(false);
     setErrors({});
     setSubmittedProductId(null);
   };
@@ -150,18 +153,52 @@ export function SubmitModal({ isOpen, onClose, onOpenDetails }: SubmitModalProps
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="description" className="flex items-center gap-2 text-sm font-medium">
-              <FileText className="h-3.5 w-3.5 text-muted-foreground" />
-              Description * <span className="text-xs text-muted-foreground">(Markdown supported)</span>
-            </Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: "" })); }}
-              placeholder={"What does your app do?\n\nUse **bold**, *italic*, - lists, and [links](url)"}
-              rows={4}
-              className="bg-secondary border-transparent focus:border-border resize-none"
-            />
+            <div className="flex items-center justify-between">
+              <Label htmlFor="description" className="flex items-center gap-2 text-sm font-medium">
+                <FileText className="h-3.5 w-3.5 text-muted-foreground" />
+                Description * <span className="text-xs text-muted-foreground">(Markdown supported)</span>
+              </Label>
+              {description.trim() && (
+                <button
+                  type="button"
+                  onClick={() => setShowPreview(!showPreview)}
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPreview ? <Pencil className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                  {showPreview ? "Edit" : "Preview"}
+                </button>
+              )}
+            </div>
+            {showPreview ? (
+              <div className="min-h-[104px] w-full rounded-md bg-secondary px-3 py-2 text-sm prose prose-sm max-w-none text-foreground">
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                    em: ({ children }) => <em className="italic">{children}</em>,
+                    ul: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-2">{children}</ul>,
+                    ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-2">{children}</ol>,
+                    li: ({ children }) => <li className="text-foreground [&>p]:inline [&>p]:m-0">{children}</li>,
+                    a: ({ href, children }) => (
+                      <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                        {children}
+                      </a>
+                    ),
+                  }}
+                >
+                  {description}
+                </ReactMarkdown>
+              </div>
+            ) : (
+              <Textarea
+                id="description"
+                value={description}
+                onChange={(e) => { setDescription(e.target.value); setErrors(prev => ({ ...prev, description: "" })); }}
+                placeholder={"What does your app do?\n\nUse **bold**, *italic*, - lists, and [links](url)"}
+                rows={4}
+                className="bg-secondary border-transparent focus:border-border resize-none"
+              />
+            )}
             {errors.description && <p className="text-xs text-destructive">{errors.description}</p>}
           </div>
 
