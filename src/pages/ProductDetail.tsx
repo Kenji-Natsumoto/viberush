@@ -286,7 +286,7 @@ const ProductDetail = () => {
                   em: ({ children }) => <em className="italic">{children}</em>,
                   ul: ({ children }) => <ul className="list-disc list-inside space-y-1 mb-4">{children}</ul>,
                   ol: ({ children }) => <ol className="list-decimal list-inside space-y-1 mb-4">{children}</ol>,
-                  li: ({ children }) => <li className="text-foreground">{children}</li>,
+                  li: ({ children }) => <li className="text-foreground [&>p]:inline [&>p]:m-0">{children}</li>,
                   a: ({ href, children }) => (
                     <a href={href} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                       {children}
