@@ -1,10 +1,19 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { useProducts } from "@/hooks/useProducts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 
 export function DirectoryCTA() {
-  const { products } = useProducts();
-  const count = products.length;
+  const { data: count } = useQuery({
+    queryKey: ['total-ship-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
 
   return (
     <section className="py-20 px-4 sm:px-6">
