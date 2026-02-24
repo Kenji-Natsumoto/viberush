@@ -7,6 +7,7 @@ import { ProductFeed } from "@/components/ProductFeed";
 import { FAQSection } from "@/components/FAQSection";
 import { DirectoryCTA } from "@/components/DirectoryCTA";
 import { Footer } from "@/components/Footer";
+import { TrustStatement } from "@/components/TrustStatement";
 import { SubmitModal } from "@/components/SubmitModal";
 import { DetailsModal } from "@/components/DetailsModal";
 
@@ -26,6 +27,7 @@ const Index = () => {
       <Header onSubmitClick={openSubmitModal} />
       <main>
         <HeroSection onSubmitClick={openSubmitModal} />
+        <TrustStatement />
         <StatsSection />
         <HallOfProof />
         <ProductFeed />
