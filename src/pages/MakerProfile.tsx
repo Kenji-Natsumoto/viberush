@@ -1,5 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, ExternalLink, Share2, Heart, Zap, Calendar, Users, Globe, Github, Linkedin, Rocket } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Share2, Heart, Zap, Calendar, Users, Globe, Github, Linkedin, Rocket, Mail, UserPlus } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
@@ -8,6 +8,30 @@ import { ToolBadge } from '@/components/ToolBadge';
 import { useMakerProfile } from '@/hooks/useMakerProfile';
 import { getProductIconUrl } from '@/lib/iconUtils';
 import type { Product } from '@/types/database';
+
+// ── Unclaimed Profile Banner ──
+function UnclaimedBanner() {
+  const profileUrl = window.location.href;
+  const subject = encodeURIComponent('Request Removal – VibeRush Profile');
+  const body = encodeURIComponent(
+    `Hello,\nI would like to request the removal of my profile and any associated content from VibeRush.\n\nProfile URL: ${profileUrl}\n\nName (optional):\nReason (optional):\n\nThank you.`
+  );
+  const mailtoHref = `mailto:kn@sprintjapan.net?subject=${subject}&body=${body}`;
+
+  return (
+    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 rounded-xl border border-border bg-secondary/60 backdrop-blur-sm mb-6">
+      <p className="text-sm text-muted-foreground">This profile is a preview.</p>
+      <div className="flex gap-2">
+        <Button variant="outline" size="sm" asChild className="gap-1.5">
+          <Link to="/auth"><UserPlus className="h-3.5 w-3.5" /> Claim Profile</Link>
+        </Button>
+        <Button variant="outline" size="sm" asChild className="gap-1.5">
+          <a href={mailtoHref}><Mail className="h-3.5 w-3.5" /> Request Removal</a>
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 // X icon
 const XIcon = ({ className }: { className?: string }) => (
@@ -174,6 +198,7 @@ const MakerProfile = () => {
   }
 
   const { profile, products, featuredProduct } = data;
+  const isUnclaimed = profile.id.startsWith('virtual-');
   const isArchitect = products.length >= 3;
   const nonFeaturedProducts = featuredProduct
     ? products.filter((p) => p.id !== featuredProduct.id)
@@ -196,6 +221,9 @@ const MakerProfile = () => {
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors">
           <ArrowLeft className="h-4 w-4" /> Back to Home
         </Link>
+
+        {/* Unclaimed profile banner */}
+        {isUnclaimed && <UnclaimedBanner />}
 
         {/* ── Profile Header (glassmorphism) ── */}
         <div className="relative overflow-hidden rounded-2xl border border-border bg-card/60 backdrop-blur-md mb-8">
