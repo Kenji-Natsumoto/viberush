@@ -67,12 +67,14 @@ const ProductDetail = () => {
     );
   }
 
-  if (!product) {
+  if (!product || product.status === 'removed') {
     return (
       <div className="min-h-screen bg-background">
         <Header onSubmitClick={() => {}} />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Product Not Found</h1>
+          <h1 className="text-2xl font-bold text-foreground mb-4">
+            {product?.status === 'removed' ? 'This product is no longer available' : 'Product Not Found'}
+          </h1>
           <Link to="/" className="text-primary hover:underline">
             ← Back to Home
           </Link>

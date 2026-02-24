@@ -34,6 +34,7 @@ export function useProducts() {
         const { data, error } = await supabase
           .from('products')
           .select('*')
+          .or('status.is.null,status.neq.removed')
           .order('created_at', { ascending: false })
           .abortSignal(controller.signal);
 
