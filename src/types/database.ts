@@ -75,6 +75,8 @@ export interface DbProduct {
   is_featured: boolean;
   owner_id?: string | null;
   claim_status?: string | null;
+  status?: string | null;
+  removal_reason?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -106,6 +108,8 @@ export interface Product {
   isFeatured: boolean;
   ownerId?: string;
   claimStatus: string;
+  status?: string;
+  removalReason?: string;
   createdAt: string;
   updatedAt: string;
   // Creator display info (computed from proxy or profile)
@@ -148,6 +152,8 @@ export function dbProductToProduct(dbProduct: DbProduct, globalAvatarUrl?: strin
     isFeatured: dbProduct.is_featured ?? false,
     ownerId: dbProduct.owner_id ?? undefined,
     claimStatus: dbProduct.claim_status ?? 'none',
+    status: dbProduct.status ?? undefined,
+    removalReason: dbProduct.removal_reason ?? undefined,
     createdAt: dbProduct.created_at,
     updatedAt: dbProduct.updated_at,
     // Computed display values

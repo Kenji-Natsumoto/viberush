@@ -63,9 +63,9 @@ export function useMakerProfile(username: string | undefined) {
 
         if (productsError) throw productsError;
 
-        const products = (productsData as DbProduct[]).map((p) =>
-          dbProductToProduct(p, profileData.avatar_url || undefined)
-        );
+        const products = (productsData as DbProduct[])
+          .filter((p) => !p.status || p.status !== 'removed')
+          .map((p) => dbProductToProduct(p, profileData.avatar_url || undefined));
 
         const totalUpvotes = products.reduce((sum, p) => sum + p.votes, 0);
         const totalVibeScore = products.reduce((sum, p) => sum + p.vibeScore, 0);
@@ -108,7 +108,9 @@ export function useMakerProfile(username: string | undefined) {
       if (proxyError) throw proxyError;
       if (!proxyProducts || proxyProducts.length === 0) return null;
 
-      const products = (proxyProducts as DbProduct[]).map((p) => dbProductToProduct(p));
+      const products = (proxyProducts as DbProduct[])
+        .filter((p) => !p.status || p.status !== 'removed')
+        .map((p) => dbProductToProduct(p));
 
       const totalUpvotes = products.reduce((sum, p) => sum + p.votes, 0);
       const totalVibeScore = products.reduce((sum, p) => sum + p.vibeScore, 0);
