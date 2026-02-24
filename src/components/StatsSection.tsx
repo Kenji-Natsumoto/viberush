@@ -1,15 +1,29 @@
 import { useProducts } from "@/hooks/useProducts";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 import { useMemo } from "react";
 
 export function StatsSection() {
   const { products } = useProducts();
 
+  // Total SHIP count including removed products (for integrity)
+  const { data: totalShipCount } = useQuery({
+    queryKey: ['total-ship-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+
   const stats = useMemo(() => {
     const now = new Date();
     const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     
-    // Count seeded products (all products count as seeded in beta)
-    const seededCount = products.length;
+    // Use total count from DB (includes removed) for SHIP integrity
+    const seededCount = totalShipCount ?? products.length;
     
     // Count featured makers (unique user IDs from featured products)
     const featuredMakers = new Set(
@@ -28,7 +42,7 @@ export function StatsSection() {
       featured: featuredMakers || 3, // Minimum 3 for display
       newThisWeek: newThisWeek,
     };
-  }, [products]);
+  }, [products, totalShipCount]);
 
   return (
     <section className="py-8 border-y border-border bg-secondary/30">
