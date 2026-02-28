@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap, User, LogOut, LayoutDashboard, Compass, BookOpen, Menu, Rocket } from 'lucide-react';
-import { useState } from 'react';
+import { Zap, User, LogOut, LayoutDashboard, Compass, BookOpen, Menu, Rocket, LogIn } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -25,6 +25,16 @@ export function Header({ onSubmitClick }: HeaderProps) {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isReturningUser, setIsReturningUser] = useState(false);
+
+  useEffect(() => {
+    const hasVisited = localStorage.getItem('vr_has_visited');
+    if (hasVisited) {
+      setIsReturningUser(true);
+    } else {
+      localStorage.setItem('vr_has_visited', '1');
+    }
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
@@ -107,10 +117,10 @@ export function Header({ onSubmitClick }: HeaderProps) {
                 variant="outline"
                 size="sm"
                 className="hidden sm:flex gap-1.5"
-                onClick={() => navigate('/auth?mode=signup')}
+                onClick={() => navigate(isReturningUser ? '/auth' : '/auth?mode=signup')}
               >
-                <User className="h-4 w-4" />
-                <span>Sign Up</span>
+                {isReturningUser ? <LogIn className="h-4 w-4" /> : <User className="h-4 w-4" />}
+                <span>{isReturningUser ? 'Sign In' : 'Sign Up'}</span>
               </Button>
             )}
 
@@ -138,10 +148,10 @@ export function Header({ onSubmitClick }: HeaderProps) {
                     <Button
                       variant="outline"
                       className="justify-start gap-2 mt-4"
-                      onClick={() => { navigate('/auth?mode=signup'); setMobileOpen(false); }}
+                      onClick={() => { navigate(isReturningUser ? '/auth' : '/auth?mode=signup'); setMobileOpen(false); }}
                     >
-                      <User className="h-4 w-4" />
-                      Sign Up
+                      {isReturningUser ? <LogIn className="h-4 w-4" /> : <User className="h-4 w-4" />}
+                      {isReturningUser ? 'Sign In' : 'Sign Up'}
                     </Button>
                   )}
                 </nav>
