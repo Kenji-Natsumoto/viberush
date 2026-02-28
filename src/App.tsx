@@ -22,6 +22,7 @@ import Chronicles from "./pages/Chronicles";
 import ChroniclesAdmin from "./pages/ChroniclesAdmin";
 import ShipGuide from "./pages/ShipGuide";
 import MakerProfile from "./pages/MakerProfile";
+import MoreDetail from "./pages/MoreDetail";
 import { FloatingShipButton } from "@/components/FloatingShipButton";
 
 const queryClient = new QueryClient({
@@ -62,6 +63,7 @@ const App = () => (
             <Route path="/admin/claims" element={<AdminClaims />} />
             <Route path="/ship-guide" element={<ShipGuide />} />
             <Route path="/maker/:username" element={<MakerProfile />} />
+            <Route path="/more-detail" element={<MoreDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
