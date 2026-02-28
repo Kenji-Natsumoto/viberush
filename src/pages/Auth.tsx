@@ -40,7 +40,7 @@ export default function Auth() {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [user, navigate]);
 
@@ -69,7 +69,7 @@ export default function Auth() {
           title: 'Login Successful',
           description: 'Welcome back!',
         });
-        navigate('/');
+        navigate('/dashboard');
       } else {
         const { error } = await signUp(data.email, data.password);
         if (error) {
