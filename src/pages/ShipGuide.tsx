@@ -49,7 +49,7 @@ export default function ShipGuide() {
   const { user } = useAuth();
   const createProduct = useCreateProduct();
   const [name, setName] = useState("");
-  const [demoUrl, setDemoUrl] = useState("");
+  const [makerName, setMakerName] = useState("");
   const [description, setDescription] = useState("");
   const [shipped, setShipped] = useState(false);
   const [shippedProductId, setShippedProductId] = useState<string | null>(null);
@@ -60,6 +60,7 @@ export default function ShipGuide() {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "Required";
     if (!description.trim()) e.description = "Required";
+    if (!makerName.trim()) e.makerName = "Required";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -70,8 +71,7 @@ export default function ShipGuide() {
       const product = await createProduct.mutateAsync({
         name: name.trim(),
         description: description.trim(),
-        proxyCreatorName: user?.email?.split("@")[0] || "Anonymous",
-        demoUrl: demoUrl.trim() || undefined,
+        proxyCreatorName: makerName.trim(),
       });
       fireConfetti();
       setShipped(true);
@@ -82,7 +82,7 @@ export default function ShipGuide() {
 
   const handleReset = () => {
     setName("");
-    setDemoUrl("");
+    setMakerName("");
     setDescription("");
     setShipped(false);
     setShippedProductId(null);
@@ -163,6 +163,9 @@ export default function ShipGuide() {
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
                     Description
                   </label>
+                  <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mb-2 bg-amber-500/10 border border-amber-500/20 rounded-md px-3 py-2">
+                    💡 あなたのプロダクトを中学生でも理解できる文章でできるだけ短く説明してください。
+                  </p>
                   <Textarea
                     value={description}
                     onChange={(e) => { setDescription(e.target.value); setErrors(p => ({ ...p, description: "" })); }}
@@ -174,14 +177,15 @@ export default function ShipGuide() {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
-                    Demo URL <span className="normal-case text-muted-foreground/60">(optional)</span>
+                    Maker Name
                   </label>
                   <Input
-                    value={demoUrl}
-                    onChange={(e) => setDemoUrl(e.target.value)}
-                    placeholder="e.g. https://myapp.lovable.app"
+                    value={makerName}
+                    onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
+                    placeholder="e.g. Jone.Done"
                     className="bg-background"
                   />
+                  {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
                 </div>
                 <div className="pt-2">
                   <Button
