@@ -160,6 +160,34 @@ export default function MoreDetail() {
           <p className="text-muted-foreground mt-1">Add details to make your product stand out on VibeRush.</p>
         </div>
 
+        {/* Info banner */}
+        <div className="flex items-start gap-3 p-4 mb-6 rounded-xl bg-amber-500/10 border border-amber-500/30">
+          <span className="text-xl">✏️</span>
+          <p className="text-sm font-medium text-amber-700 dark:text-amber-400">
+            Update your app details anytime. Changes are saved instantly!
+          </p>
+        </div>
+
+        {/* Product Avatar section */}
+        <div className="mb-6 p-5 rounded-xl border border-border bg-card space-y-3">
+          <Label className="flex items-center gap-2 text-base font-semibold">
+            <Upload className="h-4 w-4 text-muted-foreground" />
+            Product Avatar (Logo/Icon)
+          </Label>
+          <p className="text-sm text-muted-foreground">This represents the identity of your product.</p>
+          <p className="text-xs text-muted-foreground/70">
+            Recommended: 200×200px or larger (square). If not set, a 100×100px auto-generated icon will be used.
+          </p>
+          <ImageUpload
+            value={iconUrl}
+            onChange={(val) => {
+              setIconUrl(val);
+              saveField({ iconUrl: val });
+            }}
+            placeholder="https://yourapp.com/icon.png"
+          />
+        </div>
+
         <Tabs defaultValue="basics" className="space-y-6">
           <TabsList className="w-full grid grid-cols-3">
             <TabsTrigger value="basics">Basics</TabsTrigger>
@@ -245,20 +273,7 @@ export default function MoreDetail() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2 text-sm font-medium">
-                <Upload className="h-3.5 w-3.5 text-muted-foreground" />
-                Product Avatar / Logo
-              </Label>
-              <ImageUpload
-                value={iconUrl}
-                onChange={(val) => {
-                  setIconUrl(val);
-                  saveField({ iconUrl: val });
-                }}
-                placeholder="https://yourapp.com/icon.png"
-              />
-            </div>
+
           </TabsContent>
 
           {/* ====== Tab 2: Story ====== */}
