@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
 import { ToolBadge } from "@/components/ToolBadge";
 import { UpvoteButton } from "@/components/UpvoteButton";
-import { VibeScoreButton } from "@/components/VibeScoreButton";
+import { VibeButton } from "@/components/VibeButton";
 import { EditProductModal } from "@/components/EditProductModal";
 import { Header } from "@/components/Header";
 import { useAuth } from "@/contexts/AuthContext";
@@ -226,7 +226,7 @@ const ProductDetail = () => {
                   Edit App
                 </Button>
               )}
-              <VibeScoreButton score={product.vibeScore} productId={product.id} />
+              <VibeButton score={product.vibeScore} productId={product.id} />
               <UpvoteButton initialVotes={product.votes} productId={product.id} />
               
               {product.demoUrl && (

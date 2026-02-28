@@ -5,7 +5,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ToolBadge } from "@/components/ToolBadge";
-import { VibeScoreButton } from "@/components/VibeScoreButton";
+import { VibeButton } from "@/components/VibeButton";
 import { UpvoteButton } from "@/components/UpvoteButton";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -260,7 +260,7 @@ function ExploreCard({ product }: { product: Product }) {
 
       {/* Vibe & Upvote */}
       <div className="flex items-center gap-1.5 mt-3 pt-3 border-t border-border">
-        <VibeScoreButton score={product.vibeScore} productId={product.id} size="sm" />
+        <VibeButton score={product.vibeScore} productId={product.id} size="sm" />
         <UpvoteButton initialVotes={product.votes} productId={product.id} size="sm" />
       </div>
     </Link>

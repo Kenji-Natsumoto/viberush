@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ToolBadge } from "./ToolBadge";
 import { UpvoteButton } from "./UpvoteButton";
-import { VibeScoreButton } from "./VibeScoreButton";
+import { VibeButton } from "./VibeButton";
 import { EditProductModal } from "./EditProductModal";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -93,7 +93,7 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex-shrink-0 flex items-center gap-2">
+        <div className="flex-shrink-0 flex items-center gap-3">
           {isOwner && (
             <button
               onClick={(e) => {
@@ -107,7 +107,7 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
               <Pencil className="h-4 w-4" />
             </button>
           )}
-          <VibeScoreButton score={product.vibeScore} productId={product.id} />
+          <VibeButton score={product.vibeScore} productId={product.id} />
           <UpvoteButton initialVotes={product.votes} productId={product.id} />
         </div>
         </div>
