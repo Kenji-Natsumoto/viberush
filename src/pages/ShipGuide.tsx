@@ -95,6 +95,20 @@ export default function ShipGuide() {
       <Header onSubmitClick={() => {}} />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-16">
+        {/* Sign-up prompt for unauthenticated users */}
+        {!user && (
+          <div className="flex items-center gap-2 p-3 mb-6 rounded-lg bg-amber-500/10 border border-amber-500/30">
+            <span className="text-amber-600 dark:text-amber-400">⚠</span>
+            <p className="text-sm font-medium text-amber-700 dark:text-amber-400">
+              Please{' '}
+              <a href="/auth?mode=signup" className="underline font-semibold hover:text-amber-900 dark:hover:text-amber-300">
+                sign up
+              </a>{' '}
+              to submit.
+            </p>
+          </div>
+        )}
+
         {/* Page Header */}
         <div className="text-center mb-16">
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-4">

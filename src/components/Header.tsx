@@ -107,10 +107,10 @@ export function Header({ onSubmitClick }: HeaderProps) {
                 variant="outline"
                 size="sm"
                 className="hidden sm:flex gap-1.5"
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/auth?mode=signup')}
               >
                 <User className="h-4 w-4" />
-                <span>Sign In</span>
+                <span>Sign Up</span>
               </Button>
             )}
 
@@ -138,10 +138,10 @@ export function Header({ onSubmitClick }: HeaderProps) {
                     <Button
                       variant="outline"
                       className="justify-start gap-2 mt-4"
-                      onClick={() => { navigate('/auth'); setMobileOpen(false); }}
+                      onClick={() => { navigate('/auth?mode=signup'); setMobileOpen(false); }}
                     >
                       <User className="h-4 w-4" />
-                      Sign In
+                      Sign Up
                     </Button>
                   )}
                 </nav>
