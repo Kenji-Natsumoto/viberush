@@ -155,15 +155,13 @@ export default function Dashboard() {
                     >
                       View <ArrowRight className="h-3 w-3" />
                     </Link>
-                    <Button
-                      variant="default"
-                      size="sm"
-                      className="gap-1.5 text-xs h-8"
-                      onClick={() => setEditProduct(product)}
+                    <Link
+                      to={`/more-detail?product=${product.id}`}
+                      className="inline-flex items-center gap-1.5 text-xs h-8 px-3 rounded-md bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
                     >
                       <Settings className="h-3.5 w-3.5" />
-                      Edit App
-                    </Button>
+                      More Details
+                    </Link>
                   </div>
                 </CardContent>
               </Card>
