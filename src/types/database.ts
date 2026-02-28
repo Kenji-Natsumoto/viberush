@@ -162,11 +162,11 @@ export function dbProductToProduct(dbProduct: DbProduct, globalAvatarUrl?: strin
   };
 }
 
-// Product creation input (only 3 required fields for quick submit)
+// Product creation input (only 2 required fields for quick submit)
 export interface CreateProductInput {
   name: string;
   description: string;
-  proxyCreatorName: string;
+  proxyCreatorName?: string;
   // All below are optional (for details step)
   tagline?: string;
   url?: string;

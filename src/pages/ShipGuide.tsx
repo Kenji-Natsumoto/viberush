@@ -49,7 +49,6 @@ export default function ShipGuide() {
   const { user } = useAuth();
   const createProduct = useCreateProduct();
   const [name, setName] = useState("");
-  const [makerName, setMakerName] = useState("");
   const [description, setDescription] = useState("");
   const [shipped, setShipped] = useState(false);
   const [shippedProductId, setShippedProductId] = useState<string | null>(null);
@@ -71,7 +70,6 @@ export default function ShipGuide() {
       const product = await createProduct.mutateAsync({
         name: name.trim(),
         description: description.trim(),
-        proxyCreatorName: makerName.trim(),
       });
       fireConfetti();
       setShipped(true);
@@ -82,7 +80,6 @@ export default function ShipGuide() {
 
   const handleReset = () => {
     setName("");
-    setMakerName("");
     setDescription("");
     setShipped(false);
     setShippedProductId(null);
@@ -115,7 +112,7 @@ export default function ShipGuide() {
             THE 30sec. SHIP
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            3 fields. 30 seconds. Your product goes live on VibeRush.
+            2 fields. 30 seconds. Your product goes live on VibeRush.
           </p>
         </div>
 
@@ -123,10 +120,10 @@ export default function ShipGuide() {
         <section className="mb-20 bg-muted -mx-4 sm:-mx-6 px-4 sm:px-6 py-8 rounded-2xl">
           <div className="flex items-center gap-2 mb-6">
             <Sparkles className="h-5 w-5 text-primary" />
-            <h2 className="text-xl font-semibold text-foreground">SHIP in 3 Fields</h2>
+            <h2 className="text-xl font-semibold text-foreground">SHIP in 2 Fields</h2>
           </div>
           <p className="text-muted-foreground mb-8 leading-relaxed">
-            That's all it takes to publish your work to the world. No friction. No lengthy forms. Just three fields and you're live.
+            That's all it takes to publish your work to the world. No friction. No lengthy forms. Just two fields and you're live.
           </p>
           {shipped ? (
             <Card className="border border-border bg-muted/30">
@@ -188,18 +185,6 @@ export default function ShipGuide() {
                     className="bg-background border-border resize-none"
                   />
                   {errors.description && <p className="text-xs text-destructive mt-1">{errors.description}</p>}
-                </div>
-                <div>
-                  <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
-                    Demo URL <span className="text-muted-foreground/60 normal-case font-normal">(optional)</span>
-                  </label>
-                  <Input
-                    value={makerName}
-                    onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
-                    placeholder="e.g. https://myapp.lovable.app"
-                    className="bg-background border-border"
-                  />
-                  {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
                 </div>
                 <div className="pt-2">
                   <Button
