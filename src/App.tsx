@@ -22,6 +22,7 @@ import Chronicles from "./pages/Chronicles";
 import ChroniclesAdmin from "./pages/ChroniclesAdmin";
 import ShipGuide from "./pages/ShipGuide";
 import MakerProfile from "./pages/MakerProfile";
+import { FloatingShipButton } from "@/components/FloatingShipButton";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -64,6 +65,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <FloatingShipButton />
         </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
