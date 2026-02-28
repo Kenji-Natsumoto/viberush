@@ -164,7 +164,7 @@ export default function ShipGuide() {
                     Description
                   </label>
                   <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mb-2 bg-amber-500/10 border border-amber-500/20 rounded-md px-3 py-2">
-                    💡 Keep it short and simple — describe what your product does in plain English, as if explaining it to a friend.
+                    ✏️ Keep it short and simple — describe what your product does in plain English, as if explaining it to a friend.
                   </p>
                   <Textarea
                     value={description}
