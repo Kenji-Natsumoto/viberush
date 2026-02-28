@@ -1,11 +1,9 @@
-import { useState } from "react";
 import { Clock, ExternalLink, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { ToolBadge } from "./ToolBadge";
 import { UpvoteButton } from "./UpvoteButton";
 import { VibeButton } from "./VibeButton";
-import { EditProductModal } from "./EditProductModal";
 import { useAuth } from "@/contexts/AuthContext";
 
 import type { Product } from "@/types/database";
@@ -19,7 +17,6 @@ interface ProductCardProps {
 
 export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
   const { user } = useAuth();
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   // Edit permission: user_id matches OR owner_id matches
   const isOriginalSubmitter = user && (creatorId ? user.id === creatorId : user.id === product.userId);
   const isTransferredOwner = user && product.ownerId === user.id;
@@ -94,17 +91,15 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
             {/* Desktop action buttons — inline */}
             <div className="hidden sm:flex flex-shrink-0 items-center gap-3">
               {isOwner && (
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsEditModalOpen(true);
-                  }}
-                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                  title="Edit your app"
+                <Link
+                  to={`/more-detail?product=${product.id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                  title="More Details"
                 >
-                  <Pencil className="h-4 w-4" />
-                </button>
+                  <Pencil className="h-3.5 w-3.5" />
+                  More Details
+                </Link>
               )}
               <VibeButton score={product.vibeScore} productId={product.id} />
               <UpvoteButton initialVotes={product.votes} productId={product.id} />
@@ -114,17 +109,15 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
           {/* Mobile action buttons — bottom row, full width */}
           <div className="flex sm:hidden items-center justify-end gap-3 mt-3 pt-3 border-t border-border/50">
             {isOwner && (
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsEditModalOpen(true);
-                }}
-                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
-                title="Edit your app"
+              <Link
+                to={`/more-detail?product=${product.id}`}
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+                title="More Details"
               >
-                <Pencil className="h-4 w-4" />
-              </button>
+                <Pencil className="h-3.5 w-3.5" />
+                More Details
+              </Link>
             )}
             <VibeButton score={product.vibeScore} productId={product.id} size="sm" />
             <UpvoteButton initialVotes={product.votes} productId={product.id} />
@@ -132,15 +125,6 @@ export function ProductCard({ product, rank, creatorId }: ProductCardProps) {
         </div>
       </Link>
 
-      {/* Edit Modal - MUST be outside <Link> to prevent event conflicts */}
-      <EditProductModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        product={product}
-        onSave={(updatedProduct) => {
-          console.log("Product updated:", updatedProduct);
-        }}
-      />
     </>
   );
 }
