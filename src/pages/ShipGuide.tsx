@@ -177,12 +177,12 @@ export default function ShipGuide() {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
-                    Maker Name
+                    Demo URL
                   </label>
                   <Input
                     value={makerName}
                     onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
-                    placeholder="e.g. Jone.Done"
+                    placeholder="e.g. https://myapp.lovable.app"
                     className="bg-muted border-border"
                   />
                   {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
