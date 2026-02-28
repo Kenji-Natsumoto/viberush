@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
+import { ShipCTABanner } from "@/components/ShipCTABanner";
 import { StatsSection } from "@/components/StatsSection";
 import { HallOfProof } from "@/components/HallOfProof";
 import { ProductFeed } from "@/components/ProductFeed";
@@ -27,6 +28,7 @@ const Index = () => {
       <Header onSubmitClick={openSubmitModal} />
       <main>
         <HeroSection onSubmitClick={openSubmitModal} />
+        <ShipCTABanner />
         <TrustStatement />
         <StatsSection />
         <HallOfProof />
