@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Settings, Rocket, Plus, ArrowRight, BookOpen, LayoutDashboard } from "lucide-react";
+import { useMakerUsername } from "@/hooks/useMakerUsername";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useIsAdmin } from "@/hooks/useChronicles";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
@@ -38,6 +40,47 @@ function useMyProducts() {
     },
     enabled: !!user,
   });
+}
+
+function MakerLink({ product }: { product: Product }) {
+  // Resolve maker username: owner first, then creator
+  const resolveId = product.ownerId || product.userId;
+  const { data: makerUsername } = useMakerUsername(resolveId);
+
+  // For proxy products without a registered profile, try proxy_creator_name
+  const displayName = product.creatorName || 'Vibe Coder';
+  const avatarUrl = product.creatorAvatar;
+  const profilePath = makerUsername
+    ? `/maker/@${makerUsername}`
+    : product.proxyCreatorName
+      ? `/maker/@${product.proxyCreatorName}`
+      : null;
+
+  const content = (
+    <div className="flex items-center gap-1.5">
+      <Avatar className="h-4 w-4">
+        <AvatarImage src={avatarUrl} alt={displayName} />
+        <AvatarFallback className="text-[8px]">{displayName[0]}</AvatarFallback>
+      </Avatar>
+      <span className="text-xs text-muted-foreground truncate">{displayName}</span>
+    </div>
+  );
+
+  if (profilePath) {
+    return (
+      <Link
+        to={profilePath}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:opacity-80 transition-opacity"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {content}
+      </Link>
+    );
+  }
+
+  return content;
 }
 
 export default function Dashboard() {
@@ -139,11 +182,7 @@ export default function Dashboard() {
                       >
                         {product.name}
                       </Link>
-                      {product.tagline && (
-                        <p className="text-xs text-muted-foreground truncate">
-                          {product.tagline}
-                        </p>
-                      )}
+                      <MakerLink product={product} />
                     </div>
                   </div>
 
