@@ -30,7 +30,7 @@ function useMyProducts() {
       const { data, error } = await supabase
         .from("products")
         .select("*")
-        .or(`and(user_id.eq.${user.id},proxy_creator_name.is.null),and(user_id.eq.${user.id},proxy_creator_name.eq.),owner_id.eq.${user.id}`)
+        .or(`user_id.eq.${user.id},owner_id.eq.${user.id}`)
         .order("created_at", { ascending: false });
 
       if (error) throw error;

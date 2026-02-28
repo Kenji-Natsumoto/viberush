@@ -154,7 +154,7 @@ export function useCreateProduct() {
         .insert({
           name: input.name,
           description: input.description,
-          proxy_creator_name: input.proxyCreatorName,
+          proxy_creator_name: input.proxyCreatorName || null,
           user_id: user.id,
           // Optional fields - only set if provided
           tagline: input.tagline || '',
