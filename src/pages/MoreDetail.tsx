@@ -49,6 +49,7 @@ export default function MoreDetail() {
   const [linkedinUrlVal, setLinkedinUrlVal] = useState("");
   const [githubUrlVal, setGithubUrlVal] = useState("");
   const [contactEmail, setContactEmail] = useState("");
+  const [makerNameVal, setMakerNameVal] = useState("");
 
   // Populate from product
   useEffect(() => {
@@ -68,6 +69,7 @@ export default function MoreDetail() {
       setLinkedinUrlVal(product.linkedinUrl || "");
       setGithubUrlVal(product.githubUrl || "");
       setContactEmail(product.contactEmail || "");
+      setMakerNameVal(product.proxyCreatorName || "");
     }
   }, [product]);
 
@@ -241,6 +243,22 @@ export default function MoreDetail() {
                 placeholder="A short, catchy description"
                 className="bg-secondary border-transparent focus:border-border"
               />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="md-makerName" className="flex items-center gap-2 text-sm font-medium">
+                <User className="h-3.5 w-3.5 text-muted-foreground" />
+                Maker Name
+              </Label>
+              <Input
+                id="md-makerName"
+                value={makerNameVal}
+                onChange={(e) => setMakerNameVal(e.target.value)}
+                onBlur={() => saveField({ proxyCreatorName: makerNameVal })}
+                placeholder="e.g. Jane Doe / Team Name"
+                className="bg-secondary border-transparent focus:border-border"
+              />
+              <p className="text-xs text-muted-foreground">プロダクトの制作者名として表示されます</p>
             </div>
 
             <div className="space-y-2">
