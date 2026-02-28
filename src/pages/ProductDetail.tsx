@@ -219,11 +219,13 @@ const ProductDetail = () => {
               {isOwner && (
                 <Button
                   variant="default"
-                  onClick={() => setIsEditModalOpen(true)}
+                  asChild
                   className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold"
                 >
-                  <Pencil className="h-4 w-4" />
-                  Edit App
+                  <Link to={`/more-detail?product=${product.id}`}>
+                    <Pencil className="h-4 w-4" />
+                    More Detail
+                  </Link>
                 </Button>
               )}
               <VibeButton score={product.vibeScore} productId={product.id} />
