@@ -60,7 +60,7 @@ export default function ShipGuide() {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "Required";
     if (!description.trim()) e.description = "Required";
-    if (!makerName.trim()) e.makerName = "Required";
+    // makerName (Demo URL) is optional
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -177,7 +177,7 @@ export default function ShipGuide() {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
-                    Demo URL
+                    Demo URL <span className="text-muted-foreground/60 normal-case font-normal">(optional)</span>
                   </label>
                   <Input
                     value={makerName}
