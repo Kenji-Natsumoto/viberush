@@ -170,6 +170,33 @@
   animation: float-up 0.7s ease-out forwards;
 }
 
+/* Vibe Button — idle flame flicker */
+@keyframes flame-idle {
+  0%, 100% { transform: scaleY(1) scaleX(1) translateY(0); }
+  25% { transform: scaleY(1.08) scaleX(0.95) translateY(-1px); }
+  50% { transform: scaleY(0.95) scaleX(1.05) translateY(0.5px); }
+  75% { transform: scaleY(1.05) scaleX(0.97) translateY(-0.5px); }
+}
+@keyframes flame-idle-center {
+  0%, 100% { transform: scaleY(1) scaleX(1) translateY(0); }
+  30% { transform: scaleY(1.1) scaleX(0.93) translateY(-1.5px); }
+  60% { transform: scaleY(0.93) scaleX(1.06) translateY(0.5px); }
+  80% { transform: scaleY(1.06) scaleX(0.96) translateY(-1px); }
+}
+
+.animate-flame-idle {
+  animation: flame-idle 1.2s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+.animate-flame-idle-center {
+  animation: flame-idle-center 1s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+.animate-flame-idle-reverse {
+  animation: flame-idle 1.4s ease-in-out infinite reverse;
+  transform-origin: bottom center;
+}
+
 /* Vibe Button — staggered flame pulse (wave left→right) */
 @keyframes flame-pulse {
   0% { transform: scale(1); }

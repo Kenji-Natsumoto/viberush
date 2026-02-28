@@ -165,7 +165,7 @@ export function VibeButton({ score, productId, size = "default" }: VibeButtonPro
                 <svg
                   viewBox="0 0 24 24"
                   className={cn(
-                    "transition-transform",
+                    "animate-flame-idle",
                     isSmall ? "h-3 w-3" : "h-4 w-4",
                     pulsingFlames && "animate-flame-pulse-left"
                   )}
@@ -182,7 +182,7 @@ export function VibeButton({ score, productId, size = "default" }: VibeButtonPro
                 <svg
                   viewBox="0 0 24 24"
                   className={cn(
-                    "transition-transform",
+                    "animate-flame-idle-center",
                     isSmall ? "h-5 w-5" : "h-6 w-6",
                     pulsingFlames && "animate-flame-pulse-center"
                   )}
@@ -198,7 +198,7 @@ export function VibeButton({ score, productId, size = "default" }: VibeButtonPro
                 <svg
                   viewBox="0 0 24 24"
                   className={cn(
-                    "transition-transform",
+                    "animate-flame-idle-reverse",
                     isSmall ? "h-3 w-3" : "h-4 w-4",
                     pulsingFlames && "animate-flame-pulse-right"
                   )}
@@ -243,7 +243,7 @@ export function VibeButton({ score, productId, size = "default" }: VibeButtonPro
       <span
         className={cn(
           "text-muted-foreground text-center mt-1 whitespace-nowrap",
-          isSmall ? "text-[9px]" : "text-[11px]"
+          isSmall ? "text-[11px]" : "text-[13px]"
         )}
       >
         No login · Unlimited vibes
