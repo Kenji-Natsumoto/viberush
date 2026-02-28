@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Zap, User, LogOut, LayoutDashboard, Compass, BookOpen, Menu, Map } from 'lucide-react';
+import { Zap, User, LogOut, LayoutDashboard, Compass, BookOpen, Menu, Rocket } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -39,7 +39,7 @@ export function Header({ onSubmitClick }: HeaderProps) {
   const navItems = [
     { label: 'Explore', icon: Compass, path: '/explore' },
     { label: 'Chronicles', icon: BookOpen, path: '/chronicles' },
-    { label: 'SHIP Guide', icon: Map, path: '/ship-guide' },
+    { label: 'THE 30sec. SHIP', icon: Rocket, path: '/ship-guide' },
   ];
 
   return (
