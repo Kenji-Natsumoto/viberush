@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PostShipOverlay } from "@/components/PostShipOverlay";
 import { Download, ExternalLink, Image, Layers, CheckCircle2, Sparkles, FileText, PenTool, ChevronRight } from "lucide-react";
 import bannerExample1 from "@/assets/banner-example-1.jpg";
 import bannerExample2 from "@/assets/banner-example-2.jpg";
@@ -48,17 +49,17 @@ export default function ShipGuide() {
   const { user } = useAuth();
   const createProduct = useCreateProduct();
   const [name, setName] = useState("");
+  const [demoUrl, setDemoUrl] = useState("");
   const [description, setDescription] = useState("");
-  const [makerName, setMakerName] = useState("");
   const [shipped, setShipped] = useState(false);
   const [shippedProductId, setShippedProductId] = useState<string | null>(null);
+  const [showOverlay, setShowOverlay] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validate = () => {
     const e: Record<string, string> = {};
     if (!name.trim()) e.name = "Required";
     if (!description.trim()) e.description = "Required";
-    if (!makerName.trim()) e.makerName = "Required";
     setErrors(e);
     return Object.keys(e).length === 0;
   };
@@ -69,20 +70,23 @@ export default function ShipGuide() {
       const product = await createProduct.mutateAsync({
         name: name.trim(),
         description: description.trim(),
-        proxyCreatorName: makerName.trim(),
+        proxyCreatorName: user?.email?.split("@")[0] || "Anonymous",
+        demoUrl: demoUrl.trim() || undefined,
       });
       fireConfetti();
       setShipped(true);
       setShippedProductId(product.id);
+      setShowOverlay(true);
     } catch {}
   };
 
   const handleReset = () => {
     setName("");
+    setDemoUrl("");
     setDescription("");
-    setMakerName("");
     setShipped(false);
     setShippedProductId(null);
+    setShowOverlay(false);
     setErrors({});
   };
 
@@ -93,14 +97,11 @@ export default function ShipGuide() {
       <main className="flex-1 max-w-3xl mx-auto w-full px-4 sm:px-6 py-16">
         {/* Page Header */}
         <div className="text-center mb-16">
-          <p className="text-xs text-muted-foreground italic mb-3">
-            This page will eventually become 'Van Halen II' 🎸
-          </p>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground tracking-tight mb-4">
-            SHIP Guide
+            THE 30sec. SHIP
           </h1>
           <p className="text-muted-foreground max-w-xl mx-auto">
-            Everything you need to showcase your work on VibeRush.
+            3 fields. 30 seconds. Your product goes live on VibeRush.
           </p>
         </div>
 
@@ -173,15 +174,14 @@ export default function ShipGuide() {
                 </div>
                 <div>
                   <label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1.5 block">
-                    Maker Name
+                    Demo URL <span className="normal-case text-muted-foreground/60">(optional)</span>
                   </label>
                   <Input
-                    value={makerName}
-                    onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
-                    placeholder="e.g. Jane Doe"
+                    value={demoUrl}
+                    onChange={(e) => setDemoUrl(e.target.value)}
+                    placeholder="e.g. https://myapp.lovable.app"
                     className="bg-background"
                   />
-                  {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
                 </div>
                 <div className="pt-2">
                   <Button
@@ -401,6 +401,13 @@ export default function ShipGuide() {
       </main>
 
       <Footer />
+
+      {showOverlay && shippedProductId && (
+        <PostShipOverlay
+          productId={shippedProductId}
+          onComplete={() => setShowOverlay(false)}
+        />
+      )}
     </div>
   );
 }
