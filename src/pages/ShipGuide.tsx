@@ -137,7 +137,7 @@ export default function ShipGuide() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="border border-border bg-muted/30">
+            <Card className="border border-border bg-muted/60">
               <CardContent className="p-6 sm:p-8 space-y-4">
                 {!user && (
                   <div className="flex items-center gap-2 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
