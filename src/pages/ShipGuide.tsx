@@ -155,7 +155,7 @@ export default function ShipGuide() {
                     value={name}
                     onChange={(e) => { setName(e.target.value); setErrors(p => ({ ...p, name: "" })); }}
                     placeholder="e.g. VibeFlow"
-                    className="bg-muted border-border"
+                    className="bg-background border-border"
                   />
                   {errors.name && <p className="text-xs text-destructive mt-1">{errors.name}</p>}
                 </div>
@@ -171,7 +171,7 @@ export default function ShipGuide() {
                     onChange={(e) => { setDescription(e.target.value); setErrors(p => ({ ...p, description: "" })); }}
                     placeholder="What does your app do?"
                     rows={3}
-                    className="bg-muted border-border resize-none"
+                    className="bg-background border-border resize-none"
                   />
                   {errors.description && <p className="text-xs text-destructive mt-1">{errors.description}</p>}
                 </div>
@@ -183,7 +183,7 @@ export default function ShipGuide() {
                     value={makerName}
                     onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
                     placeholder="e.g. Jone.Done"
-                    className="bg-muted border-border"
+                    className="bg-background border-border"
                   />
                   {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
                 </div>
