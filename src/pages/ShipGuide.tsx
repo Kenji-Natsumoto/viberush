@@ -106,7 +106,7 @@ export default function ShipGuide() {
         </div>
 
         {/* Section 1: SHIP is super easy */}
-        <section className="mb-20 bg-muted/60 -mx-4 sm:-mx-6 px-4 sm:px-6 py-8 rounded-2xl">
+        <section className="mb-20 bg-muted -mx-4 sm:-mx-6 px-4 sm:px-6 py-8 rounded-2xl">
           <div className="flex items-center gap-2 mb-6">
             <Sparkles className="h-5 w-5 text-primary" />
             <h2 className="text-xl font-semibold text-foreground">SHIP in 3 Fields</h2>
