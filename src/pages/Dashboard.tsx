@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Settings, Rocket, Plus, ArrowRight, BookOpen } from "lucide-react";
+import { Settings, Rocket, Plus, ArrowRight, BookOpen, LayoutDashboard } from "lucide-react";
 import { useIsAdmin } from "@/hooks/useChronicles";
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/contexts/AuthContext";
@@ -59,8 +59,9 @@ export default function Dashboard() {
         {/* Page Title */}
         <div className="flex items-center justify-between mb-10">
           <div>
-            <h1 className="text-2xl font-semibold text-foreground tracking-tight">
-              My Projects
+            <h1 className="text-2xl font-semibold text-foreground tracking-tight flex items-center gap-2">
+              <LayoutDashboard className="h-6 w-6" />
+              Dashboard
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               Products you own and manage on VibeRush.
