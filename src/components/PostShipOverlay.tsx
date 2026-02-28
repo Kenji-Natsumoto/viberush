@@ -45,7 +45,7 @@ export function PostShipOverlay({ productId, onComplete }: PostShipOverlayProps)
         <button
           onClick={() => {
             onComplete();
-            navigate("/dashboard");
+            navigate(`/more-detail?product=${productId}`);
           }}
           className="w-full h-12 rounded-full bg-background border border-border text-foreground font-semibold text-sm transition-all hover:scale-[1.02] hover:shadow-lg cursor-pointer"
         >

@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 
-const HIDDEN_PATHS = ["/ship-guide", "/admin"];
+const HIDDEN_PATHS = ["/ship-guide", "/admin", "/more-detail"];
 
 export function FloatingShipButton() {
   const navigate = useNavigate();
