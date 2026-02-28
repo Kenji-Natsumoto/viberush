@@ -183,7 +183,7 @@ export default function ShipGuide() {
                     value={makerName}
                     onChange={(e) => { setMakerName(e.target.value); setErrors(p => ({ ...p, makerName: "" })); }}
                     placeholder="e.g. https://myapp.lovable.app"
-                    className="bg-muted border-border"
+                    className="bg-background border-border"
                   />
                   {errors.makerName && <p className="text-xs text-destructive mt-1">{errors.makerName}</p>}
                 </div>
