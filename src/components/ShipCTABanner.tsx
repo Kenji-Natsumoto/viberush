@@ -3,18 +3,18 @@ import { useNavigate } from "react-router-dom";
 const benefits = [
   {
     icon: "🌍",
-    label: "Global visibility",
-    desc: "Your product in front of makers, early adopters & the global Vibe Coding community",
+    label: "Get discovered",
+    desc: "Your product in front of makers, early adopters & the global Vibe Coding community — live today.",
   },
   {
     icon: "🎯",
-    label: "Real users await",
-    desc: "People actively searching for tools — your next fans are here",
+    label: "Reach real users",
+    desc: "People who are actively looking for AI-built tools — your next fans are here.",
   },
   {
     icon: "🤝",
-    label: "Investor connections",
-    desc: "We actively connect standout makers with VCs, technical collaborators & press",
+    label: "Get noticed by investors & supporters",
+    desc: "We actively connect standout makers with VCs, technical collaborators & press. SHIPping today is your first step.",
   },
 ];
 
