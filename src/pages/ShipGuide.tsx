@@ -116,6 +116,42 @@ export default function ShipGuide() {
           </p>
         </div>
 
+        {/* What happens after you SHIP */}
+        <section className="mb-10 rounded-2xl border border-border overflow-hidden">
+          <div className="px-5 py-4 bg-muted/60 border-b border-border">
+            <p className="text-sm font-semibold text-foreground">🎁 SHIPすると、あなたに起きること</p>
+          </div>
+          <div className="divide-y divide-border">
+            <div className="flex items-start gap-4 px-5 py-4">
+              <span className="text-2xl shrink-0">🌍</span>
+              <div>
+                <p className="text-sm font-semibold text-foreground">より多くの人にプロダクトを認知してもらえる</p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                  世界中のVibe Coderコミュニティ・アーリーアダプター・AI好きユーザーに即日公開。あなたの作品が今日から発見される。
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 px-5 py-4">
+              <span className="text-2xl shrink-0">🎯</span>
+              <div>
+                <p className="text-sm font-semibold text-foreground">本当に使ってくれる人と出会える</p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                  AIツールを積極的に探しているユーザーが集まるプラットフォーム。あなたのプロダクトを待っている人がいる。
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4 px-5 py-4">
+              <span className="text-2xl shrink-0">🤝</span>
+              <div>
+                <p className="text-sm font-semibold text-foreground">投資家・支援者との接点が生まれる</p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                  VibeRushは優れたMakerをVC・技術パートナー・メディアに積極的に繋いでいきます。今SHIPしておくことが、その第一歩。
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Section 1: SHIP is super easy */}
         <section className="mb-20 bg-muted -mx-4 sm:-mx-6 px-4 sm:px-6 py-8 rounded-2xl">
           <div className="flex items-center gap-2 mb-6">
