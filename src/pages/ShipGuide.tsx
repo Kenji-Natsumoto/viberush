@@ -121,9 +121,9 @@ export default function ShipGuide() {
           <h2 className="text-xl font-semibold text-foreground mb-6">🎁 What happens when you SHIP</h2>
           <div className="space-y-4">
             {[
-              { emoji: "🌍", title: "Get discovered", desc: "Your product in front of makers, early adopters & the global Vibe Coding community — live today." },
-              { emoji: "🎯", title: "Reach real users", desc: "People who are actively looking for AI-built tools — your next fans are here." },
-              { emoji: "🤝", title: "Get noticed by investors & supporters", desc: "We actively connect standout makers with VCs, technical collaborators & press. SHIPping today is your first step." },
+              { emoji: "🌍", title: "Global visibility", desc: "Your product in front of makers, early adopters & the global Vibe Coding community" },
+              { emoji: "🎯", title: "Real users await", desc: "People actively searching for tools — your next fans are here" },
+              { emoji: "🤝", title: "Investor connections", desc: "We actively connect standout makers with VCs, technical collaborators & press" },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/40">
                 <span className="text-xl mt-0.5">{item.emoji}</span>
