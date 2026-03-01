@@ -118,12 +118,12 @@ export default function ShipGuide() {
 
         {/* Section: SHIPメリット */}
         <section className="mb-20 border border-border rounded-2xl p-6 sm:p-8">
-          <h2 className="text-xl font-semibold text-foreground mb-6">SHIPすると、あなたに起きること</h2>
+          <h2 className="text-xl font-semibold text-foreground mb-6">What happens when you SHIP</h2>
           <div className="space-y-4">
             {[
-              { emoji: "🌍", title: "より多くの人にプロダクトを認知してもらえる", desc: "世界中のVibe Coderコミュニティに即日公開" },
-              { emoji: "🎯", title: "本当に使ってくれる人と出会える", desc: "AIツールを探しているユーザーが集まる" },
-              { emoji: "🤝", title: "投資家・支援者との接点が生まれる", desc: "VibeRushがVC・メディアに積極的に繋ぐ" },
+              { emoji: "🌍", title: "Global visibility, instantly", desc: "Your product goes live to the worldwide Vibe Coder community on day one" },
+              { emoji: "🎯", title: "Meet real users who care", desc: "Connect with people actively searching for AI-powered tools" },
+              { emoji: "🤝", title: "Investor & supporter connections", desc: "VibeRush actively bridges you with VCs and media" },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-muted/40">
                 <span className="text-xl mt-0.5">{item.emoji}</span>
