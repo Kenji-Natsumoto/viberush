@@ -15,7 +15,7 @@ export function HeroSection({ onSubmitClick }: HeroSectionProps) {
           Be seen.
         </h1>
         <p className="text-lg md:text-xl text-muted-foreground mb-3 max-w-xl mx-auto">
-          Your product in front of makers, investors & the global Vibe Coding community.
+          Get discovered. Connect with users, investors & the global Vibe Coding community.
         </p>
         <p className="text-sm text-muted-foreground/60 mb-10">
           Free · 30 seconds · No engineers required
