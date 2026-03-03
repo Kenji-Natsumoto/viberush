@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Link, FileText, Play, Video, Upload, Clock, Sparkles, Mail, Github, Linkedin, User, Check, Loader2 } from "lucide-react";
+import { ArrowLeft, Link, FileText, Play, Video, Upload, Clock, Sparkles, Mail, Github, Linkedin, User, Check, Loader2, Image as ImageIcon, X, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,6 +12,7 @@ import { useProduct, useUpdateProduct } from "@/hooks/useProducts";
 import { useAuth } from "@/contexts/AuthContext";
 import { TOOL_CATEGORIES, toolColors, TIME_OPTIONS } from "@/lib/toolConfig";
 import { PRODUCT_CATEGORIES } from "@/lib/categoryConfig";
+import { useProductScreenshots, useAddScreenshots, useDeleteScreenshot } from "@/hooks/useProductScreenshots";
 import type { Tool } from "@/types/database";
 
 // X (Twitter) icon component
@@ -191,10 +192,11 @@ export default function MoreDetail() {
         </div>
 
         <Tabs defaultValue="basics" className="space-y-6">
-          <TabsList className="w-full grid grid-cols-3">
+          <TabsList className="w-full grid grid-cols-4">
             <TabsTrigger value="basics">Basics</TabsTrigger>
             <TabsTrigger value="story">Story</TabsTrigger>
             <TabsTrigger value="links">Links & Social</TabsTrigger>
+            <TabsTrigger value="screenshots">Screenshots</TabsTrigger>
           </TabsList>
 
           {/* ====== Tab 1: Basics ====== */}
@@ -479,8 +481,84 @@ export default function MoreDetail() {
               />
             </div>
           </TabsContent>
+
+          {/* ====== Tab 4: Screenshots ====== */}
+          <TabsContent value="screenshots" className="space-y-5">
+            <ScreenshotsTab productId={productId} />
+          </TabsContent>
         </Tabs>
       </div>
+    </div>
+  );
+}
+
+/* ── Screenshots Tab Component ── */
+function ScreenshotsTab({ productId }: { productId: string }) {
+  const { data: screenshots = [], isLoading } = useProductScreenshots(productId);
+  const addScreenshots = useAddScreenshots();
+  const deleteScreenshot = useDeleteScreenshot();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    addScreenshots.mutate({ productId, files });
+    e.target.value = "";
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20">
+        <p className="text-sm font-medium text-blue-700 dark:text-blue-400 flex items-center gap-2">
+          <ImageIcon className="h-4 w-4" />
+          Upload screenshots to showcase your product (recommended: 1280×720, 16:9)
+        </p>
+      </div>
+
+      {/* Upload button */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={handleFiles}
+      />
+      <Button
+        variant="outline"
+        onClick={() => fileInputRef.current?.click()}
+        disabled={addScreenshots.isPending}
+        className="gap-2 w-full border-dashed border-2 py-8 text-muted-foreground hover:text-foreground"
+      >
+        {addScreenshots.isPending ? (
+          <><Loader2 className="h-4 w-4 animate-spin" /> Uploading...</>
+        ) : (
+          <><Plus className="h-4 w-4" /> Add Screenshots</>
+        )}
+      </Button>
+
+      {/* Existing screenshots */}
+      {isLoading ? (
+        <div className="flex justify-center py-8">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : screenshots.length === 0 ? (
+        <p className="text-center text-sm text-muted-foreground py-8">No screenshots yet.</p>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          {screenshots.map((ss) => (
+            <div key={ss.id} className="relative group rounded-xl overflow-hidden border border-border">
+              <img src={ss.url} alt="Screenshot" className="w-full h-40 object-cover" />
+              <button
+                onClick={() => deleteScreenshot.mutate({ id: ss.id, productId })}
+                className="absolute top-2 right-2 p-1.5 rounded-full bg-background/80 border border-border opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:text-destructive-foreground"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
