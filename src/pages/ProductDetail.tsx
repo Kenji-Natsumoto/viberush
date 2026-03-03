@@ -341,9 +341,6 @@ const ProductDetail = () => {
           </div>
         )}
 
-        {/* Screenshots Gallery */}
-        <ScreenshotGallery screenshots={screenshots} />
-
         {/* Magic Prompt Section */}
         {product.aiPrompt && (
           <div className="bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-blue-500/10 border border-purple-500/20 rounded-2xl overflow-hidden">
@@ -384,6 +381,8 @@ const ProductDetail = () => {
           </div>
         )}
 
+        {/* Screenshots Gallery - below Magic Prompt */}
+        <ScreenshotGallery screenshots={screenshots} />
 
         {/* Edit Modal */}
         <EditProductModal
