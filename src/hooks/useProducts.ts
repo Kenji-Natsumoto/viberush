@@ -446,27 +446,11 @@ export function useAddVibeClick() {
       if (error) throw error;
 
       return { productId };
-    },
-    onMutate: async ({ productId }) => {
-      await queryClient.cancelQueries({ queryKey: PRODUCTS_KEY });
-
-      const previousProducts = queryClient.getQueryData<Product[]>(PRODUCTS_KEY);
-
-      // Optimistically +1
-      queryClient.setQueryData<Product[]>(PRODUCTS_KEY, (old) => {
-        if (!old) return old;
-        return old.map((p) =>
-          p.id === productId ? { ...p, vibeScore: p.vibeScore - count } : p
-        );
-      });
-      queryClient.setQueryData<Product | null>(['product', productId], (old) => {
-        if (!old) return old;
-        return { ...old, vibeScore: old.vibeScore - count };
-      });
+    } catch (error) {
       console.error('Vibe click error:', error);
       toast({
         title: "Vibe Failed",
-        description: error.message,
+        description: (error as Error).message,
         variant: "destructive",
       });
     } finally {
