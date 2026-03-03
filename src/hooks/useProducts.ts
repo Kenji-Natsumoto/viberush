@@ -439,6 +439,7 @@ export function useAddVibeClick() {
 
       const { error } = await supabase.rpc('add_vibe_click', {
         p_product_id: productId,
+        p_source: 'web',
       });
       if (error) throw error;
 
