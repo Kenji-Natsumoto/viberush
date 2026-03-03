@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
@@ -430,67 +430,88 @@ export function useAddVibeClick() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const { toast } = useToast();
+  const pendingRef = useRef<Map<string, number>>(new Map());
+  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
 
-  return useMutation({
-    mutationFn: async ({ productId }: { productId: string }) => {
-      // Check current session directly (handles anonymous sign-in race condition)
+  const flush = useCallback(async (productId: string, count: number) => {
+    try {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session?.user) throw new Error('Must be logged in to vibe');
 
-      const { error } = await supabase.rpc('add_vibe_click', {
-        p_product_id: productId,
-        p_source: 'web',
-      });
-      if (error) throw error;
-
-      return { productId };
-    },
-    onMutate: async ({ productId }) => {
-      await queryClient.cancelQueries({ queryKey: PRODUCTS_KEY });
-
-      const previousProducts = queryClient.getQueryData<Product[]>(PRODUCTS_KEY);
-
-      // Optimistically +1
+      if (count === 1) {
+        const { error } = await supabase.rpc('add_vibe_click', {
+          p_product_id: productId,
+          p_source: 'web',
+        });
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.rpc('add_vibe_clicks_batch', {
+          p_product_id: productId,
+          p_count: count,
+          p_source: 'web',
+        });
+        if (error) throw error;
+      }
+    } catch (error: any) {
+      // Rollback optimistic updates
       queryClient.setQueryData<Product[]>(PRODUCTS_KEY, (old) => {
         if (!old) return old;
-        return old.map((product) =>
-          product.id === productId
-            ? { ...product, vibeScore: product.vibeScore + 1 }
-            : product
+        return old.map((p) =>
+          p.id === productId ? { ...p, vibeScore: p.vibeScore - count } : p
         );
       });
-
       queryClient.setQueryData<Product | null>(['product', productId], (old) => {
         if (!old) return old;
-        return { ...old, vibeScore: old.vibeScore + 1 };
+        return { ...old, vibeScore: old.vibeScore - count };
       });
-
-      // Mark as clicked
-      queryClient.setQueryData<Set<string>>(['user-vibe-clicks', user?.id], (old) => {
-        const newSet = new Set(old);
-        newSet.add(productId);
-        return newSet;
-      });
-
-      return { previousProducts };
-    },
-    onError: (error: Error, variables, context) => {
-      if (context?.previousProducts) {
-        queryClient.setQueryData(PRODUCTS_KEY, context.previousProducts);
-      }
       console.error('Vibe click error:', error);
       toast({
         title: "Vibe Failed",
         description: error.message,
         variant: "destructive",
       });
-    },
-    onSettled: (data) => {
+    } finally {
       queryClient.invalidateQueries({ queryKey: PRODUCTS_KEY });
       queryClient.invalidateQueries({ queryKey: ['user-vibe-clicks'] });
-      if (data?.productId) {
-        queryClient.invalidateQueries({ queryKey: ['product', data.productId] });
-      }
-    },
-  });
+      queryClient.invalidateQueries({ queryKey: ['product', productId] });
+    }
+  }, [queryClient, toast]);
+
+  const mutate = useCallback(({ productId }: { productId: string }) => {
+    // Optimistic +1 immediately
+    queryClient.setQueryData<Product[]>(PRODUCTS_KEY, (old) => {
+      if (!old) return old;
+      return old.map((p) =>
+        p.id === productId ? { ...p, vibeScore: p.vibeScore + 1 } : p
+      );
+    });
+    queryClient.setQueryData<Product | null>(['product', productId], (old) => {
+      if (!old) return old;
+      return { ...old, vibeScore: old.vibeScore + 1 };
+    });
+    queryClient.setQueryData<Set<string>>(['user-vibe-clicks', user?.id], (old) => {
+      const s = new Set(old);
+      s.add(productId);
+      return s;
+    });
+
+    // Accumulate clicks
+    const current = pendingRef.current.get(productId) || 0;
+    pendingRef.current.set(productId, current + 1);
+
+    // Debounce: flush after 1s of inactivity
+    const existing = timersRef.current.get(productId);
+    if (existing) clearTimeout(existing);
+    timersRef.current.set(
+      productId,
+      setTimeout(() => {
+        const count = pendingRef.current.get(productId) || 0;
+        pendingRef.current.delete(productId);
+        timersRef.current.delete(productId);
+        if (count > 0) flush(productId, count);
+      }, 1000)
+    );
+  }, [user?.id, queryClient, flush]);
+
+  return { mutate, isPending: false };
 }
