@@ -24,6 +24,7 @@ import ShipGuide from "./pages/ShipGuide";
 import MakerProfile from "./pages/MakerProfile";
 import MoreDetail from "./pages/MoreDetail";
 import { FloatingShipButton } from "@/components/FloatingShipButton";
+import { UTMCapture } from "@/components/UTMCapture";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,6 +46,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <UTMCapture />
         <AuthProvider>
           <Routes>
             <Route path="/" element={<Index />} />

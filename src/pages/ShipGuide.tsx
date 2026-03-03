@@ -119,33 +119,33 @@ export default function ShipGuide() {
         {/* What happens after you SHIP */}
         <section className="mb-10 rounded-2xl border border-border overflow-hidden">
           <div className="px-5 py-4 bg-muted/60 border-b border-border">
-            <p className="text-sm font-semibold text-foreground">🎁 SHIPすると、あなたに起きること</p>
+            <p className="text-sm font-semibold text-foreground">🎁 What happens when you SHIP</p>
           </div>
           <div className="divide-y divide-border">
             <div className="flex items-start gap-4 px-5 py-4">
               <span className="text-2xl shrink-0">🌍</span>
               <div>
-                <p className="text-sm font-semibold text-foreground">より多くの人にプロダクトを認知してもらえる</p>
+                <p className="text-sm font-semibold text-foreground">Get discovered</p>
                 <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                  世界中のVibe Coderコミュニティ・アーリーアダプター・AI好きユーザーに即日公開。あなたの作品が今日から発見される。
+                  Your product in front of makers, early adopters & the global Vibe Coding community — live today.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-4 px-5 py-4">
               <span className="text-2xl shrink-0">🎯</span>
               <div>
-                <p className="text-sm font-semibold text-foreground">本当に使ってくれる人と出会える</p>
+                <p className="text-sm font-semibold text-foreground">Reach real users</p>
                 <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                  AIツールを積極的に探しているユーザーが集まるプラットフォーム。あなたのプロダクトを待っている人がいる。
+                  People who are actively looking for AI-built tools — your next fans are here.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-4 px-5 py-4">
               <span className="text-2xl shrink-0">🤝</span>
               <div>
-                <p className="text-sm font-semibold text-foreground">投資家・支援者との接点が生まれる</p>
+                <p className="text-sm font-semibold text-foreground">Get noticed by investors & supporters</p>
                 <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-                  VibeRushは優れたMakerをVC・技術パートナー・メディアに積極的に繋いでいきます。今SHIPしておくことが、その第一歩。
+                  We actively connect standout makers with VCs, technical collaborators & press. SHIPping today is your first step.
                 </p>
               </div>
             </div>

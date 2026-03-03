@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/contexts/AuthContext';
+import { getVibeSource } from '@/hooks/useUTMTracking';
 import { 
   DbProduct, 
   Product, 
@@ -439,6 +440,7 @@ export function useAddVibeClick() {
 
       const { error } = await supabase.rpc('add_vibe_click', {
         p_product_id: productId,
+        p_source: getVibeSource(),
       });
       if (error) throw error;
 
