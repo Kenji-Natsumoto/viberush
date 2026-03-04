@@ -19,7 +19,7 @@ export function HeroSection() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button
             size="lg"
-            onClick={onSubmitClick}
+            onClick={() => navigate("/ship-guide")}
             className="gap-2 px-8 bg-primary hover:bg-primary/90 text-primary-foreground w-full sm:w-auto"
           >
             🚀 Ship Your Product

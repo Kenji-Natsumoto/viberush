@@ -45,7 +45,7 @@ export function ShipCTABanner() {
             </p>
           </div>
           <button
-            onClick={onSubmitClick}
+            onClick={() => navigate("/ship-guide")}
             className="w-full md:w-auto h-11 px-6 rounded-full bg-white text-[#1a1a2e] font-semibold text-sm transition-all duration-200 hover:scale-[1.03] hover:shadow-lg shrink-0 cursor-pointer"
           >
             🚀 Ship Your Product
