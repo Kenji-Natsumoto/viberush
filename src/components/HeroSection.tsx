@@ -1,11 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-interface HeroSectionProps {
-  onSubmitClick: () => void;
-}
-
-export function HeroSection({ onSubmitClick }: HeroSectionProps) {
+export function HeroSection() {
   const navigate = useNavigate();
 
   return (
