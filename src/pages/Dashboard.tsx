@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Settings, Rocket, Plus, ArrowRight, BookOpen, LayoutDashboard } from "lucide-react";
+import { Settings, Rocket, Plus, ArrowRight, BookOpen, LayoutDashboard, BarChart2 } from "lucide-react";
 import { useMakerUsername } from "@/hooks/useMakerUsername";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useIsAdmin } from "@/hooks/useChronicles";
@@ -111,12 +111,20 @@ export default function Dashboard() {
             </p>
           </div>
           {isAdmin && (
-            <Link to="/dashboard/chronicles">
-              <Button variant="outline" size="sm" className="gap-1.5">
-                <BookOpen className="h-4 w-4" />
-                Manage Chronicles
-              </Button>
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link to="/admin/analytics">
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <BarChart2 className="h-4 w-4" />
+                  SNS Analytics
+                </Button>
+              </Link>
+              <Link to="/dashboard/chronicles">
+                <Button variant="outline" size="sm" className="gap-1.5">
+                  <BookOpen className="h-4 w-4" />
+                  Chronicles
+                </Button>
+              </Link>
+            </div>
           )}
         </div>
 
