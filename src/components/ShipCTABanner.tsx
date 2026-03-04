@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom";
+interface ShipCTABannerProps {
+  onSubmitClick: () => void;
+}
 
 const MAKER_BENEFITS = [
   {
@@ -18,8 +20,7 @@ const MAKER_BENEFITS = [
   },
 ];
 
-export function ShipCTABanner() {
-  const navigate = useNavigate();
+export function ShipCTABanner({ onSubmitClick }: ShipCTABannerProps) {
 
   return (
     <section className="w-full px-4 md:px-6 pb-6">
@@ -45,7 +46,7 @@ export function ShipCTABanner() {
             </p>
           </div>
           <button
-            onClick={() => navigate("/ship-guide")}
+            onClick={onSubmitClick}
             className="w-full md:w-auto h-11 px-6 rounded-full bg-white text-[#1a1a2e] font-semibold text-sm transition-all duration-200 hover:scale-[1.03] hover:shadow-lg shrink-0 cursor-pointer"
           >
             🚀 Ship Your Product

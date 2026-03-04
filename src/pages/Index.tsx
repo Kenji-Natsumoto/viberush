@@ -28,7 +28,7 @@ const Index = () => {
       <Header onSubmitClick={openSubmitModal} />
       <main>
         <HeroSection onSubmitClick={openSubmitModal} />
-        <ShipCTABanner />
+        <ShipCTABanner onSubmitClick={openSubmitModal} />
         <TrustStatement />
         <StatsSection />
         <HallOfProof />
