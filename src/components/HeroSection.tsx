@@ -5,7 +5,7 @@ export function HeroSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-20 md:py-28">
+    <section className="relative pt-14 pb-8 md:pt-20 md:pb-10">
       <div className="relative max-w-3xl mx-auto px-4 text-center">
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-4">
           Your AI app deserves<br className="hidden sm:block" /> to be seen.

@@ -29,7 +29,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <ShipCTABanner />
-        <TrustStatement />
+        
         <StatsSection />
         <HallOfProof />
         <ProductFeed />
