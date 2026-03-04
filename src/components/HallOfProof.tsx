@@ -138,7 +138,7 @@ export function HallOfProof() {
 
   if (isLoading) {
     return (
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
+      <section className="py-8 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold text-foreground mb-2">Hall of Proof</h2>
@@ -157,7 +157,7 @@ export function HallOfProof() {
   if (featuredProducts.length < 3) return null;
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background">
+    <section className="py-8 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-2xl font-bold text-foreground mb-2">Hall of Proof</h2>

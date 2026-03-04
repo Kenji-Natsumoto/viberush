@@ -22,7 +22,7 @@ export function ShipCTABanner() {
   const navigate = useNavigate();
 
   return (
-    <section className="w-full px-4 md:px-6 pb-6">
+    <section className="w-full px-4 md:px-6 pb-3">
       <div
         className="relative max-w-5xl mx-auto rounded-2xl px-6 py-6 md:py-8 md:px-8 flex flex-col gap-6"
         style={{
