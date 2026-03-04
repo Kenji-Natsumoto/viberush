@@ -29,10 +29,9 @@ const Index = () => {
       <main>
         <HeroSection />
         <ShipCTABanner />
-        
-        <StatsSection />
         <HallOfProof />
         <ProductFeed />
+        <StatsSection />
         <FAQSection />
         <DirectoryCTA />
       </main>
