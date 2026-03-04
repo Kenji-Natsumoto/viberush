@@ -27,8 +27,8 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header onSubmitClick={openSubmitModal} />
       <main>
-        <HeroSection onSubmitClick={openSubmitModal} />
-        <ShipCTABanner onSubmitClick={openSubmitModal} />
+        <HeroSection />
+        <ShipCTABanner />
         <TrustStatement />
         <StatsSection />
         <HallOfProof />
