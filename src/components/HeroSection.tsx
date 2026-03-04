@@ -14,10 +14,12 @@ export function HeroSection({ onSubmitClick }: HeroSectionProps) {
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-4">
           Your AI app deserves<br className="hidden sm:block" /> to be seen.
         </h1>
-        <p className="text-lg md:text-xl text-muted-foreground mb-3 max-w-xl mx-auto">
+        <p className="text-base md:text-lg font-semibold text-primary mb-3 tracking-wide">
+          Free to ship in 30 sec · Just a name & description
+        </p>
+        <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-xl mx-auto">
           Ship it. Get discovered. Connect with users, investors & the global Vibe Coding community.
         </p>
-        <p className="text-sm text-muted-foreground/60 mb-10">Free · 30 seconds · No engineers required</p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Button
             size="lg"
