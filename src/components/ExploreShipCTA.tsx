@@ -26,7 +26,7 @@ export function ExploreShipCTA() {
         "relative mx-auto max-w-4xl my-16 rounded-xl overflow-hidden transition-all duration-700",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       )}
-      style={{ padding: '3px' }}
+      style={{ padding: '6px' }}
     >
       {/* Thick rainbow glow border */}
       <div
@@ -38,7 +38,7 @@ export function ExploreShipCTA() {
         }}
       />
       <div
-        className="relative rounded-[calc(0.75rem-3px)] px-8 py-14 md:px-16 md:py-20 text-center"
+        className="relative rounded-[calc(0.75rem-6px)] px-8 py-14 md:px-16 md:py-20 text-center"
         style={{
           background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
         }}
