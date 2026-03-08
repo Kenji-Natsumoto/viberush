@@ -185,6 +185,7 @@ export default function Explore() {
             ))}
           </div>
         )}
+        <ExploreShipCTA />
       </main>
 
       <Footer />
