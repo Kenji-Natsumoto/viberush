@@ -107,10 +107,10 @@ export function ExploreShipCTA() {
         {/* Free label */}
         <p
           className={cn(
-            "mt-4 text-xs font-medium transition-all duration-700 delay-600",
+            "mt-4 text-base font-semibold tracking-wide transition-all duration-700 delay-600",
             visible ? "opacity-100" : "opacity-0"
           )}
-          style={{ color: "rgba(255,255,255,0.35)" }}
+          style={{ color: "#FF6B35" }}
         >
           Free · No code required · 30 seconds
         </p>
