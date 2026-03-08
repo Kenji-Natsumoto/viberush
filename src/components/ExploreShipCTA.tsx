@@ -23,12 +23,22 @@ export function ExploreShipCTA() {
     <section
       ref={ref}
       className={cn(
-        "relative mx-auto max-w-4xl my-16 overflow-hidden transition-all duration-700 border-glow-wrapper rounded-xl",
+        "relative mx-auto max-w-4xl my-16 rounded-xl overflow-hidden transition-all duration-700",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       )}
+      style={{ padding: '3px' }}
     >
+      {/* Thick rainbow glow border */}
       <div
-        className="relative rounded-[calc(0.75rem-2px)] px-8 py-14 md:px-16 md:py-20 text-center"
+        className="absolute inset-0 rounded-xl"
+        style={{
+          background: 'linear-gradient(90deg, hsl(201 100% 50%), hsl(190 80% 55%), hsl(170 60% 50%), hsl(100 40% 45%), hsl(60 60% 50%), hsl(45 80% 55%), hsl(42 100% 50%), hsl(35 90% 45%))',
+          backgroundSize: '300% 100%',
+          animation: 'border-glow-spin 6s linear infinite',
+        }}
+      />
+      <div
+        className="relative rounded-[calc(0.75rem-3px)] px-8 py-14 md:px-16 md:py-20 text-center"
         style={{
           background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
         }}
