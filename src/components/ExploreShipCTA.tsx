@@ -52,7 +52,7 @@ export function ExploreShipCTA() {
         {/* Headline */}
         <h2
           className={cn(
-            "text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-tight transition-all duration-700 delay-200",
+            "text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight leading-loose transition-all duration-700 delay-200",
             visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           )}
           style={{ color: "#ffffff" }}
@@ -60,7 +60,7 @@ export function ExploreShipCTA() {
           Ship your AI app here
           <br />
           <span
-            className="bg-clip-text text-transparent"
+            className="bg-clip-text text-transparent pb-2 inline-block"
             style={{
               backgroundImage: "linear-gradient(90deg, #FF6B35, #fbbf24, #FF6B35)",
               backgroundSize: "200% 100%",
