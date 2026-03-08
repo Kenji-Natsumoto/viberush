@@ -23,15 +23,12 @@ export function ExploreShipCTA() {
     <section
       ref={ref}
       className={cn(
-        "relative mx-auto max-w-4xl my-16 rounded-3xl overflow-hidden transition-all duration-700",
+        "relative mx-auto max-w-4xl my-16 overflow-hidden transition-all duration-700 border-glow-wrapper rounded-xl",
         visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       )}
     >
-      {/* Animated gradient border */}
-      <div className="absolute inset-0 rounded-3xl p-[2px] border-glow-wrapper" />
-
       <div
-        className="relative rounded-3xl px-8 py-14 md:px-16 md:py-20 text-center"
+        className="relative rounded-[calc(0.75rem-2px)] px-8 py-14 md:px-16 md:py-20 text-center"
         style={{
           background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
         }}
