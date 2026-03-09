@@ -100,7 +100,7 @@ const ProductDetail = () => {
   };
 
   const getShareUrl = () =>
-    `https://nfchuijfdygiclaqecvk.supabase.co/functions/v1/share-product?id=${product.id}`;
+    `https://api.viberush.io/functions/v1/share-product?id=${product.id}`;
 
   const handleShareToX = () => {
     const timeToBuildText = product.timeToBuild || "a few hours";
