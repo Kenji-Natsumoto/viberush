@@ -28,7 +28,6 @@ function buildShareHtml(product: {
   const description = escapeHtml(product.tagline ?? "A vibe-coded app on VibeRush");
   const ogImage = `https://api.viberush.io/functions/v1/og-image/${product.id}`;
   const productUrl = `${SITE_URL}/product/${product.id}`;
-  const shareUrl = `${SITE_URL}/share/${product.id}`;
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -43,7 +42,6 @@ function buildShareHtml(product: {
   <meta property="og:image" content="${escapeHtml(ogImage)}">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:url" content="${escapeHtml(shareUrl)}">
   <meta property="og:site_name" content="VibeRush">
 
   <!-- Twitter Card -->
