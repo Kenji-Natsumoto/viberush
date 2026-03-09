@@ -53,8 +53,6 @@ function buildShareHtml(product: {
   <meta name="twitter:image" content="${escapeHtml(ogImage)}">
   <meta name="twitter:site" content="@VibeRush_Kenji">
 
-  <!-- Redirect for browsers -->
-  <meta http-equiv="refresh" content="0;url=${escapeHtml(productUrl)}">
 </head>
 <body>
   <script>window.location.replace(${JSON.stringify(productUrl)});</script>
