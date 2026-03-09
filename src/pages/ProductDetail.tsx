@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useProductScreenshots } from "@/hooks/useProductScreenshots";
-import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Github, Linkedin, Link2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Play, Video, Copy, Check, Clock, Sparkles, Pencil, Share2, Linkedin, Link2 } from "lucide-react";
 import { ScreenshotGallery } from "@/components/ScreenshotGallery";
 import ReactMarkdown from "react-markdown";
 import { Button } from "@/components/ui/button";
@@ -99,14 +99,21 @@ const ProductDetail = () => {
     }
   };
 
+  const getShareUrl = () =>
+    `https://nfchuijfdygiclaqecvk.supabase.co/functions/v1/share-product?id=${product.id}`;
+
   const handleShareToX = () => {
     const timeToBuildText = product.timeToBuild || "a few hours";
     const shareText = product.url
       ? `Built ${product.name} in ${timeToBuildText} with AI! Check it out on #VibeRush 🚀`
       : `Built ${product.name} in ${timeToBuildText} with AI! #VibeRush 🚀`;
-    const shareUrl = window.location.href;
-    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(getShareUrl())}`;
     window.open(twitterUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleShareToLinkedIn = () => {
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(getShareUrl())}`;
+    window.open(linkedInUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -265,19 +272,20 @@ const ProductDetail = () => {
 
               <Button
                 variant="outline"
-                onClick={() => {
-                  if (shortCode) {
-                    const shortUrl = `${window.location.origin}/s/${shortCode}`;
-                    navigator.clipboard.writeText(shortUrl);
-                  } else if (id) {
-                    createShortUrl.mutate(id);
-                  }
-                }}
-                disabled={createShortUrl.isPending}
+                onClick={() => navigator.clipboard.writeText(getShareUrl())}
                 className="gap-2"
               >
                 <Link2 className="h-4 w-4" />
-                {createShortUrl.isPending ? 'Creating...' : shortCode ? 'Copy Short URL' : 'Get Short URL'}
+                Copy Share Link
+              </Button>
+
+              <Button
+                variant="outline"
+                onClick={handleShareToLinkedIn}
+                className="gap-2"
+              >
+                <Linkedin className="h-4 w-4" />
+                Share on LinkedIn
               </Button>
             </div>
 

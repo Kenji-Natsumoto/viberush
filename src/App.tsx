@@ -14,6 +14,7 @@ import Privacy from "./pages/Privacy";
 import Brand from "./pages/Brand";
 import NotFound from "./pages/NotFound";
 import ShortUrlRedirect from "./pages/ShortUrlRedirect";
+import ShareRedirect from "./pages/ShareRedirect";
 import Images from "./pages/Images";
 import AdminClaims from "./pages/AdminClaims";
 import AdminAnalytics from "./pages/AdminAnalytics";
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/s/:code" element={<ShortUrlRedirect />} />
+            <Route path="/share/:id" element={<ShareRedirect />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/about" element={<About />} />
             <Route path="/terms" element={<Terms />} />
