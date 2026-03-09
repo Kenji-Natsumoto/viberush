@@ -26,7 +26,7 @@ function buildShareHtml(product: {
 }): string {
   const title = escapeHtml(`${product.name} — Shipped on VibeRush`);
   const description = escapeHtml(product.tagline ?? "A vibe-coded app on VibeRush");
-  const ogImage = `https://nfchuijfdygiclaqecvk.supabase.co/functions/v1/og-image/${product.id}`;
+  const ogImage = `https://api.viberush.io/functions/v1/og-image/${product.id}`;
   const productUrl = `${SITE_URL}/product/${product.id}`;
   const shareUrl = `${SITE_URL}/share/${product.id}`;
 
