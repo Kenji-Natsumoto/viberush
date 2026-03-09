@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VibeRush Project Management Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+  }
+
+  .slide {
+    width: 1280px;
+    min-height: 720px;
+    margin: 0 auto 4px;
+    padding: 48px 56px;
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    position: relative;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #7c3aed, #ec4899, #f59e0b);
+  }
+
+  .slide-number {
+    position: absolute;
+    bottom: 24px; right: 40px;
+    font-size: 13px;
+    color: #555;
+    font-weight: 500;
+  }
+
+  .logo-tag {
+    position: absolute;
+    bottom: 24px; left: 40px;
+    font-size: 12px;
+    color: #444;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-size: 36px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f0f0f0;
+    margin-bottom: 6px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #a78bfa;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: #888;
+    margin-bottom: 32px;
+    font-weight: 400;
+  }
+
+  .divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #7c3aed, #ec4899);
+    margin: 16px 0 24px;
+    border-radius: 2px;
+  }
+
+  /* Grid layouts */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; }
+
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .card-highlight {
+    background: rgba(124,58,237,0.08);
+    border: 1px solid rgba(124,58,237,0.25);
+  }
+
+  .card-warn {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.2);
+  }
+
+  .card-success {
+    background: rgba(16,185,129,0.06);
+    border: 1px solid rgba(16,185,129,0.2);
+  }
+
+  .card-danger {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.2);
+  }
+
+  .card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .card .value {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .card .value.small { font-size: 22px; }
+  .card .value.purple { color: #a78bfa; }
+  .card .value.pink { color: #ec4899; }
+  .card .value.amber { color: #f59e0b; }
+  .card .value.green { color: #10b981; }
+  .card .value.red { color: #ef4444; }
+
+  .card .detail {
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    color: #a78bfa;
+    border-bottom: 1px solid rgba(167,139,250,0.2);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: #ccc;
+  }
+
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .tag-p0 { background: rgba(239,68,68,0.15); color: #f87171; }
+  .tag-p1 { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .tag-p2 { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .tag-done { background: rgba(16,185,129,0.15); color: #34d399; }
+  .tag-wip { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .tag-todo { background: rgba(255,255,255,0.08); color: #888; }
+
+  /* Timeline */
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin-top: 16px;
+  }
+
+  .timeline-item {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    padding: 0 4px;
+  }
+
+  .timeline-item::after {
+    content: '';
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    right: -50%;
+    height: 2px;
+    background: rgba(167,139,250,0.3);
+  }
+
+  .timeline-item:last-child::after { display: none; }
+
+  .timeline-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: #7c3aed;
+    margin: 10px auto 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-dot.active {
+    width: 16px; height: 16px;
+    background: #ec4899;
+    box-shadow: 0 0 12px rgba(236,72,153,0.5);
+    margin: 8px auto 8px;
+  }
+
+  .timeline-dot.future {
+    background: #333;
+    border: 2px solid #555;
+  }
+
+  .timeline-month {
+    font-size: 13px;
+    font-weight: 700;
+    color: #a78bfa;
+  }
+
+  .timeline-month.active { color: #ec4899; }
+
+  .timeline-ships {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    margin: 4px 0;
+  }
+
+  .timeline-label {
+    font-size: 10px;
+    color: #666;
+    line-height: 1.3;
+  }
+
+  /* Progress bars */
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .progress-fill.purple { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+  .progress-fill.pink { background: linear-gradient(90deg, #ec4899, #f472b6); }
+  .progress-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
+  .progress-fill.amber { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+
+  /* Lists */
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+
+  .checklist li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: #ccc;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .checklist li::before {
+    content: '○';
+    color: #555;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .checklist li.done::before {
+    content: '●';
+    color: #10b981;
+  }
+
+  .checklist li.wip::before {
+    content: '◐';
+    color: #f59e0b;
+  }
+
+  /* Pillar blocks */
+  .pillar {
+    padding: 16px;
+    border-left: 3px solid;
+    background: rgba(255,255,255,0.02);
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 12px;
+  }
+
+  .pillar-1 { border-color: #ec4899; }
+  .pillar-2 { border-color: #a78bfa; }
+  .pillar-3 { border-color: #60a5fa; }
+  .pillar-4 { border-color: #f59e0b; }
+  .pillar-5 { border-color: #10b981; }
+
+  .pillar-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .pillar-desc {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.4;
+  }
+
+  .pillar-kpi {
+    font-size: 11px;
+    color: #a78bfa;
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* MTP banner */
+  .mtp-banner {
+    background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(236,72,153,0.08));
+    border: 1px solid rgba(124,58,237,0.2);
+    border-radius: 16px;
+    padding: 28px 32px;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .mtp-text {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e0d4ff;
+    line-height: 1.4;
+  }
+
+  .flex-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .flex-1 { flex: 1; }
+  .flex-2 { flex: 2; }
+
+  .text-sm { font-size: 13px; }
+  .text-xs { font-size: 11px; }
+  .text-muted { color: #666; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .mb-8 { margin-bottom: 8px; }
+  .mb-16 { margin-bottom: 16px; }
+  .fw-700 { font-weight: 700; }
+
+  /* Layer diagram */
+  .layer-stack {
+    margin: 16px 0;
+  }
+
+  .layer {
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .layer-3 {
+    background: rgba(239,68,68,0.06);
+    border: 1px solid rgba(239,68,68,0.15);
+  }
+
+  .layer-2 {
+    background: rgba(245,158,11,0.06);
+    border: 1px solid rgba(245,158,11,0.15);
+  }
+
+  .layer-1 {
+    background: rgba(16,185,129,0.08);
+    border: 1px solid rgba(16,185,129,0.25);
+    box-shadow: 0 0 20px rgba(16,185,129,0.08);
+  }
+
+  .layer-name {
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .layer-period {
+    font-size: 12px;
+    color: #888;
+  }
+
+  .layer-here {
+    font-size: 11px;
+    background: #10b981;
+    color: #000;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ SLIDE 1: Title ============ -->
+<div class="slide">
+  <div style="display:flex; flex-direction:column; justify-content:center; height:100%; text-align:center;">
+    <div style="margin-bottom:24px;">
+      <span style="font-size:14px; color:#7c3aed; font-weight:600; letter-spacing:3px; text-transform:uppercase;">SPRINT Japan / VibeRush Division</span>
+    </div>
+    <h1 style="font-size:52px; margin-bottom:16px; text-align:center;">VibeRush</h1>
+    <h2 style="font-size:28px; color:#ccc; font-weight:400; text-align:center;">プロジェクト管理ダッシュボード</h2>
+    <div class="divider" style="margin:24px auto;"></div>
+    <p style="font-size:16px; color:#888; max-width:600px; margin:0 auto; line-height:1.6;">
+      バイブコーディング時代のプロダクト発見プラットフォーム<br>
+      <span style="color:#a78bfa;">"Your AI app deserves to be seen."</span>
+    </p>
+    <div style="margin-top:40px; display:flex; gap:32px; justify-content:center;">
+      <div style="text-align:center;">
+        <div style="font-size:11px; color:#666; text-transform:uppercase; letter-spacing:1px;">ステータス</div>
+        <div style="font-size:16px; color:#10b981; font-weight:700; margin-top:4px;">Layer 1: トラクション</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:11px; color:#666; text-transform:uppercase; letter-spacing:1px;">日付</div>
+        <div style="font-size:16px; color:#fff; font-weight:700; margin-top:4px;">2026年3月8日</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:11px; color:#666; text-transform:uppercase; letter-spacing:1px;">中間ゴール</div>
+        <div style="font-size:16px; color:#f59e0b; font-weight:700; margin-top:4px;">2026年9月</div>
+      </div>
+    </div>
+  </div>
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">1 / 9</div>
+</div>
+
+<!-- ============ SLIDE 2: Mission & Strategy ============ -->
+<div class="slide">
+  <h3>Slide 2</h3>
+  <h2>ミッション & 戦略構造</h2>
+  <div class="divider"></div>
+
+  <div class="mtp-banner">
+    <div style="font-size:11px; color:#7c3aed; font-weight:600; letter-spacing:2px; margin-bottom:8px;">MASSIVE TRANSFORMATIVE PURPOSE</div>
+    <div class="mtp-text">「AIネイティブアプリのビジネス生態系として世界に変革を促す」</div>
+  </div>
+
+  <div class="flex-row" style="margin-top:20px; gap:16px;">
+    <!-- ビジネスモデル仮説 -->
+    <div class="flex-1">
+      <div class="card" style="padding:16px; border-left:3px solid #f59e0b;">
+        <div style="font-size:11px; color:#f59e0b; font-weight:700; letter-spacing:1px; margin-bottom:10px;">ビジネスモデルの定義（仮説）</div>
+        <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:10px;">
+          <div style="background:rgba(245,158,11,0.15); color:#fbbf24; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; flex-shrink:0;">1</div>
+          <div style="font-size:12px; color:#ccc; line-height:1.6;">
+            <strong style="color:#fff;">VC・M&A関連会社</strong>は、魅力的な新規性のあるプロダクトや起業家（Maker）の<strong style="color:#fbbf24;">独自指標による信頼ある格付け</strong>やポートフォリオ情報などがあれば、<strong style="color:#fbbf24;">有料でも欲しくなる</strong>はずだ
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="background:rgba(245,158,11,0.15); color:#fbbf24; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; flex-shrink:0;">2</div>
+          <div style="font-size:12px; color:#ccc; line-height:1.6;">
+            <strong style="color:#fff;">Maker</strong>は、体系化され実績もある<strong style="color:#fbbf24;">アプリ開発・マネジメント・マーケティング・顧客獲得ノウハウ</strong>があれば、自己アプリに活かしたいので、<strong style="color:#fbbf24;">有料でも欲しがる</strong>はずだ
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- メイン戦略定義 -->
+    <div class="flex-1">
+      <div class="card" style="padding:16px; border-left:3px solid #ec4899;">
+        <div style="font-size:11px; color:#ec4899; font-weight:700; letter-spacing:1px; margin-bottom:10px;">メイン戦略定義</div>
+        <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:10px;">
+          <div style="background:rgba(236,72,153,0.15); color:#ec4899; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; flex-shrink:0;">1</div>
+          <div style="font-size:12px; color:#ccc; line-height:1.6;">
+            ビジネスモデル早期実現には、<strong style="color:#fff;">圧倒的な数（目安1万プロダクト）</strong>のMakerとSHIP、プロダクトのクオリティ・優秀なMakerの確保とコミュニケーションが<strong style="color:#ec4899;">不可欠</strong>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:10px;">
+          <div style="background:rgba(236,72,153,0.15); color:#ec4899; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; flex-shrink:0;">2</div>
+          <div style="font-size:12px; color:#ccc; line-height:1.6;">
+            これを可能な限り<strong style="color:#fff;">「水面下」で行う</strong>必要がある — 世間が気づいた時には1万プロダクト到達が容易な状態にする<strong style="color:#ec4899;">（Moat戦略）</strong>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; align-items:flex-start;">
+          <div style="background:rgba(236,72,153,0.15); color:#ec4899; font-size:11px; font-weight:700; padding:2px 8px; border-radius:6px; flex-shrink:0;">3</div>
+          <div style="font-size:12px; color:#ccc; line-height:1.6;">
+            (2.) に加え、1万プロダクトのSHIPを<strong style="color:#fff;">18ヶ月以内に実現</strong>させる必要がある
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-row" style="margin-top:16px;">
+    <div class="flex-1">
+      <h3 style="font-size:14px;">戦略ポジショニング</h3>
+      <div class="card card-highlight" style="margin-bottom:12px;">
+        <div style="font-size:15px; font-weight:700; color:#e0d4ff; margin-bottom:8px;">Hugging Face × Product Hunt</div>
+        <div style="font-size:13px; color:#999; line-height:1.5;">
+          バイブコーディング専門の<br>プロダクト発見プラットフォーム
+        </div>
+        <div style="font-size:12px; color:#10b981; margin-top:8px; font-weight:600;">
+          直接競合: 現在ゼロ（ファーストムーバー）
+        </div>
+      </div>
+      <div style="font-size:12px; color:#888; line-height:1.6;">
+        <strong style="color:#ccc;">市場規模:</strong> $4.7B (CAGR 38%)<br>
+        <strong style="color:#ccc;">AI生成コード比率:</strong> 41%→60%（2026予測）<br>
+        <strong style="color:#ccc;">Lovable単独:</strong> 月間75万アプリ生成
+      </div>
+    </div>
+
+    <div class="flex-2">
+      <h3 style="font-size:14px;">3層戦略モデル</h3>
+      <div class="layer-stack">
+        <div class="layer layer-3">
+          <div>
+            <div class="layer-name" style="color:#f87171;">Layer 3: EXIT</div>
+            <div class="layer-period">2027後半〜2028/3 — 資産価値 ¥1,500億+ 達成・売却</div>
+          </div>
+        </div>
+        <div class="layer layer-2">
+          <div>
+            <div class="layer-name" style="color:#fbbf24;">Layer 2: SCALE</div>
+            <div class="layer-period">2026/10〜2027 — Series A・チーム構築・グローバル展開</div>
+          </div>
+        </div>
+        <div class="layer layer-1">
+          <div>
+            <div class="layer-name" style="color:#34d399;">Layer 1: TRACTION</div>
+            <div class="layer-period">NOW〜2026/9 — PMF実証・10K SHIP・初期収益</div>
+          </div>
+          <div class="layer-here">← 現在地</div>
+        </div>
+      </div>
+
+      <div class="grid-3 mt-16">
+        <div class="card" style="padding:12px;">
+          <h4 style="font-size:11px;">中間ゴール (9月)</h4>
+          <div class="value small purple">10,000 SHIPs</div>
+          <div class="detail">MAU 50K / k>1.0</div>
+        </div>
+        <div class="card" style="padding:12px;">
+          <h4 style="font-size:11px;">Series A</h4>
+          <div class="value small amber">2026 Q4</div>
+          <div class="detail">$1M+ ARR目標</div>
+        </div>
+        <div class="card" style="padding:12px;">
+          <h4 style="font-size:11px;">最終ゴール</h4>
+          <div class="value small pink">¥1,500億</div>
+          <div class="detail">2028/3 エグジット</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">2 / 9</div>
+</div>
+
+<!-- ============ SLIDE 3: Current Status & KPIs ============ -->
+<div class="slide">
+  <h3>Slide 3</h3>
+  <h2>現在のステータス & KPI</h2>
+  <div class="subtitle">2026年3月8日 時点</div>
+  <div class="divider"></div>
+
+  <div class="grid-4">
+    <div class="card card-highlight">
+      <h4>総SHIP数</h4>
+      <div class="value purple">54</div>
+      <div class="detail">目標: 10,000（9月）</div>
+      <div class="progress-bar"><div class="progress-fill purple" style="width:0.54%"></div></div>
+      <div class="text-xs text-muted mt-8">達成率 0.5%</div>
+    </div>
+    <div class="card">
+      <h4>MAU</h4>
+      <div class="value small">計測中</div>
+      <div class="detail">目標: 50,000</div>
+      <div class="progress-bar"><div class="progress-fill pink" style="width:0%"></div></div>
+      <div class="text-xs text-muted mt-8">GA4フィルター設定済</div>
+    </div>
+    <div class="card">
+      <h4>バイラル係数</h4>
+      <div class="value small">未計測</div>
+      <div class="detail">目標: k > 1.0</div>
+      <div class="progress-bar"><div class="progress-fill amber" style="width:0%"></div></div>
+      <div class="text-xs text-muted mt-8">OGカード実装後に計測開始</div>
+    </div>
+    <div class="card">
+      <h4>月次キャッシュフロー</h4>
+      <div class="value small green">~¥1.5M</div>
+      <div class="detail">目標: ¥800K+</div>
+      <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+      <div class="text-xs text-muted mt-8">コンサル収入</div>
+    </div>
+  </div>
+
+  <div class="flex-row mt-24">
+    <div class="flex-1">
+      <h3 style="font-size:14px;">チーム & リソース</h3>
+      <table>
+        <tr><td style="color:#999;">チーム規模</td><td style="font-weight:600;">1名（CEO + 全実行）</td></tr>
+        <tr><td style="color:#999;">年間売上</td><td style="font-weight:600;">~¥30M（100%コンサル）</td></tr>
+        <tr><td style="color:#999;">固定費</td><td style="font-weight:600;">~¥0（フルリモート）</td></tr>
+        <tr><td style="color:#999;">外部資金</td><td style="font-weight:600;">なし</td></tr>
+        <tr><td style="color:#999;">技術基盤</td><td style="font-weight:600;">Lovable L4 + Supabase</td></tr>
+        <tr><td style="color:#999;">AI運用</td><td style="font-weight:600;">Claude Code（全セッション）</td></tr>
+      </table>
+    </div>
+    <div class="flex-1">
+      <h3 style="font-size:14px;">SNSチャネル実績（3/6時点）</h3>
+      <table>
+        <tr><th>媒体</th><th>IMP</th><th>CTR</th><th>状態</th></tr>
+        <tr><td>X (金曜)</td><td>12</td><td>8%</td><td><span class="tag tag-wip">改善中</span></td></tr>
+        <tr><td>LinkedIn (金曜)</td><td>16</td><td>—</td><td><span class="tag tag-wip">改善中</span></td></tr>
+      </table>
+      <div class="card mt-16" style="padding:12px;">
+        <h4 style="font-size:11px;">SNS投稿リズム</h4>
+        <div style="font-size:13px; color:#ccc; line-height:1.6;">
+          X: 月曜 22:00 JST (8am EST)<br>
+          LinkedIn: 月曜 23:00 JST (9am EST)<br>
+          <span style="color:#666;">土日に月水金3日分準備 → 自動投稿</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">3 / 9</div>
+</div>
+
+<!-- ============ SLIDE 4: Organization & Close The Loop ============ -->
+<div class="slide">
+  <h3>Slide 4</h3>
+  <h2>組織構成 & Close The Loop</h2>
+  <div class="subtitle">AIカンパニーとしてのプロジェクト運営体制</div>
+  <div class="divider"></div>
+
+  <div class="flex-row">
+    <div class="flex-1">
+      <h3 style="font-size:14px;">リソースマップ（スタッフ構成）</h3>
+
+      <!-- CEO -->
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="display:inline-block; background:rgba(236,72,153,0.1); border:2px solid #ec4899; border-radius:12px; padding:12px 28px;">
+          <div style="font-size:20px; margin-bottom:4px;">👨‍💼</div>
+          <div style="font-size:15px; font-weight:700; color:#ec4899;">夏本さん</div>
+          <div style="font-size:11px; color:#999;">CEO / 最終意思決定</div>
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="width:2px; height:20px; background:#555; margin:0 auto;"></div>
+      </div>
+
+      <!-- PM -->
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="display:inline-block; background:rgba(124,58,237,0.12); border:2px solid #7c3aed; border-radius:12px; padding:12px 28px; position:relative;">
+          <div style="position:absolute; top:-8px; right:-8px; background:#7c3aed; color:#fff; font-size:9px; font-weight:700; padding:2px 8px; border-radius:8px;">THIS SESSION</div>
+          <div style="font-size:20px; margin-bottom:4px;">🤖</div>
+          <div style="font-size:15px; font-weight:700; color:#a78bfa;">秋元さん: PM</div>
+          <div style="font-size:11px; color:#999;">VibeRush担当プロジェクトマネージャー</div>
+          <div style="font-size:10px; color:#666; margin-top:4px;">Claude Code — Project Management</div>
+        </div>
+      </div>
+
+      <!-- Connector -->
+      <div style="text-align:center; margin-bottom:16px;">
+        <div style="display:flex; justify-content:center; align-items:flex-start;">
+          <div style="width:2px; height:20px; background:#555;"></div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:0;">
+          <div style="width:120px; border-top:2px solid #555; border-left:2px solid #555; height:16px;"></div>
+          <div style="width:2px; height:16px; background:#555;"></div>
+          <div style="width:120px; border-top:2px solid #555; border-right:2px solid #555; height:16px;"></div>
+        </div>
+      </div>
+
+      <!-- 3 Staff members -->
+      <div class="grid-3" style="gap:12px;">
+        <div style="text-align:center; background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.25); border-radius:10px; padding:12px 8px;">
+          <div style="font-size:18px; margin-bottom:4px;">🤖</div>
+          <div style="font-size:12px; font-weight:700; color:#fbbf24;">秋元さん</div>
+          <div style="font-size:11px; color:#ccc; font-weight:600;">チャネル開拓<br>SNS運用担当</div>
+          <div style="font-size:10px; color:#666; margin-top:4px; border-top:1px solid rgba(255,255,255,0.05); padding-top:4px;">SNS運用セッション</div>
+        </div>
+        <div style="text-align:center; background:rgba(96,165,250,0.06); border:1px solid rgba(96,165,250,0.25); border-radius:10px; padding:12px 8px;">
+          <div style="font-size:18px; margin-bottom:4px;">🤖</div>
+          <div style="font-size:12px; font-weight:700; color:#60a5fa;">秋元さん</div>
+          <div style="font-size:11px; color:#ccc; font-weight:600;">プロダクト<br>開発担当</div>
+          <div style="font-size:10px; color:#666; margin-top:4px; border-top:1px solid rgba(255,255,255,0.05); padding-top:4px;">Implement Function</div>
+        </div>
+        <div style="text-align:center; background:rgba(16,185,129,0.06); border:1px solid rgba(16,185,129,0.25); border-radius:10px; padding:12px 8px;">
+          <div style="font-size:18px; margin-bottom:4px;">🤖</div>
+          <div style="font-size:12px; font-weight:700; color:#34d399;">秋元さん</div>
+          <div style="font-size:11px; color:#ccc; font-weight:600;">運用<br>Analytics担当</div>
+          <div style="font-size:10px; color:#666; margin-top:4px; border-top:1px solid rgba(255,255,255,0.05); padding-top:4px;">Analytics系タスク</div>
+        </div>
+      </div>
+
+      <div class="card mt-16" style="padding:12px; text-align:center;">
+        <div style="font-size:11px; color:#888;">全スタッフ = Claude Code セッション（セッションが違うだけで全員「秋元さん」）</div>
+        <div style="font-size:11px; color:#666; margin-top:4px;">準備中: <span style="color:#a78bfa;">Vyse（Webアプリ）</span>— AI知能管理の自社プロダクト</div>
+      </div>
+    </div>
+
+    <div class="flex-1">
+      <h3 style="font-size:14px;">Close The Loop サイクル</h3>
+      <div style="font-size:12px; color:#888; margin-bottom:16px;">毎週日曜午後開催 ｜ NGの場合別日確保</div>
+
+      <!-- CTL Flow -->
+      <div style="position:relative;">
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.2); border:2px solid #7c3aed; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#a78bfa; flex-shrink:0;">1</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+            <div style="font-size:13px; font-weight:600; color:#fff;">定例MTG</div>
+            <div style="font-size:10px; color:#888;">ブリーフィング・デブリーフィング・ネクストアクション決定</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.2); border:2px solid #7c3aed; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#a78bfa; flex-shrink:0;">2</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+            <div style="font-size:13px; font-weight:600; color:#fff;">スケジュールを立てる</div>
+            <div style="font-size:10px; color:#888;">翌週の各担当タスク整理</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.2); border:2px solid #7c3aed; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#a78bfa; flex-shrink:0;">3</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+            <div style="font-size:13px; font-weight:600; color:#fff;">進捗を把握する</div>
+            <div style="font-size:10px; color:#888;">SNS運用 / Pd開発 / Analytics から成果収集</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.2); border:2px solid #7c3aed; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#a78bfa; flex-shrink:0;">4</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+            <div style="font-size:13px; font-weight:600; color:#fff;">関係者に進捗を報告する</div>
+            <div style="font-size:10px; color:#888;">夏本さん（CEO）にサマリー報告</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.2); border:2px solid #7c3aed; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#a78bfa; flex-shrink:0;">5</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+            <div style="font-size:13px; font-weight:600; color:#fff;">次回MTGのプランを立てる</div>
+            <div style="font-size:10px; color:#888;">アジェンダ設計</div>
+          </div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:16px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(124,58,237,0.2); border:2px solid #7c3aed; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:#a78bfa; flex-shrink:0;">6</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:10px 14px;">
+            <div style="font-size:13px; font-weight:600; color:#fff;">MTGアジェンダ作成+通知</div>
+            <div style="font-size:10px; color:#888;">翌週のMTG準備完了</div>
+          </div>
+        </div>
+
+        <!-- Loop arrow -->
+        <div style="text-align:center; margin-bottom:12px;">
+          <div style="font-size:11px; color:#7c3aed; font-weight:600; letter-spacing:1px;">↻ REPEAT WEEKLY</div>
+        </div>
+      </div>
+
+      <!-- Sub-loop -->
+      <div class="card card-highlight" style="padding:14px;">
+        <div style="font-size:12px; color:#a78bfa; font-weight:600; margin-bottom:8px;">サブループ（月次 or 必要時）</div>
+        <div style="display:flex; gap:8px;">
+          <div style="flex:1; background:rgba(255,255,255,0.03); border-radius:6px; padding:8px; text-align:center;">
+            <div style="font-size:11px; font-weight:600; color:#ccc;">ゴールと<br>マイルストーン定義</div>
+          </div>
+          <div style="display:flex; align-items:center; color:#555;">→</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border-radius:6px; padding:8px; text-align:center;">
+            <div style="font-size:11px; font-weight:600; color:#ccc;">実際と照らし合わせ<br>成功分析</div>
+          </div>
+          <div style="display:flex; align-items:center; color:#555;">→</div>
+          <div style="flex:1; background:rgba(255,255,255,0.03); border-radius:6px; padding:8px; text-align:center;">
+            <div style="font-size:11px; font-weight:600; color:#ccc;">見通しを<br>立てる</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">4 / 9</div>
+</div>
+
+<!-- ============ SLIDE 5: 5 Pillars & Roadmap ============ -->
+<div class="slide">
+  <h3>Slide 5</h3>
+  <h2>5本柱戦略 & ロードマップ</h2>
+  <div class="subtitle">Layer 1 トラクション期（2026/3〜9）</div>
+  <div class="divider"></div>
+
+  <div class="flex-row">
+    <div class="flex-1">
+      <div class="pillar pillar-1">
+        <div class="pillar-title">❶ バイラルループ設計</div>
+        <div class="pillar-desc">SHIPカード自動生成・SNSシェアボタン・Shipped on VibeRushバッジ</div>
+        <div class="pillar-kpi">KPI: バイラル係数 k > 1.0（7月目標）</div>
+      </div>
+      <div class="pillar pillar-2">
+        <div class="pillar-title">❷ コミュニティシーディング</div>
+        <div class="pillar-desc">インフルエンサー50名招待・Build in Publicチャレンジ・Weekly Top Ships</div>
+        <div class="pillar-kpi">KPI: WAU > 1,000（6月目標）</div>
+      </div>
+      <div class="pillar pillar-3">
+        <div class="pillar-title">❸ ビルドツール統合</div>
+        <div class="pillar-desc">Lovable/Bolt直接SHIP連携（※1K+ SHIPs後に実装）</div>
+        <div class="pillar-kpi">KPI: SHIP量の50%+がツール経由（9月目標）</div>
+      </div>
+      <div class="pillar pillar-4">
+        <div class="pillar-title">❹ コンテンツ & PR</div>
+        <div class="pillar-desc">Product Huntローンチ（4月）・月次トレンドレポート・メディア露出</div>
+        <div class="pillar-kpi">KPI: メディア掲載3件+（6月目標）</div>
+      </div>
+      <div class="pillar pillar-5">
+        <div class="pillar-title">❺ キャッシュフロー</div>
+        <div class="pillar-desc">コンサル1件維持（¥800K/月上限）・80%+の時間をVibeRushに</div>
+        <div class="pillar-kpi">KPI: 月次キャッシュフロー ¥800K+維持</div>
+      </div>
+    </div>
+
+    <div class="flex-1">
+      <h3 style="font-size:14px;">月次 SHIP 目標</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-month active">3月</div>
+          <div class="timeline-dot active"></div>
+          <div class="timeline-ships">54</div>
+          <div class="timeline-label">基盤構築<br>戦略確定</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-month">4月</div>
+          <div class="timeline-dot future"></div>
+          <div class="timeline-ships">120+</div>
+          <div class="timeline-label">PH Launch<br>初期牽引</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-month">5月</div>
+          <div class="timeline-dot future"></div>
+          <div class="timeline-ships">300+</div>
+          <div class="timeline-label">バイラルMVP<br>レポート#1</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-month">6月</div>
+          <div class="timeline-dot future"></div>
+          <div class="timeline-ships">700+</div>
+          <div class="timeline-label">ツール統合<br>メディア</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-month">7月</div>
+          <div class="timeline-dot future"></div>
+          <div class="timeline-ships">1.5K+</div>
+          <div class="timeline-label">自律成長<br>Seed準備</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-month">8月</div>
+          <div class="timeline-dot future"></div>
+          <div class="timeline-ships">3.5K+</div>
+          <div class="timeline-label">k>1.0確認<br>資金調達</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-month">9月</div>
+          <div class="timeline-dot future"></div>
+          <div class="timeline-ships" style="color:#10b981;">10K</div>
+          <div class="timeline-label" style="color:#10b981; font-weight:600;">GOAL<br>Series A</div>
+        </div>
+      </div>
+
+      <div class="card mt-24" style="padding:16px;">
+        <h4>月次必要成長率</h4>
+        <div style="display:flex; align-items:baseline; gap:8px;">
+          <div class="value small amber">~126%</div>
+          <div class="detail">月次複利（毎月倍増ペース）</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px; margin-top:20px;">チャネル優先度</h3>
+      <table style="font-size:13px;">
+        <tr><th>Tier</th><th>チャネル</th><th>密度</th></tr>
+        <tr><td><span class="tag tag-p0">T1</span></td><td>Lovable/Bolt Discord</td><td>★★★</td></tr>
+        <tr><td><span class="tag tag-p0">T1</span></td><td>r/vibecoding</td><td>★★★</td></tr>
+        <tr><td><span class="tag tag-p0">T1</span></td><td>Product Hunt Forum</td><td>★★</td></tr>
+        <tr><td><span class="tag tag-p1">T2</span></td><td>TikTok / YouTube</td><td>★★</td></tr>
+        <tr><td><span class="tag tag-p2">T3</span></td><td>X / LinkedIn（維持）</td><td>★</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">5 / 9</div>
+</div>
+
+<!-- ============ SLIDE 5: Feature Priorities & Sprint Plan ============ -->
+<div class="slide">
+  <h3>Slide 6</h3>
+  <h2>機能実装ロードマップ & リソース配分</h2>
+  <div class="divider"></div>
+
+  <div class="flex-row">
+    <div class="flex-2">
+      <h3 style="font-size:14px;">実装優先度マトリクス</h3>
+      <table>
+        <tr>
+          <th>優先度</th>
+          <th>機能</th>
+          <th>目的</th>
+          <th>期限</th>
+          <th>状態</th>
+        </tr>
+        <tr>
+          <td><span class="tag tag-p0">P0</span></td>
+          <td style="font-weight:600; color:#fff;">SHIPカード（OG画像）自動生成</td>
+          <td>SNS拡散の骨格</td>
+          <td>3月末</td>
+          <td><span class="tag tag-wip">仕様確定</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-p0">P0</span></td>
+          <td style="font-weight:600; color:#fff;">SNSシェアボタン</td>
+          <td>SHIP後の摩擦ゼロ化</td>
+          <td>3月末</td>
+          <td><span class="tag tag-todo">未着手</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-p1">P1</span></td>
+          <td>"Shipped on VibeRush" バッジ</td>
+          <td>外部ブランド認知</td>
+          <td>4月中旬</td>
+          <td><span class="tag tag-todo">未着手</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-p1">P1</span></td>
+          <td>ユーザープロフィール強化</td>
+          <td>開発者アイデンティティ</td>
+          <td>4月末</td>
+          <td><span class="tag tag-todo">未着手</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-p2">P2</span></td>
+          <td>週次/月次ランキング</td>
+          <td>デイリーハビット形成</td>
+          <td>5月</td>
+          <td><span class="tag tag-todo">未着手</span></td>
+        </tr>
+        <tr>
+          <td><span class="tag tag-p2">P2</span></td>
+          <td>SHIP詳細ページ充実</td>
+          <td>プロダクト訴求力</td>
+          <td>5月</td>
+          <td><span class="tag tag-todo">未着手</span></td>
+        </tr>
+        <tr style="opacity:0.5;">
+          <td><span class="tag tag-todo">延期</span></td>
+          <td>ビルドツール統合</td>
+          <td>SHIP量の自動化</td>
+          <td>1K SHIP後</td>
+          <td><span class="tag tag-todo">保留</span></td>
+        </tr>
+      </table>
+
+      <h3 style="font-size:14px; margin-top:24px;">OG画像実装アーキテクチャ</h3>
+      <div class="card" style="padding:16px; font-size:13px; color:#ccc; line-height:1.6;">
+        <div style="font-family:monospace; font-size:12px; color:#a78bfa;">
+          SNSクローラー → /share/product/:id → Supabase Edge Function<br>
+          → 動的OGメタタグ生成 → HTMLリダイレクト → VibeRush SPA
+        </div>
+        <div class="mt-8" style="color:#888;">
+          ※ SPA構造のため、Edge Functionでメタタグを動的に生成し、クローラーにはプロダクト固有のカード情報を返す
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1">
+      <h3 style="font-size:14px;">時間配分（Layer 1期間）</h3>
+      <div class="card card-highlight" style="padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:13px; color:#ccc;">VibeRush開発</span>
+          <span style="font-size:15px; font-weight:700; color:#a78bfa;">70-80%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill purple" style="width:75%"></div></div>
+      </div>
+      <div class="card" style="padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:13px; color:#ccc;">コミュニティ運営</span>
+          <span style="font-size:15px; font-weight:700; color:#ec4899;">10%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill pink" style="width:10%"></div></div>
+      </div>
+      <div class="card" style="padding:16px; margin-bottom:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:13px; color:#ccc;">SNS & コンテンツ</span>
+          <span style="font-size:15px; font-weight:700; color:#f59e0b;">5%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill amber" style="width:5%"></div></div>
+      </div>
+      <div class="card" style="padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:13px; color:#ccc;">コンサルティング</span>
+          <span style="font-size:15px; font-weight:700; color:#10b981;">5-10%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill green" style="width:8%"></div></div>
+      </div>
+
+      <h3 style="font-size:14px; margin-top:24px;">予算概要</h3>
+      <div class="card" style="padding:16px;">
+        <table style="font-size:12px;">
+          <tr><td style="color:#999;">月次収入</td><td style="font-weight:600;">~¥1.5M</td></tr>
+          <tr><td style="color:#999;">固定費</td><td style="font-weight:600; color:#10b981;">~¥0</td></tr>
+          <tr><td style="color:#999;">Lovable L4</td><td style="font-weight:600;">$99/月</td></tr>
+          <tr><td style="color:#999;">Supabase</td><td style="font-weight:600;">Free〜$25/月</td></tr>
+          <tr><td style="color:#999;">AI API費用</td><td style="font-weight:600;">変動</td></tr>
+          <tr style="border-top:1px solid #333;"><td style="color:#f59e0b; font-weight:600;">投資可能額</td><td style="font-weight:700; color:#f59e0b;">~¥1.4M/月</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">6 / 9</div>
+</div>
+
+<!-- ============ SLIDE 6: Risks & Critical Path ============ -->
+<div class="slide">
+  <h3>Slide 7</h3>
+  <h2>リスク管理 & クリティカルパス</h2>
+  <div class="divider"></div>
+
+  <div class="flex-row">
+    <div class="flex-1">
+      <h3 style="font-size:14px;">リスクレジスター</h3>
+      <table style="font-size:13px;">
+        <tr><th>#</th><th>リスク</th><th>影響</th><th>確率</th><th>対策</th></tr>
+        <tr>
+          <td style="color:#666;">1</td>
+          <td style="color:#fff; font-weight:500;">バイブコーディング幻滅期突入</td>
+          <td><span style="color:#f87171;">高</span></td>
+          <td><span style="color:#fbbf24;">中</span></td>
+          <td style="font-size:11px;">品質キュレーション重視</td>
+        </tr>
+        <tr>
+          <td style="color:#666;">2</td>
+          <td style="color:#fff; font-weight:500;">Lovable/Cursor自前Discovery実装</td>
+          <td><span style="color:#f87171;">高</span></td>
+          <td><span style="color:#fbbf24;">中</span></td>
+          <td style="font-size:11px;">中立プラットフォーム化</td>
+        </tr>
+        <tr>
+          <td style="color:#666;">3</td>
+          <td style="color:#fff; font-weight:500;">1人体制の限界</td>
+          <td><span style="color:#f87171;">高</span></td>
+          <td><span style="color:#f87171;">高</span></td>
+          <td style="font-size:11px;">AI最大活用 + Q2フリーランサー</td>
+        </tr>
+        <tr>
+          <td style="color:#666;">4</td>
+          <td style="color:#fff; font-weight:500;">Product Huntローンチ不発</td>
+          <td><span style="color:#f87171;">高</span></td>
+          <td><span style="color:#fbbf24;">中</span></td>
+          <td style="font-size:11px;">事前50名インフルエンサー確保</td>
+        </tr>
+        <tr>
+          <td style="color:#666;">5</td>
+          <td style="color:#fff; font-weight:500;">AI市場冷却</td>
+          <td><span style="color:#f87171;">高</span></td>
+          <td><span style="color:#60a5fa;">低</span></td>
+          <td style="font-size:11px;">CAGR 38%の長期成長に依拠</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="flex-1">
+      <h3 style="font-size:14px;">クリティカルパス</h3>
+      <ul class="checklist">
+        <li class="done">戦略確定（3/5完了）</li>
+        <li class="done">OG画像技術仕様策定</li>
+        <li class="done">SNS自動投稿基盤構築</li>
+        <li class="done">GA4内部トラフィックフィルター設定</li>
+        <li class="wip">ビルドツールパートナーシップ（Lovable交渉中）</li>
+        <li class="wip">インフルエンサー50名リスト作成</li>
+        <li>Product Huntローンチ日確定（3/15まで）</li>
+        <li>SHIPカード + SNSボタン実装（3月末）</li>
+        <li>Product Huntローンチ（4月）</li>
+        <li>バイラルループMVP稼働（5月）</li>
+        <li>Series A投資家パイプライン構築（7月〜）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="mt-24">
+    <h3 style="font-size:14px;">9月ゴール判定基準（Layer 1成功ゲート）</h3>
+    <div class="grid-4" style="grid-template-columns: repeat(7, 1fr); gap:8px;">
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">SHIPs</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">10,000+</div>
+      </div>
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">MAU</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">50,000+</div>
+      </div>
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">k-factor</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">> 1.0</div>
+      </div>
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">ツール経由</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">50%+</div>
+      </div>
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">メディア</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">15件+</div>
+      </div>
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">投資家</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">5社+</div>
+      </div>
+      <div class="card" style="padding:10px; text-align:center;">
+        <div style="font-size:11px; color:#999;">P0機能</div>
+        <div style="font-size:16px; font-weight:700; color:#a78bfa;">稼働中</div>
+      </div>
+    </div>
+    <div style="font-size:12px; color:#666; margin-top:8px;">
+      7/7達成 → Layer 2へ ｜ 5/7達成 → 3ヶ月延長 ｜ &lt;5/7 → ピボット検討
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">7 / 9</div>
+</div>
+
+<!-- ============ SLIDE 7: Operating Rhythm & Next Actions ============ -->
+<div class="slide">
+  <h3>Slide 8</h3>
+  <h2>運用リズム & 今週のアクション</h2>
+  <div class="divider"></div>
+
+  <div class="flex-row">
+    <div class="flex-1">
+      <h3 style="font-size:14px;">週次オペレーション</h3>
+      <table style="font-size:13px;">
+        <tr><th>曜日</th><th>アクティビティ</th><th>担当</th></tr>
+        <tr>
+          <td style="font-weight:600; color:#a78bfa;">土・日</td>
+          <td>週次投稿3日分（月水金）原稿準備<br>分析レビュー（前週振り返り）</td>
+          <td>CEO + Claude</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600; color:#ec4899;">月</td>
+          <td>X投稿 22:00 / LI投稿 23:00<br>コミュニティエンゲージメント</td>
+          <td>自動 + CEO</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600; color:#ccc;">火〜木</td>
+          <td>プロダクト開発（P0/P1機能）<br>コミュニティ参加（Discord/Reddit）</td>
+          <td>CEO + Lovable</td>
+        </tr>
+        <tr>
+          <td style="font-weight:600; color:#f59e0b;">金</td>
+          <td>X投稿 / LI投稿（水曜も追加可能）<br>週次KPIスナップショット</td>
+          <td>自動 + CEO</td>
+        </tr>
+      </table>
+
+      <h3 style="font-size:14px; margin-top:24px;">月次レビューサイクル</h3>
+      <div class="card" style="padding:16px; font-size:13px; color:#ccc; line-height:1.8;">
+        <strong style="color:#a78bfa;">月初（第1週）:</strong> 前月KPI確認・目標調整<br>
+        <strong style="color:#a78bfa;">月中（第2週）:</strong> 進捗中間チェック・ブロッカー解消<br>
+        <strong style="color:#a78bfa;">月末（第4週）:</strong> 月次レポート作成・翌月計画
+      </div>
+
+      <h3 style="font-size:14px; margin-top:24px;">ClaudeCodeセッション構成</h3>
+      <table style="font-size:12px;">
+        <tr><th>セッション</th><th>役割</th></tr>
+        <tr><td style="color:#a78bfa;">SNS運用（週次）</td><td>投稿作成・スケジュール</td></tr>
+        <tr><td style="color:#ec4899;">Implement Function</td><td>Lovableプロンプト・テスト</td></tr>
+        <tr><td style="color:#f59e0b;">Corporate Strategy</td><td>戦略レビュー</td></tr>
+        <tr><td style="color:#10b981; font-weight:600;">Project Management ← NEW</td><td>事業部統合管理</td></tr>
+      </table>
+    </div>
+
+    <div class="flex-1">
+      <h3 style="font-size:14px;">今週（3/8〜3/14）のアクション</h3>
+      <div class="card card-highlight" style="padding:16px; margin-bottom:12px;">
+        <div style="font-size:13px; color:#ec4899; font-weight:600; margin-bottom:6px;">最優先</div>
+        <ul class="checklist">
+          <li>週次SNS投稿（月曜）準備・投稿</li>
+          <li>P0: SHIPカード（OG画像）実装開始</li>
+          <li>Product Huntローンチ日程確定</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:16px; margin-bottom:12px;">
+        <div style="font-size:13px; color:#f59e0b; font-weight:600; margin-bottom:6px;">重要</div>
+        <ul class="checklist">
+          <li>インフルエンサーリスト作成開始</li>
+          <li>Reddit/Discord コミュニティ参加開始</li>
+          <li>GitHub Actions移行（cron依存解消）</li>
+        </ul>
+      </div>
+      <div class="card" style="padding:16px;">
+        <div style="font-size:13px; color:#60a5fa; font-weight:600; margin-bottom:6px;">その他</div>
+        <ul class="checklist">
+          <li>SNS Analytics定期レビュー設計</li>
+          <li>月次KPIトラッキングシート作成</li>
+        </ul>
+      </div>
+
+      <div class="card card-warn mt-24" style="padding:16px;">
+        <h4 style="color:#f59e0b;">3月の最重要マイルストーン</h4>
+        <div style="font-size:15px; font-weight:700; color:#fff; margin:8px 0;">
+          SHIPカード + SNSボタン = 3/31完成
+        </div>
+        <div style="font-size:12px; color:#888; line-height:1.5;">
+          4月Product Huntローンチの前提条件。<br>
+          これなしではバイラルループが機能しない。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">8 / 9</div>
+</div>
+
+<!-- ============ SLIDE 9: 第1回 Close The Loop アジェンダ ============ -->
+<div class="slide">
+  <div style="display:flex; gap:8px; align-items:center; margin-bottom:4px;">
+    <h3 style="margin:0;">Slide 9</h3>
+    <span style="background:#7c3aed; color:#fff; font-size:10px; font-weight:700; padding:3px 10px; border-radius:8px;">LIVE</span>
+  </div>
+  <h2>第1回 Close The Loop</h2>
+  <div class="subtitle">2026年3月8日（日）— キックオフMTG</div>
+  <div class="divider"></div>
+
+  <div class="flex-row">
+    <div class="flex-1">
+      <h3 style="font-size:14px;">アジェンダ</h3>
+
+      <div style="margin-bottom:16px;">
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+          <div style="background:rgba(124,58,237,0.15); color:#a78bfa; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; flex-shrink:0; min-width:60px; text-align:center;">5 min</div>
+          <div>
+            <div style="font-size:14px; font-weight:600; color:#fff;">1. オープニング</div>
+            <div style="font-size:12px; color:#888; margin-top:2px;">PM体制の確認・Close The Loopサイクルの共有</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+          <div style="background:rgba(236,72,153,0.15); color:#ec4899; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; flex-shrink:0; min-width:60px; text-align:center;">10 min</div>
+          <div>
+            <div style="font-size:14px; font-weight:600; color:#fff;">2. 前週振り返り（ブリーフィング）</div>
+            <div style="font-size:12px; color:#888; margin-top:2px;">
+              3/1〜3/7の成果一覧<br>
+              <span style="color:#fbbf24;">SNS運用:</span> 水曜テスト投稿 + 金曜投稿（バグ対応含む）<br>
+              <span style="color:#60a5fa;">Pd開発:</span> SNS Analyticsダッシュボード実装・デプロイ<br>
+              <span style="color:#34d399;">Analytics:</span> GA4フィルター設定完了・UTMルール確立
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+          <div style="background:rgba(245,158,11,0.15); color:#f59e0b; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; flex-shrink:0; min-width:60px; text-align:center;">10 min</div>
+          <div>
+            <div style="font-size:14px; font-weight:600; color:#fff;">3. KPIチェック & 課題</div>
+            <div style="font-size:12px; color:#888; margin-top:2px;">
+              SHIP数: 54 → 目標10K（ギャップ確認）<br>
+              SNS IMP: X=12 / LI=16（低水準 → 原因と対策）<br>
+              ブロッカー: LinkedIn投稿バグ<span style="color:#10b981;">→ 解決済み</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+          <div style="background:rgba(16,185,129,0.15); color:#10b981; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; flex-shrink:0; min-width:60px; text-align:center;">15 min</div>
+          <div>
+            <div style="font-size:14px; font-weight:600; color:#fff;">4. 来週（3/8〜3/14）計画</div>
+            <div style="font-size:12px; color:#888; margin-top:2px;">
+              各担当への指示・タスク割り振り<br>
+              <span style="color:#fbbf24;">SNS運用:</span> 月曜投稿準備・コンテンツ企画<br>
+              <span style="color:#60a5fa;">Pd開発:</span> P0 OGカード実装着手<br>
+              <span style="color:#34d399;">Analytics:</span> 週次レポート自動化検討<br>
+              <span style="color:#ec4899;">PM:</span> PH Launch日程確定・インフルエンサーリスト
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="background:rgba(96,165,250,0.15); color:#60a5fa; font-size:11px; font-weight:700; padding:4px 10px; border-radius:6px; flex-shrink:0; min-width:60px; text-align:center;">5 min</div>
+          <div>
+            <div style="font-size:14px; font-weight:600; color:#fff;">5. クロージング</div>
+            <div style="font-size:12px; color:#888; margin-top:2px;">
+              次回MTG: 3/15（日）午後<br>
+              宿題確認・コミットメント
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex-1">
+      <h3 style="font-size:14px;">前週ハイライト（3/1〜3/7）</h3>
+      <div class="grid-2" style="gap:10px; margin-bottom:16px;">
+        <div class="card card-success" style="padding:12px;">
+          <div style="font-size:11px; color:#34d399; font-weight:600;">DONE</div>
+          <div style="font-size:13px; color:#fff; font-weight:500; margin-top:4px;">戦略v1.0確定</div>
+        </div>
+        <div class="card card-success" style="padding:12px;">
+          <div style="font-size:11px; color:#34d399; font-weight:600;">DONE</div>
+          <div style="font-size:13px; color:#fff; font-weight:500; margin-top:4px;">X API + 自動投稿</div>
+        </div>
+        <div class="card card-success" style="padding:12px;">
+          <div style="font-size:11px; color:#34d399; font-weight:600;">DONE</div>
+          <div style="font-size:13px; color:#fff; font-weight:500; margin-top:4px;">Analytics Dashboard</div>
+        </div>
+        <div class="card card-success" style="padding:12px;">
+          <div style="font-size:11px; color:#34d399; font-weight:600;">DONE</div>
+          <div style="font-size:13px; color:#fff; font-weight:500; margin-top:4px;">GA4フィルター完成</div>
+        </div>
+        <div class="card card-success" style="padding:12px;">
+          <div style="font-size:11px; color:#34d399; font-weight:600;">DONE</div>
+          <div style="font-size:13px; color:#fff; font-weight:500; margin-top:4px;">LIバグ根本修正</div>
+        </div>
+        <div class="card card-warn" style="padding:12px;">
+          <div style="font-size:11px; color:#f59e0b; font-weight:600;">ISSUE</div>
+          <div style="font-size:13px; color:#fff; font-weight:500; margin-top:4px;">SNS IMP低水準</div>
+        </div>
+      </div>
+
+      <h3 style="font-size:14px;">来週の最優先タスク（担当別）</h3>
+      <table style="font-size:12px;">
+        <tr><th>担当</th><th>タスク</th><th>期限</th></tr>
+        <tr>
+          <td><span style="color:#fbbf24;">SNS運用</span></td>
+          <td>月曜投稿（X 22:00 / LI 23:00）</td>
+          <td>3/9</td>
+        </tr>
+        <tr>
+          <td><span style="color:#60a5fa;">Pd開発</span></td>
+          <td>OGカード Edge Function 実装開始</td>
+          <td>3/14</td>
+        </tr>
+        <tr>
+          <td><span style="color:#34d399;">Analytics</span></td>
+          <td>前週SNSデータ収集・整理</td>
+          <td>3/10</td>
+        </tr>
+        <tr>
+          <td><span style="color:#a78bfa;">PM</span></td>
+          <td>PH Launch日程確定</td>
+          <td>3/15</td>
+        </tr>
+        <tr>
+          <td><span style="color:#a78bfa;">PM</span></td>
+          <td>インフルエンサー50名リスト作成開始</td>
+          <td>3/14</td>
+        </tr>
+      </table>
+
+      <div class="card card-highlight mt-16" style="padding:14px; text-align:center;">
+        <div style="font-size:11px; color:#7c3aed; font-weight:600; letter-spacing:1px;">NEXT CLOSE THE LOOP</div>
+        <div style="font-size:20px; font-weight:800; color:#fff; margin:6px 0;">2026年3月15日（日）午後</div>
+        <div style="font-size:12px; color:#888;">同サイクルで進捗確認 → 来週計画 → アジェンダ通知</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="logo-tag">VibeRush — Confidential</div>
+  <div class="slide-number">9 / 9</div>
+</div>
+
+</body>
+</html>
