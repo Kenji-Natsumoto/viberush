@@ -9,14 +9,18 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// WASM initialization — runs once per cold start
+// WASM + font initialization — runs once per cold start
 let wasmReady = false;
+let fontBytes: Uint8Array | null = null;
+
 async function ensureWasm() {
   if (!wasmReady) {
-    const resp = await fetch(
-      "https://cdn.jsdelivr.net/npm/@resvg/resvg-wasm@2.6.2/index_bg.wasm"
-    );
-    await initWasm(resp);
+    const [wasmResp, fontResp] = await Promise.all([
+      fetch("https://cdn.jsdelivr.net/npm/@resvg/resvg-wasm@2.6.2/index_bg.wasm"),
+      fetch("https://fonts.gstatic.com/s/inter/v13/UcC73FwrK3iLTeHuS_fvQtMwCp50KnMa1ZL7.woff2"),
+    ]);
+    await initWasm(wasmResp);
+    fontBytes = new Uint8Array(await fontResp.arrayBuffer());
     wasmReady = true;
   }
 }
@@ -63,12 +67,11 @@ function buildSvg(p: ProductRow): string {
     const w = Math.max(label.length * 11 + 24, 80);
     badges += `
     <rect x="${bx}" y="430" width="${w}" height="36" rx="8" fill="#1e1e2e" stroke="#6366f1" stroke-width="1.5"/>
-    <text x="${bx + w / 2}" y="454" font-family="sans-serif" font-size="17" fill="#a5b4fc" text-anchor="middle">${label}</text>`;
+    <text x="${bx + w / 2}" y="454" font-family="Inter, sans-serif" font-size="17" fill="#a5b4fc" text-anchor="middle">${label}</text>`;
     bx += w + 14;
   }
 
-  // Time-to-build badge
-  const VibeText = `&#x26A1; ${vibeScore} Vibes`;
+  const VibeText = `\u26A1 ${vibeScore} Vibes`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <defs>
@@ -88,18 +91,18 @@ function buildSvg(p: ProductRow): string {
   <rect x="0" y="0" width="1200" height="84" fill="#6366f108"/>
 
   <!-- Brand -->
-  <text x="50" y="56" font-family="sans-serif" font-size="30" font-weight="bold" fill="#6366f1">VibeRush</text>
-  <text x="192" y="56" font-family="sans-serif" font-size="20" fill="#52525b">.io</text>
-  <text x="1150" y="56" font-family="sans-serif" font-size="17" fill="#3f3f46" text-anchor="end">Your AI app deserves to be seen.</text>
+  <text x="50" y="56" font-family="Inter, sans-serif" font-size="30" font-weight="bold" fill="#6366f1">VibeRush</text>
+  <text x="192" y="56" font-family="Inter, sans-serif" font-size="20" fill="#52525b">.io</text>
+  <text x="1150" y="56" font-family="Inter, sans-serif" font-size="17" fill="#3f3f46" text-anchor="end">Your AI app deserves to be seen.</text>
 
   <!-- Header divider -->
   <rect x="30" y="84" width="1140" height="1" fill="#27272a"/>
 
   <!-- Product name -->
-  <text x="50" y="225" font-family="sans-serif" font-size="66" font-weight="bold" fill="#ffffff">${name}</text>
+  <text x="50" y="225" font-family="Inter, sans-serif" font-size="66" font-weight="bold" fill="#ffffff">${name}</text>
 
   <!-- Tagline -->
-  <text x="50" y="292" font-family="sans-serif" font-size="28" fill="#a1a1aa">${tagline}</text>
+  <text x="50" y="292" font-family="Inter, sans-serif" font-size="28" fill="#a1a1aa">${tagline}</text>
 
   <!-- Section divider -->
   <rect x="30" y="402" width="1140" height="1" fill="#27272a"/>
@@ -108,16 +111,16 @@ function buildSvg(p: ProductRow): string {
   ${badges}
 
   <!-- Vibe score -->
-  <text x="1150" y="462" font-family="sans-serif" font-size="26" fill="#facc15" text-anchor="end">${VibeText}</text>
+  <text x="1150" y="462" font-family="Inter, sans-serif" font-size="26" fill="#facc15" text-anchor="end">${VibeText}</text>
 
   <!-- Footer divider -->
   <rect x="30" y="572" width="1140" height="1" fill="#27272a"/>
 
   <!-- Footer -->
-  <text x="50" y="610" font-family="sans-serif" font-size="19" fill="#71717a">Shipped on VibeRush</text>
-  <text x="280" y="610" font-family="sans-serif" font-size="19" fill="#3f3f46"> · </text>
-  <text x="305" y="610" font-family="sans-serif" font-size="19" fill="#71717a">by ${maker}</text>
-  <text x="1150" y="610" font-family="sans-serif" font-size="19" fill="#71717a" text-anchor="end">${date}</text>
+  <text x="50" y="610" font-family="Inter, sans-serif" font-size="19" fill="#71717a">Shipped on VibeRush</text>
+  <text x="280" y="610" font-family="Inter, sans-serif" font-size="19" fill="#3f3f46"> · </text>
+  <text x="305" y="610" font-family="Inter, sans-serif" font-size="19" fill="#71717a">by ${maker}</text>
+  <text x="1150" y="610" font-family="Inter, sans-serif" font-size="19" fill="#71717a" text-anchor="end">${date}</text>
 </svg>`;
 }
 
@@ -125,8 +128,8 @@ function fallbackSvg(): string {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630">
   <rect width="1200" height="630" fill="#0d0d1a"/>
   <rect x="0" y="0" width="8" height="630" fill="#6366f1"/>
-  <text x="600" y="300" font-family="sans-serif" font-size="64" font-weight="bold" fill="#6366f1" text-anchor="middle">VibeRush</text>
-  <text x="600" y="372" font-family="sans-serif" font-size="26" fill="#71717a" text-anchor="middle">Your AI app deserves to be seen.</text>
+  <text x="600" y="300" font-family="Inter, sans-serif" font-size="64" font-weight="bold" fill="#6366f1" text-anchor="middle">VibeRush</text>
+  <text x="600" y="372" font-family="Inter, sans-serif" font-size="26" fill="#71717a" text-anchor="middle">Your AI app deserves to be seen.</text>
 </svg>`;
 }
 
@@ -146,8 +149,12 @@ Deno.serve(async (req: Request) => {
       ? lastPart
       : url.searchParams.get("id");
 
+    const fontOpts = fontBytes
+      ? { loadSystemFonts: false, fontBuffers: [fontBytes] }
+      : { loadSystemFonts: false };
+
     if (!id) {
-      const resvg = new Resvg(fallbackSvg(), { font: { loadSystemFonts: true } });
+      const resvg = new Resvg(fallbackSvg(), { font: fontOpts });
       return new Response(resvg.render().asPng(), {
         headers: { ...CORS_HEADERS, "Content-Type": "image/png", "Cache-Control": "public, max-age=3600" },
       });
@@ -162,7 +169,7 @@ Deno.serve(async (req: Request) => {
       .maybeSingle();
 
     const svg = (!error && product) ? buildSvg(product) : fallbackSvg();
-    const resvg = new Resvg(svg, { font: { loadSystemFonts: true } });
+    const resvg = new Resvg(svg, { font: fontOpts });
     const png = resvg.render().asPng();
 
     return new Response(png, {
