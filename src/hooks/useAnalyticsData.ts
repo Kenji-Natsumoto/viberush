@@ -38,10 +38,9 @@ function getStartDate(period: Period): Date {
     return d;
   }
   if (period === 'week') {
+    // 土曜23:59リセット = 直近の日曜00:00スタート
     const d = new Date(now);
-    const day = d.getDay();
-    const diff = day === 0 ? -6 : 1 - day; // 月曜始まり
-    d.setDate(d.getDate() + diff);
+    d.setDate(d.getDate() - d.getDay()); // 0=Sun → 日曜へ巻き戻し
     d.setHours(0, 0, 0, 0);
     return d;
   }
@@ -68,7 +67,7 @@ export function useVibeAnalytics(period: Period) {
       if (error) throw error;
       return data as VibeClickRow[];
     },
-    refetchInterval: 5 * 60 * 1000, // 5分ごと自動更新
+    refetchInterval: 60 * 1000, // 1分ごとリアルタイム更新 // 5分ごと自動更新
   });
 }
 
@@ -93,7 +92,7 @@ export function useDailyVibeAnalytics() {
       if (error) throw error;
       return data as VibeClickRow[];
     },
-    refetchInterval: 5 * 60 * 1000,
+    refetchInterval: 60 * 1000, // 1分ごとリアルタイム更新
   });
 }
 
@@ -115,7 +114,7 @@ export function useAllVibeClicks(period: Period) {
       if (error) throw error;
       return data as VibeClickRow[];
     },
-    refetchInterval: 5 * 60 * 1000,
+    refetchInterval: 60 * 1000, // 1分ごとリアルタイム更新
   });
 }
 
@@ -139,7 +138,7 @@ export function useAllDailyVibeClicks() {
       if (error) throw error;
       return data as VibeClickRow[];
     },
-    refetchInterval: 5 * 60 * 1000,
+    refetchInterval: 60 * 1000, // 1分ごとリアルタイム更新
   });
 }
 
@@ -186,7 +185,22 @@ export function aggregateByDate(
     .sort((a, b) => b.date.localeCompare(a.date));
 }
 
-/** プロダクト別 内訳（Vibe数上位10件） */
+/** プロダクト別 内訳 全ソース（Top Vibed用、上位N件） */
+export function aggregateAllByProduct(
+  clicks: VibeClickRow[],
+  limit = 3
+): { product_id: string; count: number }[] {
+  const map: Record<string, number> = {};
+  for (const click of clicks) {
+    map[click.product_id] = (map[click.product_id] || 0) + 1;
+  }
+  return Object.entries(map)
+    .map(([product_id, count]) => ({ product_id, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
+}
+
+/** プロダクト別 内訳（SNS流入 Vibe数上位10件） */
 export function aggregateByProduct(clicks: VibeClickRow[]): ProductBreakdown[] {
   const map: Record<string, { twitter: number; linkedin: number }> = {};
 

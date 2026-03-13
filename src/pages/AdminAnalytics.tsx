@@ -27,6 +27,7 @@ import {
   aggregateSummary,
   aggregateByDate,
   aggregateByProduct,
+  aggregateAllByProduct,
   type Period,
 } from "@/hooks/useAnalyticsData";
 
@@ -116,10 +117,12 @@ export default function AdminAnalytics() {
   const organicTotal = allTotal - summary.total;
   const daily = aggregateByDate(dailyClicks, allDailyClicks);
   const topProducts = aggregateByProduct(clicks);
+  const topVibed = aggregateAllByProduct(allClicks, 3); // 全ソース上位3
 
-  const { data: productNames = {} } = useProductNames(
-    topProducts.map((p) => p.product_id)
-  );
+  const { data: productNames = {} } = useProductNames([
+    ...topProducts.map((p) => p.product_id),
+    ...topVibed.map((p) => p.product_id),
+  ]);
 
   if (!authLoading && (!user || !isAdmin)) {
     return <Navigate to="/auth" replace />;
@@ -232,6 +235,70 @@ export default function AdminAnalytics() {
             color="text-primary"
           />
         </div>
+
+        {/* ── Top Vibed ── */}
+        <Card className="border border-orange-500/30 bg-orange-500/5 mb-8">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm font-medium flex items-center gap-2">
+              🏆 Top Vibed プロダクト
+              <Badge variant="outline" className="text-xs ml-1 font-normal border-orange-500/40 text-orange-400">
+                {periodLabel} · 全ソース
+              </Badge>
+              <span className="ml-auto text-xs text-muted-foreground font-normal">
+                毎週土曜 23:59 リセット
+              </span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {allLoading ? (
+              <div className="space-y-2.5">
+                {[1, 2, 3].map((i) => (
+                  <Skeleton key={i} className="h-10 w-full" />
+                ))}
+              </div>
+            ) : topVibed.length === 0 ? (
+              <p className="text-sm text-muted-foreground text-center py-6">
+                {periodLabel}の Vibe データがまだありません
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {topVibed.map((row, i) => {
+                  const medals = ["🥇", "🥈", "🥉"];
+                  const barWidth = topVibed[0].count > 0
+                    ? Math.round((row.count / topVibed[0].count) * 100)
+                    : 0;
+                  return (
+                    <div key={row.product_id} className="flex items-center gap-3">
+                      <span className="text-lg w-6 text-center shrink-0">
+                        {medals[i] ?? `${i + 1}`}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <Link
+                          to={`/product/${row.product_id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm font-medium text-foreground hover:underline underline-offset-2 truncate block"
+                        >
+                          {productNames[row.product_id] || row.product_id.slice(0, 8) + "…"}
+                        </Link>
+                        <div className="mt-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-orange-400 rounded-full transition-all duration-500"
+                            style={{ width: `${barWidth}%` }}
+                          />
+                        </div>
+                      </div>
+                      <span className="text-lg font-bold text-orange-400 tabular-nums shrink-0">
+                        {row.count.toLocaleString()}
+                      </span>
+                      <span className="text-xs text-muted-foreground shrink-0">vibes</span>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* ── 直近7日 トレンドテーブル ── */}
         <Card className="border border-border mb-8">
