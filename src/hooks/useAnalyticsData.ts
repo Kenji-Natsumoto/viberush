@@ -19,7 +19,8 @@ export interface DailyBreakdown {
   date: string;
   twitter: number;
   linkedin: number;
-  total: number;
+  total: number;        // SNS流入合計
+  allTotal: number;     // 全ソース合計（organic含む）
 }
 
 export interface ProductBreakdown {
@@ -72,7 +73,7 @@ export function useVibeAnalytics(period: Period) {
 }
 
 /**
- * 直近7日間の日別データを取得（トレンドグラフ用）
+ * 直近7日間の日別データを取得（SNS流入のみ、トレンドグラフ用）
  */
 export function useDailyVibeAnalytics() {
   return useQuery({
@@ -96,6 +97,52 @@ export function useDailyVibeAnalytics() {
   });
 }
 
+/**
+ * 指定期間の全Vibeクリックを取得（ソース問わず — organic含む）
+ */
+export function useAllVibeClicks(period: Period) {
+  return useQuery({
+    queryKey: ['vibe-all-clicks', period],
+    queryFn: async () => {
+      const startDate = getStartDate(period);
+
+      const { data, error } = await supabase
+        .from('vibe_clicks')
+        .select('source, created_at, product_id')
+        .gte('created_at', startDate.toISOString())
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return data as VibeClickRow[];
+    },
+    refetchInterval: 5 * 60 * 1000,
+  });
+}
+
+/**
+ * 直近7日間の全Vibeクリックを取得（ソース問わず）
+ */
+export function useAllDailyVibeClicks() {
+  return useQuery({
+    queryKey: ['vibe-all-daily'],
+    queryFn: async () => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 6);
+      startDate.setHours(0, 0, 0, 0);
+
+      const { data, error } = await supabase
+        .from('vibe_clicks')
+        .select('source, created_at, product_id')
+        .gte('created_at', startDate.toISOString())
+        .order('created_at', { ascending: true });
+
+      if (error) throw error;
+      return data as VibeClickRow[];
+    },
+    refetchInterval: 5 * 60 * 1000,
+  });
+}
+
 // ── 集計ヘルパー ─────────────────────────────────────
 
 /** ソース別 合計 */
@@ -105,22 +152,36 @@ export function aggregateSummary(clicks: VibeClickRow[]): SourceSummary {
   return { twitter, linkedin, total: twitter + linkedin };
 }
 
-/** 日別 内訳（新しい日順） */
-export function aggregateByDate(clicks: VibeClickRow[]): DailyBreakdown[] {
-  const map: Record<string, { twitter: number; linkedin: number }> = {};
+/** 日別 内訳（SNS流入 + allTotal付き、新しい日順）
+ *  snsClicks: SNS流入のみ（twitter/linkedin）
+ *  allClicks:  全ソース（organic含む）
+ */
+export function aggregateByDate(
+  snsClicks: VibeClickRow[],
+  allClicks: VibeClickRow[] = []
+): DailyBreakdown[] {
+  const map: Record<string, { twitter: number; linkedin: number; allTotal: number }> = {};
 
-  for (const click of clicks) {
-    const date = click.created_at.slice(0, 10); // YYYY-MM-DD
-    if (!map[date]) map[date] = { twitter: 0, linkedin: 0 };
+  for (const click of snsClicks) {
+    const date = click.created_at.slice(0, 10);
+    if (!map[date]) map[date] = { twitter: 0, linkedin: 0, allTotal: 0 };
     if (click.source === 'twitter') map[date].twitter++;
     if (click.source === 'linkedin') map[date].linkedin++;
+  }
+
+  for (const click of allClicks) {
+    const date = click.created_at.slice(0, 10);
+    if (!map[date]) map[date] = { twitter: 0, linkedin: 0, allTotal: 0 };
+    map[date].allTotal++;
   }
 
   return Object.entries(map)
     .map(([date, counts]) => ({
       date,
-      ...counts,
+      twitter: counts.twitter,
+      linkedin: counts.linkedin,
       total: counts.twitter + counts.linkedin,
+      allTotal: counts.allTotal,
     }))
     .sort((a, b) => b.date.localeCompare(a.date));
 }

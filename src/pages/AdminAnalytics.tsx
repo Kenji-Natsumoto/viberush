@@ -22,6 +22,8 @@ import { supabase } from "@/lib/supabase";
 import {
   useVibeAnalytics,
   useDailyVibeAnalytics,
+  useAllVibeClicks,
+  useAllDailyVibeClicks,
   aggregateSummary,
   aggregateByDate,
   aggregateByProduct,
@@ -106,9 +108,13 @@ export default function AdminAnalytics() {
   } = useVibeAnalytics(period);
 
   const { data: dailyClicks = [] } = useDailyVibeAnalytics();
+  const { data: allClicks = [], isLoading: allLoading } = useAllVibeClicks(period);
+  const { data: allDailyClicks = [] } = useAllDailyVibeClicks();
 
   const summary = aggregateSummary(clicks);
-  const daily = aggregateByDate(dailyClicks);
+  const allTotal = allClicks.length;
+  const organicTotal = allTotal - summary.total;
+  const daily = aggregateByDate(dailyClicks, allDailyClicks);
   const topProducts = aggregateByProduct(clicks);
 
   const { data: productNames = {} } = useProductNames(
@@ -189,6 +195,23 @@ export default function AdminAnalytics() {
         </Tabs>
 
         {/* ── Summary Cards ── */}
+        {/* 行1: 全体Vibe集計 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <SummaryCard
+            label="🔥 Total Vibes（全ソース）"
+            value={allTotal}
+            isLoading={allLoading}
+            color="text-orange-400"
+            highlight
+          />
+          <SummaryCard
+            label="🌱 Organic Vibes（SNS非経由）"
+            value={organicTotal < 0 ? 0 : organicTotal}
+            isLoading={allLoading}
+            color="text-emerald-400"
+          />
+        </div>
+        {/* 行2: SNS流入内訳 */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
           <SummaryCard
             label="🐦 X (Twitter) Vibes"
@@ -207,7 +230,6 @@ export default function AdminAnalytics() {
             value={summary.total}
             isLoading={isLoading}
             color="text-primary"
-            highlight
           />
         </div>
 
@@ -236,7 +258,10 @@ export default function AdminAnalytics() {
                       <th className="pb-2.5 pr-6 font-medium text-blue-400">
                         💼 LinkedIn
                       </th>
-                      <th className="pb-2.5 font-medium">合計</th>
+                      <th className="pb-2.5 pr-6 font-medium">SNS合計</th>
+                      <th className="pb-2.5 font-medium text-orange-400">
+                        🔥 全件
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -266,9 +291,14 @@ export default function AdminAnalytics() {
                             <span className="text-muted-foreground/40">—</span>
                           )}
                         </td>
-                        <td className="py-3">
+                        <td className="py-3 pr-6">
                           <span className="font-bold text-foreground">
                             {row.total}
+                          </span>
+                        </td>
+                        <td className="py-3">
+                          <span className="font-bold text-orange-400">
+                            {row.allTotal}
                           </span>
                         </td>
                       </tr>

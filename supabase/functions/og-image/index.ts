@@ -3,6 +3,7 @@ import { initWasm, Resvg } from "npm:@resvg/resvg-wasm@2.6.2";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
 const SUPABASE_SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+const OG_BUCKET = "og-images";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -139,8 +140,6 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    await ensureWasm();
-
     const url = new URL(req.url);
     // Support /og-image/{id} path OR ?id= query param
     const pathParts = url.pathname.split("/").filter(Boolean);
@@ -148,6 +147,28 @@ Deno.serve(async (req: Request) => {
     const id = (lastPart && lastPart !== "og-image")
       ? lastPart
       : url.searchParams.get("id");
+
+    // Fast path: serve from Storage cache (no WASM cold start needed)
+    if (id) {
+      const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+      const { data: cached, error: cacheErr } = await supabase.storage
+        .from(OG_BUCKET)
+        .download(`${id}.png`);
+
+      if (!cacheErr && cached) {
+        const bytes = new Uint8Array(await cached.arrayBuffer());
+        return new Response(bytes, {
+          headers: {
+            ...CORS_HEADERS,
+            "Content-Type": "image/png",
+            "Cache-Control": "public, max-age=86400, s-maxage=86400",
+          },
+        });
+      }
+    }
+
+    // Cache miss — generate with WASM
+    await ensureWasm();
 
     const fontOpts = fontBytes
       ? { loadSystemFonts: false, fontBuffers: [fontBytes] }
@@ -171,6 +192,18 @@ Deno.serve(async (req: Request) => {
     const svg = (!error && product) ? buildSvg(product) : fallbackSvg();
     const resvg = new Resvg(svg, { font: fontOpts });
     const png = resvg.render().asPng();
+
+    // Store in Storage for future requests — fire-and-forget
+    if (!error && product) {
+      createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY).storage
+        .from(OG_BUCKET)
+        .upload(`${id}.png`, png, {
+          contentType: "image/png",
+          cacheControl: "86400",
+          upsert: true,
+        })
+        .catch(() => {});
+    }
 
     return new Response(png, {
       headers: {
