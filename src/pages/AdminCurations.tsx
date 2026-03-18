@@ -56,8 +56,9 @@ function ProductCurationsTab() {
       await upsert.mutateAsync({ product_id: editingId, content_md: draft, video_url: videoUrl || undefined });
       toast({ title: 'Curation saved ✓' });
       setEditingId(null);
-    } catch (e) {
-      toast({ title: 'Error', description: String(e), variant: 'destructive' });
+    } catch (e: unknown) {
+      const msg = (e as { message?: string })?.message ?? JSON.stringify(e);
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     }
   };
 
@@ -67,8 +68,9 @@ function ProductCurationsTab() {
       await del.mutateAsync(id);
       toast({ title: 'Deleted' });
       setEditingId(null);
-    } catch (e) {
-      toast({ title: 'Error', description: String(e), variant: 'destructive' });
+    } catch (e: unknown) {
+      const msg = (e as { message?: string })?.message ?? JSON.stringify(e);
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     }
   };
 
@@ -213,8 +215,9 @@ function MakerRespectsTab() {
       }
       toast({ title: 'Respect saved ✓' });
       setEditingId(null);
-    } catch (e) {
-      toast({ title: 'Error', description: String(e), variant: 'destructive' });
+    } catch (e: unknown) {
+      const msg = (e as { message?: string })?.message ?? JSON.stringify(e);
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     }
   };
 
@@ -224,8 +227,9 @@ function MakerRespectsTab() {
       await del.mutateAsync(id);
       toast({ title: 'Deleted' });
       setEditingId(null);
-    } catch (e) {
-      toast({ title: 'Error', description: String(e), variant: 'destructive' });
+    } catch (e: unknown) {
+      const msg = (e as { message?: string })?.message ?? JSON.stringify(e);
+      toast({ title: 'Error', description: msg, variant: 'destructive' });
     }
   };
 
