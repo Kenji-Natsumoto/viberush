@@ -37,17 +37,7 @@ export function CurationSection({ productId }: Props) {
 
       {/* Body */}
       <div className="relative px-6 py-6">
-        <div className="prose prose-sm prose-invert max-w-none
-          prose-p:text-orange-100/80 prose-p:leading-relaxed
-          prose-strong:text-orange-200 prose-strong:font-semibold
-          prose-em:text-orange-300/70
-          prose-headings:text-orange-100 prose-headings:font-bold
-          prose-a:text-amber-400 prose-a:no-underline hover:prose-a:underline
-          prose-ul:text-orange-100/80 prose-ol:text-orange-100/80
-          prose-li:marker:text-orange-500
-          prose-blockquote:border-l-orange-500/50 prose-blockquote:text-orange-200/60
-          prose-code:bg-orange-950/60 prose-code:text-orange-300 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded
-        ">
+        <div className="prose prose-sm prose-invert max-w-none [&_p]:text-orange-100/90 [&_p]:leading-relaxed [&_strong]:text-orange-200 [&_em]:text-orange-300/80 [&_h1,&_h2,&_h3,&_h4]:text-orange-100 [&_a]:text-amber-400 [&_li]:text-orange-100/90 [&_blockquote]:text-orange-200/70 [&_blockquote]:border-l-orange-500/50 [&_code]:bg-orange-950/60 [&_code]:text-orange-300">
           <ReactMarkdown>{curation.content_md}</ReactMarkdown>
         </div>
 
