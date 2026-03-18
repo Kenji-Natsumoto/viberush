@@ -18,6 +18,7 @@ import ShareRedirect from "./pages/ShareRedirect";
 import Images from "./pages/Images";
 import AdminClaims from "./pages/AdminClaims";
 import AdminAnalytics from "./pages/AdminAnalytics";
+import AdminCurations from "./pages/AdminCurations";
 import Dashboard from "./pages/Dashboard";
 import Explore from "./pages/Explore";
 import Chronicles from "./pages/Chronicles";
@@ -67,6 +68,7 @@ const App = () => (
             <Route path="/dashboard/chronicles" element={<ChroniclesAdmin />} />
             <Route path="/admin/claims" element={<AdminClaims />} />
             <Route path="/admin/analytics" element={<AdminAnalytics />} />
+            <Route path="/admin/curations" element={<AdminCurations />} />
             <Route path="/ship-guide" element={<ShipGuide />} />
             <Route path="/maker/:username" element={<MakerProfile />} />
             <Route path="/more-detail" element={<MoreDetail />} />

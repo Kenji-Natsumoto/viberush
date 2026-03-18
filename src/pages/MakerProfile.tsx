@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ToolBadge } from '@/components/ToolBadge';
 import { useMakerProfile } from '@/hooks/useMakerProfile';
 import { getProductIconUrl } from '@/lib/iconUtils';
+import { MakerRespectSection } from '@/components/MakerRespectSection';
 import type { Product } from '@/types/database';
 
 // ── Unclaimed Profile Banner ──
@@ -337,6 +338,11 @@ const MakerProfile = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* Curator's Respect — shows only when a respect entry exists */}
+        {!profile.id.startsWith('virtual-') && (
+          <MakerRespectSection makerId={profile.id} />
         )}
       </main>
     </div>

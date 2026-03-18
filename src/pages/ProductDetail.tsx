@@ -16,6 +16,7 @@ import { useMakerUsername } from "@/hooks/useMakerUsername";
 import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
 import { useIsAdmin } from "@/hooks/useClaim";
 import { getProductIconUrl } from "@/lib/iconUtils";
+import { CurationSection } from "@/components/CurationSection";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
 
@@ -391,6 +392,9 @@ const ProductDetail = () => {
 
         {/* Screenshots Gallery - below Magic Prompt */}
         <ScreenshotGallery screenshots={screenshots} />
+
+        {/* Curator's Voice — shows only when a curation exists */}
+        <CurationSection productId={product.id} />
 
         {/* Edit Modal */}
         <EditProductModal
