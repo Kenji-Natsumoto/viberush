@@ -353,6 +353,29 @@ function MakerRespectsTab() {
             <Plus className="h-3.5 w-3.5" /> Add Virtual
           </Button>
         </div>
+
+        {/* Editor for a newly added virtual profile (not yet in DB) */}
+        {editingId?.startsWith('proxy:') && !proxyRespects.some((r) => r.proxy_creator_name === editingId.slice(6)) && (
+          <div className="mt-3 rounded-xl border border-violet-500/30 bg-card overflow-hidden">
+            <div className="flex items-center justify-between px-4 py-3">
+              <div className="flex items-center gap-3">
+                <span className="font-medium text-sm text-foreground">{editingId.slice(6)}</span>
+                <span className="text-xs px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-400 font-medium">New Virtual</span>
+              </div>
+              <Button variant="default" size="sm" onClick={() => setEditingId(null)}>Close</Button>
+            </div>
+            <RespectEditor
+              draft={draft}
+              setDraft={setDraft}
+              preview={preview}
+              setPreview={setPreview}
+              hasExisting={false}
+              onSave={handleSave}
+              onDelete={handleDelete}
+              isPending={upsert.isPending}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
