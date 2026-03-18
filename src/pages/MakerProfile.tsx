@@ -340,10 +340,11 @@ const MakerProfile = () => {
           </div>
         )}
 
-        {/* Curator's Respect — shows only when a respect entry exists */}
-        {!profile.id.startsWith('virtual-') && (
-          <MakerRespectSection makerId={profile.id} />
-        )}
+        {/* Curator's Respect — real and virtual profiles */}
+        <MakerRespectSection
+          makerId={isUnclaimed ? undefined : profile.id}
+          proxyCreatorName={isUnclaimed ? profile.username : undefined}
+        />
       </main>
     </div>
   );

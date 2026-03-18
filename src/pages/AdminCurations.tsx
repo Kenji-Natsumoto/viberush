@@ -173,27 +173,44 @@ function MakerRespectsTab() {
   const del = useDeleteMakerRespect();
 
   const [search, setSearch] = useState('');
-  const [editingId, setEditingId] = useState<string | null>(null); // maker_id
+  // editingId: maker UUID or "proxy:username"
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState('');
   const [preview, setPreview] = useState(false);
+  const [newProxyName, setNewProxyName] = useState('');
 
-  const respectMap = Object.fromEntries(respects.map((r) => [r.maker_id, r]));
+  const respectByMakerId = Object.fromEntries(
+    respects.filter((r) => r.maker_id).map((r) => [r.maker_id!, r])
+  );
+  const respectByProxy = Object.fromEntries(
+    respects.filter((r) => r.proxy_creator_name).map((r) => [r.proxy_creator_name!.toLowerCase(), r])
+  );
+  const proxyRespects = respects.filter((r) => !r.maker_id && r.proxy_creator_name);
 
   const filtered = makers.filter((m) =>
     (m.username + (m.display_name ?? '')).toLowerCase().includes(search.toLowerCase())
   );
 
-  const startEdit = (makerId: string) => {
-    const existing = respectMap[makerId];
-    setDraft(existing?.content_md ?? '');
+  const startEditMaker = (makerId: string) => {
+    setDraft(respectByMakerId[makerId]?.content_md ?? '');
     setPreview(false);
     setEditingId(makerId);
+  };
+
+  const startEditProxy = (proxyName: string) => {
+    setDraft(respectByProxy[proxyName.toLowerCase()]?.content_md ?? '');
+    setPreview(false);
+    setEditingId(`proxy:${proxyName}`);
   };
 
   const handleSave = async () => {
     if (!editingId) return;
     try {
-      await upsert.mutateAsync({ maker_id: editingId, content_md: draft });
+      if (editingId.startsWith('proxy:')) {
+        await upsert.mutateAsync({ proxy_creator_name: editingId.slice(6), content_md: draft });
+      } else {
+        await upsert.mutateAsync({ maker_id: editingId, content_md: draft });
+      }
       toast({ title: 'Respect saved ✓' });
       setEditingId(null);
     } catch (e) {
@@ -212,8 +229,16 @@ function MakerRespectsTab() {
     }
   };
 
+  const handleAddProxy = () => {
+    const name = newProxyName.trim();
+    if (!name) return;
+    setNewProxyName('');
+    startEditProxy(name);
+  };
+
   return (
     <div>
+      {/* Search */}
       <div className="relative mb-4">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -224,9 +249,10 @@ function MakerRespectsTab() {
         />
       </div>
 
-      <div className="space-y-2 mb-6">
+      {/* Real profiles */}
+      <div className="space-y-2 mb-8">
         {filtered.map((m) => {
-          const hasRespect = !!respectMap[m.id];
+          const hasRespect = !!respectByMakerId[m.id];
           const isEditing = editingId === m.id;
           return (
             <div key={m.id} className="rounded-xl border border-border bg-card overflow-hidden">
@@ -244,51 +270,142 @@ function MakerRespectsTab() {
                   variant={isEditing ? 'default' : 'outline'}
                   size="sm"
                   className="gap-1.5 flex-shrink-0"
-                  onClick={() => isEditing ? setEditingId(null) : startEdit(m.id)}
+                  onClick={() => isEditing ? setEditingId(null) : startEditMaker(m.id)}
                 >
                   {isEditing ? 'Close' : hasRespect ? <><Pencil className="h-3.5 w-3.5" /> Edit</> : <><Plus className="h-3.5 w-3.5" /> Add</>}
                 </Button>
               </div>
 
               {isEditing && (
-                <div className="border-t border-border px-4 py-4 bg-secondary/30 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground font-medium">Markdown · Curator's Respect</span>
-                    <div className="flex gap-2">
-                      <Button variant="ghost" size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setPreview(!preview)}>
-                        {preview ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
-                        {preview ? 'Edit' : 'Preview'}
-                      </Button>
-                      {hasRespect && (
-                        <Button variant="ghost" size="sm" className="gap-1.5 h-7 text-xs text-destructive hover:text-destructive"
-                          onClick={() => handleDelete(respectMap[m.id].id)}>
-                          <Trash2 className="h-3 w-3" /> Delete
-                        </Button>
-                      )}
-                      <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={handleSave} disabled={upsert.isPending}>
-                        <Save className="h-3 w-3" /> Save
-                      </Button>
-                    </div>
-                  </div>
-
-                  {preview ? (
-                    <div className="min-h-[140px] rounded-lg border border-border bg-background p-4 prose prose-sm prose-invert max-w-none">
-                      <ReactMarkdown>{draft || '_No content_'}</ReactMarkdown>
-                    </div>
-                  ) : (
-                    <Textarea
-                      value={draft}
-                      onChange={(e) => setDraft(e.target.value)}
-                      placeholder="Write your respect message in Markdown…"
-                      className="min-h-[180px] font-mono text-sm resize-y"
-                    />
-                  )}
-                </div>
+                <RespectEditor
+                  draft={draft}
+                  setDraft={setDraft}
+                  preview={preview}
+                  setPreview={setPreview}
+                  hasExisting={hasRespect}
+                  existingId={hasRespect ? respectByMakerId[m.id].id : undefined}
+                  onSave={handleSave}
+                  onDelete={handleDelete}
+                  isPending={upsert.isPending}
+                />
               )}
             </div>
           );
         })}
       </div>
+
+      {/* Virtual / Unclaimed profiles section */}
+      <div>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+          <Star className="h-4 w-4 text-violet-400" />
+          Virtual Profiles (Unclaimed)
+        </h3>
+
+        {/* Existing proxy respects */}
+        <div className="space-y-2 mb-4">
+          {proxyRespects.map((r) => {
+            const name = r.proxy_creator_name!;
+            const isEditing = editingId === `proxy:${name}`;
+            return (
+              <div key={r.id} className="rounded-xl border border-border bg-card overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span className="font-medium text-sm text-foreground">{name}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-violet-500/15 text-violet-400 font-medium flex-shrink-0">Virtual · Respected</span>
+                  </div>
+                  <Button
+                    variant={isEditing ? 'default' : 'outline'}
+                    size="sm"
+                    className="gap-1.5 flex-shrink-0"
+                    onClick={() => isEditing ? setEditingId(null) : startEditProxy(name)}
+                  >
+                    {isEditing ? 'Close' : <><Pencil className="h-3.5 w-3.5" /> Edit</>}
+                  </Button>
+                </div>
+                {isEditing && (
+                  <RespectEditor
+                    draft={draft}
+                    setDraft={setDraft}
+                    preview={preview}
+                    setPreview={setPreview}
+                    hasExisting={true}
+                    existingId={r.id}
+                    onSave={handleSave}
+                    onDelete={handleDelete}
+                    isPending={upsert.isPending}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Add new virtual profile */}
+        <div className="flex gap-2">
+          <Input
+            placeholder="Creator name (e.g. Max Musing)"
+            value={newProxyName}
+            onChange={(e) => setNewProxyName(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleAddProxy()}
+            className="text-sm"
+          />
+          <Button size="sm" variant="outline" className="gap-1.5 flex-shrink-0" onClick={handleAddProxy}>
+            <Plus className="h-3.5 w-3.5" /> Add Virtual
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Shared inline editor ─────────────────────────────────────────────────────
+function RespectEditor({
+  draft, setDraft, preview, setPreview,
+  hasExisting, existingId, onSave, onDelete, isPending,
+}: {
+  draft: string;
+  setDraft: (v: string) => void;
+  preview: boolean;
+  setPreview: (v: boolean) => void;
+  hasExisting: boolean;
+  existingId?: string;
+  onSave: () => void;
+  onDelete: (id: string) => void;
+  isPending: boolean;
+}) {
+  return (
+    <div className="border-t border-border px-4 py-4 bg-secondary/30 space-y-4">
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-muted-foreground font-medium">Markdown · Curator's Respect</span>
+        <div className="flex gap-2">
+          <Button variant="ghost" size="sm" className="gap-1.5 h-7 text-xs" onClick={() => setPreview(!preview)}>
+            {preview ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+            {preview ? 'Edit' : 'Preview'}
+          </Button>
+          {hasExisting && existingId && (
+            <Button variant="ghost" size="sm" className="gap-1.5 h-7 text-xs text-destructive hover:text-destructive"
+              onClick={() => onDelete(existingId)}>
+              <Trash2 className="h-3 w-3" /> Delete
+            </Button>
+          )}
+          <Button size="sm" className="gap-1.5 h-7 text-xs" onClick={onSave} disabled={isPending}>
+            <Save className="h-3 w-3" /> Save
+          </Button>
+        </div>
+      </div>
+
+      {preview ? (
+        <div className="min-h-[140px] rounded-lg border border-border bg-background p-4 prose prose-sm prose-invert max-w-none">
+          <ReactMarkdown>{draft || '_No content_'}</ReactMarkdown>
+        </div>
+      ) : (
+        <Textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder="Write your respect message in Markdown…"
+          className="min-h-[180px] font-mono text-sm resize-y"
+        />
+      )}
     </div>
   );
 }

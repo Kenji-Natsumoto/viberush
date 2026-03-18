@@ -8,11 +8,12 @@ const StarIcon = () => (
 );
 
 interface Props {
-  makerId: string;
+  makerId?: string;
+  proxyCreatorName?: string;
 }
 
-export function MakerRespectSection({ makerId }: Props) {
-  const { data: respect, isLoading } = useMakerRespect(makerId);
+export function MakerRespectSection({ makerId, proxyCreatorName }: Props) {
+  const { data: respect, isLoading } = useMakerRespect(makerId, proxyCreatorName);
 
   if (isLoading || !respect) return null;
 

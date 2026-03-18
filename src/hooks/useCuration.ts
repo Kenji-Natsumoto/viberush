@@ -12,7 +12,8 @@ export interface ProductCuration {
 
 export interface MakerRespect {
   id: string;
-  maker_id: string;
+  maker_id: string | null;
+  proxy_creator_name: string | null;
   content_md: string;
   created_at: string;
   updated_at: string;
@@ -85,11 +86,21 @@ export function useDeleteProductCuration() {
 
 // ── Maker Respect ─────────────────────────────
 
-export function useMakerRespect(makerId?: string) {
+export function useMakerRespect(makerId?: string, proxyCreatorName?: string) {
+  const key = proxyCreatorName ?? makerId;
   return useQuery({
-    queryKey: ['maker_respect', makerId],
-    enabled: !!makerId && !makerId.startsWith('virtual-'),
+    queryKey: ['maker_respect', key],
+    enabled: !!proxyCreatorName || (!!makerId && !makerId.startsWith('virtual-')),
     queryFn: async () => {
+      if (proxyCreatorName) {
+        const { data, error } = await supabase
+          .from('maker_respects')
+          .select('*')
+          .ilike('proxy_creator_name', proxyCreatorName)
+          .maybeSingle();
+        if (error) throw error;
+        return data as MakerRespect | null;
+      }
       const { data, error } = await supabase
         .from('maker_respects')
         .select('*')
@@ -111,7 +122,7 @@ export function useAllMakerRespects() {
         .order('updated_at', { ascending: false });
       if (error) throw error;
       return data as (MakerRespect & {
-        maker_profiles: { id: string; username: string; display_name: string | null };
+        maker_profiles: { id: string; username: string; display_name: string | null } | null;
       })[];
     },
   });
@@ -131,20 +142,55 @@ export function useAllMakerProfilesSimple() {
   });
 }
 
+type UpsertMakerRespectPayload =
+  | { maker_id: string; content_md: string; proxy_creator_name?: undefined }
+  | { proxy_creator_name: string; content_md: string; maker_id?: undefined };
+
 export function useUpsertMakerRespect() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (payload: { maker_id: string; content_md: string }) => {
-      const { data, error } = await supabase
-        .from('maker_respects')
-        .upsert({ ...payload, updated_at: new Date().toISOString() }, { onConflict: 'maker_id' })
-        .select()
-        .single();
-      if (error) throw error;
-      return data;
+    mutationFn: async (payload: UpsertMakerRespectPayload) => {
+      if (payload.proxy_creator_name) {
+        // Virtual profile: check-then-insert/update (partial index not supported by upsert)
+        const { data: existing } = await supabase
+          .from('maker_respects')
+          .select('id')
+          .ilike('proxy_creator_name', payload.proxy_creator_name)
+          .maybeSingle();
+        if (existing) {
+          const { data, error } = await supabase
+            .from('maker_respects')
+            .update({ content_md: payload.content_md, updated_at: new Date().toISOString() })
+            .eq('id', existing.id)
+            .select()
+            .single();
+          if (error) throw error;
+          return data;
+        } else {
+          const { data, error } = await supabase
+            .from('maker_respects')
+            .insert({ proxy_creator_name: payload.proxy_creator_name, content_md: payload.content_md })
+            .select()
+            .single();
+          if (error) throw error;
+          return data;
+        }
+      } else {
+        const { data, error } = await supabase
+          .from('maker_respects')
+          .upsert(
+            { maker_id: payload.maker_id, content_md: payload.content_md, updated_at: new Date().toISOString() },
+            { onConflict: 'maker_id' }
+          )
+          .select()
+          .single();
+        if (error) throw error;
+        return data;
+      }
     },
     onSuccess: (_, vars) => {
-      qc.invalidateQueries({ queryKey: ['maker_respect', vars.maker_id] });
+      const key = vars.proxy_creator_name ?? vars.maker_id;
+      qc.invalidateQueries({ queryKey: ['maker_respect', key] });
       qc.invalidateQueries({ queryKey: ['all_maker_respects'] });
     },
   });
