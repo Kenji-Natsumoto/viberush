@@ -36,7 +36,7 @@ export function MakerRespectSection({ makerId }: Props) {
 
       {/* Body */}
       <div className="relative px-6 py-6">
-        <div className="prose prose-sm prose-invert max-w-none [&_p]:text-violet-100/90 [&_p]:leading-relaxed [&_strong]:text-violet-200 [&_em]:text-violet-300/80 [&_h1,&_h2,&_h3,&_h4]:text-violet-100 [&_a]:text-indigo-400 [&_li]:text-violet-100/90 [&_blockquote]:text-violet-200/70 [&_blockquote]:border-l-violet-500/50 [&_code]:bg-violet-950/60 [&_code]:text-violet-300">
+        <div className="prose prose-sm prose-invert max-w-none [&_p]:text-violet-100/90 [&_p]:leading-[1.85] [&_p]:mb-5 [&_strong]:text-violet-200 [&_em]:text-violet-300/80 [&_h1]:text-violet-100 [&_h2]:text-violet-100 [&_h3]:text-violet-100 [&_h4]:text-violet-100 [&_h2]:mt-7 [&_h3]:mt-5 [&_a]:text-indigo-400 [&_li]:text-violet-100/90 [&_li]:mb-1.5 [&_ul]:mb-5 [&_ol]:mb-5 [&_blockquote]:text-violet-200/70 [&_blockquote]:border-l-violet-500/50 [&_blockquote]:pl-4 [&_blockquote]:my-5 [&_code]:bg-violet-950/60 [&_code]:text-violet-300">
           <ReactMarkdown>{respect.content_md}</ReactMarkdown>
         </div>
 
