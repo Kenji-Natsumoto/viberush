@@ -118,11 +118,11 @@ export function useAllMakerRespects() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('maker_respects')
-        .select('*, maker_profiles(id, username, display_name)')
+        .select('*, maker_profiles(id, username)')
         .order('updated_at', { ascending: false });
       if (error) throw error;
       return data as (MakerRespect & {
-        maker_profiles: { id: string; username: string; display_name: string | null } | null;
+        maker_profiles: { id: string; username: string } | null;
       })[];
     },
   });
@@ -134,10 +134,10 @@ export function useAllMakerProfilesSimple() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('maker_profiles')
-        .select('id, username, display_name')
+        .select('id, username')
         .order('username');
       if (error) throw error;
-      return data as { id: string; username: string; display_name: string | null }[];
+      return data as { id: string; username: string }[];
     },
   });
 }

@@ -190,7 +190,7 @@ function MakerRespectsTab() {
   const proxyRespects = respects.filter((r) => !r.maker_id && r.proxy_creator_name);
 
   const filtered = makers.filter((m) =>
-    (m.username + (m.display_name ?? '')).toLowerCase().includes(search.toLowerCase())
+    m.username.toLowerCase().includes(search.toLowerCase())
   );
 
   const startEditMaker = (makerId: string) => {
@@ -263,7 +263,7 @@ function MakerRespectsTab() {
               <div className="flex items-center justify-between px-4 py-3">
                 <div className="flex items-center gap-3 min-w-0">
                   <span className="font-medium text-sm text-foreground">
-                    {m.display_name || m.username}
+                    {m.username}
                   </span>
                   <span className="text-xs text-muted-foreground">@{m.username}</span>
                   {hasRespect && (
