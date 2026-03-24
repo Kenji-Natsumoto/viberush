@@ -134,10 +134,10 @@ export function useAllMakerProfilesSimple() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('maker_profiles')
-        .select('id, username, display_name')
+        .select('id, username')
         .order('username');
       if (error) throw error;
-      return data as { id: string; username: string; display_name: string | null }[];
+      return data as { id: string; username: string }[];
     },
   });
 }
