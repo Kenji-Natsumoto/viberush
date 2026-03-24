@@ -190,7 +190,7 @@ function MakerRespectsTab() {
   const proxyRespects = respects.filter((r) => !r.maker_id && r.proxy_creator_name);
 
   const filtered = makers.filter((m) =>
-    (m.username + (m.display_name ?? '')).toLowerCase().includes(search.toLowerCase())
+    m.username.toLowerCase().includes(search.toLowerCase())
   );
 
   const startEditMaker = (makerId: string) => {
