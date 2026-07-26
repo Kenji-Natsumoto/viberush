@@ -22,3 +22,20 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- Secrets: never commit ---
+# Only .env.example is tracked, and it must contain placeholders only.
+.env
+.env.*
+!.env.example
+*.env
+copy.env.rtf
+
+# --- Auth sessions / tokens: never commit ---
+# Browser session files grant account access; they are not detectable by
+# API-key pattern scanners, so they must be excluded by filename.
+*session*.json
+*_session.json
+*cookies*.json
+*token*.json
+.auth/
