@@ -1,5 +1,7 @@
 import { Zap } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/lib/supabase";
 
 function useTypewriter(text: string, speed = 40, startDelay = 800) {
   const [displayed, setDisplayed] = useState("");
@@ -34,6 +36,19 @@ function useTypewriter(text: string, speed = 40, startDelay = 800) {
 export function FiftyShipHero() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+
+  // Total SHIP count including removed products (for integrity) — same source as StatsSection
+  const { data: totalShipCount } = useQuery({
+    queryKey: ["total-ship-count"],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from("products")
+        .select("*", { count: "exact", head: true });
+      if (error) throw error;
+      return count ?? 0;
+    },
+  });
+  const shipCount = totalShipCount ?? 50;
 
   const tagline = "Stop coding, start vibing. Explore the Golden Age of the Solo Maker.";
   const { displayed: typedTagline, done: taglineDone } = useTypewriter(tagline, 35, 1200);
@@ -89,7 +104,7 @@ export function FiftyShipHero() {
         >
           Welcome to the{" "}
           <span className="bg-gradient-to-r from-[hsl(190_80%_60%)] via-[hsl(42_100%_65%)] to-[hsl(35_90%_55%)] bg-clip-text text-transparent">
-            50-SHIP Blitz.
+            {shipCount}-SHIP Blitz.
           </span>
         </h1>
 
@@ -104,7 +119,7 @@ export function FiftyShipHero() {
           <p>
             This is not just a gallery of apps. It is a living testament to the{" "}
             <span className="text-[hsl(0_0%_100%/0.95)] font-medium">'Agentic Individual.'</span>{" "}
-            Here, you will find 50 fully functional, AI-native products built by makers who
+            Here, you will find {shipCount} fully functional, AI-native products built by makers who
             bypassed the friction of syntax to turn their pure intent into reality. From a golf
             mastery app to a multi-generational record store platform, this is what happens when
             we choose <span className="text-[hsl(0_0%_100%/0.95)] font-medium">Identity over Code.</span>
