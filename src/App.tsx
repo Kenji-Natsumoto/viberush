@@ -26,6 +26,7 @@ import ChroniclesAdmin from "./pages/ChroniclesAdmin";
 import ShipGuide from "./pages/ShipGuide";
 import MakerProfile from "./pages/MakerProfile";
 import MoreDetail from "./pages/MoreDetail";
+import Question from "./pages/Question";
 import { FloatingShipButton } from "@/components/FloatingShipButton";
 import { UTMCapture } from "@/components/UTMCapture";
 
@@ -72,6 +73,7 @@ const App = () => (
             <Route path="/ship-guide" element={<ShipGuide />} />
             <Route path="/maker/:username" element={<MakerProfile />} />
             <Route path="/more-detail" element={<MoreDetail />} />
+            <Route path="/question" element={<Question />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
