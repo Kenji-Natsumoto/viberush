@@ -31,7 +31,7 @@ import {
   type Period,
 } from "@/hooks/useAnalyticsData";
 
-// プロダクト名を一括取得
+// Fetch all product names at once
 function useProductNames(productIds: string[]) {
   return useQuery({
     queryKey: ["product-names-analytics", productIds.sort().join(",")],
@@ -50,7 +50,7 @@ function useProductNames(productIds: string[]) {
   });
 }
 
-// 日付フォーマット（YYYY-MM-DD → M/D（曜））
+// Date format (YYYY-MM-DD -> M/D (day))
 function formatDate(dateStr: string): string {
   const d = new Date(dateStr + "T00:00:00");
   return d.toLocaleDateString("ja-JP", {
@@ -60,7 +60,7 @@ function formatDate(dateStr: string): string {
   });
 }
 
-// ── サマリーカード ──────────────────────────────────
+// ── Summary cards ──────────────────────────────────
 function SummaryCard({
   label,
   value,
@@ -94,7 +94,7 @@ function SummaryCard({
   );
 }
 
-// ── メインページ ──────────────────────────────────
+// ── Main page ──────────────────────────────────
 export default function AdminAnalytics() {
   const { user, loading: authLoading } = useAuth();
   const isAdmin = useIsAdmin();
@@ -117,7 +117,7 @@ export default function AdminAnalytics() {
   const organicTotal = allTotal - summary.total;
   const daily = aggregateByDate(dailyClicks, allDailyClicks);
   const topProducts = aggregateByProduct(clicks);
-  const topVibed = aggregateAllByProduct(allClicks, 3); // 全ソース上位3
+  const topVibed = aggregateAllByProduct(allClicks, 3); // top 3 across all sources
 
   const { data: productNames = {} } = useProductNames([
     ...topProducts.map((p) => p.product_id),
@@ -136,7 +136,7 @@ export default function AdminAnalytics() {
     : "—";
 
   const periodLabel =
-    period === "today" ? "今日" : period === "week" ? "今週" : "今月";
+    period === "today" ? "Today" : period === "week" ? "This week" : "This month";
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -163,7 +163,7 @@ export default function AdminAnalytics() {
               SNS Analytics
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              X・LinkedIn からの流入 Vibe 行動を計測（Phase 1: Vibe数ベース）
+              Tracking Vibe activity driven from X and LinkedIn (Phase 1: Vibe count)
             </p>
           </div>
           <div className="flex items-center gap-3 mt-1">
@@ -179,7 +179,7 @@ export default function AdminAnalytics() {
               <RefreshCw
                 className={`h-3 w-3 ${isFetching ? "animate-spin" : ""}`}
               />
-              更新
+              Refresh
             </button>
           </div>
         </div>
@@ -191,30 +191,30 @@ export default function AdminAnalytics() {
           className="mb-8"
         >
           <TabsList className="bg-muted">
-            <TabsTrigger value="today">今日</TabsTrigger>
-            <TabsTrigger value="week">今週</TabsTrigger>
-            <TabsTrigger value="month">今月</TabsTrigger>
+            <TabsTrigger value="today">Today</TabsTrigger>
+            <TabsTrigger value="week">This week</TabsTrigger>
+            <TabsTrigger value="month">This month</TabsTrigger>
           </TabsList>
         </Tabs>
 
         {/* ── Summary Cards ── */}
-        {/* 行1: 全体Vibe集計 */}
+        {/* Row 1: all Vibes */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <SummaryCard
-            label="🔥 Total Vibes（全ソース）"
+            label="🔥 Total Vibes (all sources)"
             value={allTotal}
             isLoading={allLoading}
             color="text-orange-400"
             highlight
           />
           <SummaryCard
-            label="🌱 Organic Vibes（SNS非経由）"
+            label="🌱 Organic Vibes (not via social)"
             value={organicTotal < 0 ? 0 : organicTotal}
             isLoading={allLoading}
             color="text-emerald-400"
           />
         </div>
-        {/* 行2: SNS流入内訳 */}
+        {/* Row 2: social breakdown */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
           <SummaryCard
             label="🐦 X (Twitter) Vibes"
@@ -240,12 +240,12 @@ export default function AdminAnalytics() {
         <Card className="border border-orange-500/30 bg-orange-500/5 mb-8">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
-              🏆 Top Vibed プロダクト
+              🏆 Top Vibed products
               <Badge variant="outline" className="text-xs ml-1 font-normal border-orange-500/40 text-orange-400">
-                {periodLabel} · 全ソース
+                {periodLabel} · all sources
               </Badge>
               <span className="ml-auto text-xs text-muted-foreground font-normal">
-                毎週土曜 23:59 リセット
+                Resets every Saturday 23:59
               </span>
             </CardTitle>
           </CardHeader>
@@ -258,7 +258,7 @@ export default function AdminAnalytics() {
               </div>
             ) : topVibed.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-6">
-                {periodLabel}の Vibe データがまだありません
+                No Vibe data yet for {periodLabel}
               </p>
             ) : (
               <div className="space-y-2">
@@ -300,34 +300,34 @@ export default function AdminAnalytics() {
           </CardContent>
         </Card>
 
-        {/* ── 直近7日 トレンドテーブル ── */}
+        {/* -- Last 7 days trend table -- */}
         <Card className="border border-border mb-8">
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <TrendingUp className="h-4 w-4" />
-              直近7日間 日別 Vibe 数
+              Daily Vibes over the last 7 days
             </CardTitle>
           </CardHeader>
           <CardContent>
             {daily.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-10">
-                SNS流入からの Vibe データがまだありません
+                No Vibe data from social yet
               </p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border text-left text-muted-foreground">
-                      <th className="pb-2.5 pr-6 font-medium">日付</th>
+                      <th className="pb-2.5 pr-6 font-medium">Date</th>
                       <th className="pb-2.5 pr-6 font-medium text-sky-400">
                         🐦 X
                       </th>
                       <th className="pb-2.5 pr-6 font-medium text-blue-400">
                         💼 LinkedIn
                       </th>
-                      <th className="pb-2.5 pr-6 font-medium">SNS合計</th>
+                      <th className="pb-2.5 pr-6 font-medium">Social total</th>
                       <th className="pb-2.5 font-medium text-orange-400">
-                        🔥 全件
+                        🔥 All
                       </th>
                     </tr>
                   </thead>
@@ -382,7 +382,7 @@ export default function AdminAnalytics() {
           <CardHeader className="pb-3">
             <CardTitle className="text-sm font-medium flex items-center gap-2">
               <Zap className="h-4 w-4" />
-              SNS流入 Vibe TOP プロダクト
+              Top products by Vibes from social
               <Badge variant="outline" className="text-xs ml-1 font-normal">
                 {periodLabel}
               </Badge>
@@ -397,7 +397,7 @@ export default function AdminAnalytics() {
               </div>
             ) : topProducts.length === 0 ? (
               <p className="text-sm text-muted-foreground text-center py-10">
-                {periodLabel}の SNS流入 Vibe データがまだありません
+                No social Vibe data yet for {periodLabel}
               </p>
             ) : (
               <div className="overflow-x-auto">
@@ -405,14 +405,14 @@ export default function AdminAnalytics() {
                   <thead>
                     <tr className="border-b border-border text-left text-muted-foreground">
                       <th className="pb-2.5 pr-3 font-medium w-8">#</th>
-                      <th className="pb-2.5 pr-4 font-medium">プロダクト</th>
+                      <th className="pb-2.5 pr-4 font-medium">Product</th>
                       <th className="pb-2.5 pr-4 font-medium text-sky-400">
                         🐦 X
                       </th>
                       <th className="pb-2.5 pr-4 font-medium text-blue-400">
                         💼 LinkedIn
                       </th>
-                      <th className="pb-2.5 font-medium">合計</th>
+                      <th className="pb-2.5 font-medium">Total</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -471,29 +471,29 @@ export default function AdminAnalytics() {
         <Card className="border border-dashed border-border/60">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-              🚧 Phase 2: GA4 流入データ
+              🚧 Phase 2: GA4 traffic data
               <Badge variant="secondary" className="text-xs font-normal">
-                準備中
+                Coming soon
               </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-xs text-muted-foreground mb-3">
-              GA4 Data API 連携後に追加表示されるデータ：
+              Available once the GA4 Data API is connected:
             </p>
             <ul className="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
               <li>
-                SNS 流入セッション数（
+                Sessions driven from social (
                 <code className="font-mono text-[11px]">/explore</code>{" "}
-                着地数）
+                landings)
               </li>
-              <li>X vs LinkedIn 着地数比較・前週比</li>
+              <li>X vs LinkedIn landings, week over week</li>
               <li>
-                着地 → 商品詳細遷移 → Vibe の完全ファネル
+                Full funnel: landing → product detail → Vibe
               </li>
               <li>
-                キャンペーン別パフォーマンス（
-                <code className="font-mono text-[11px]">wed_0304</code> 等）
+                Performance by campaign (
+                <code className="font-mono text-[11px]">wed_0304</code> etc.)
               </li>
             </ul>
             <p className="text-xs text-muted-foreground mt-4 pt-3 border-t border-border/40">
@@ -501,7 +501,7 @@ export default function AdminAnalytics() {
               <code className="font-mono text-[11px] bg-muted px-1 py-0.5 rounded">
                 522543299
               </code>{" "}
-              — Google Cloud サービスアカウント + Supabase Edge Function 連携が必要
+              — Requires a Google Cloud service account + a Supabase Edge Function
             </p>
           </CardContent>
         </Card>
@@ -513,7 +513,7 @@ export default function AdminAnalytics() {
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Dashboard に戻る
+            Back to Dashboard
           </Link>
         </div>
       </main>

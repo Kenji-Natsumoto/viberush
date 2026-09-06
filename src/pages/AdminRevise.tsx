@@ -11,10 +11,11 @@ import { ArrowLeft, Send } from "lucide-react";
 /**
  * /admin/revise?key=2026-W37:mon
  *
- * VR LI（LinkedIn 便）の差し戻し。Discord のレビュー便に貼られたリンクから開き、
- * 一言書いて送るだけ。スクロール無し。書き先は Supabase `li_revisions`（status=open）。
- * 改稿するのは 30 分毎の step4_revise_v02.py（セッションは手で直さない）。
- * 結果（指示 → 変えた点）は同じ行に書き戻され、下の履歴に出る。
+ * Revision box for the VR LinkedIn posts. Opened from the link at the end of the
+ * Discord review message: write one line, hit send. No scrolling.
+ * Writes to Supabase `li_revisions` (status=open).
+ * The rewrite itself is done by step4_revise_v02.py every 30 minutes — never by hand.
+ * The result ("instruction -> what changed") is written back onto the same row below.
  */
 type Revision = {
   id: string;
@@ -28,14 +29,14 @@ type Revision = {
 };
 
 const STATUS_LABEL: Record<string, string> = {
-  open: "⏳ 改稿待ち（30分以内）",
-  revised: "✅ 改稿済み・再レビュー便を送信",
-  blocked: "🛑 照合で止まった（原稿は変えていない）",
-  failed: "❌ 失敗",
+  open: "⏳ Waiting for rewrite (within 30 min)",
+  revised: "✅ Rewritten — review message sent",
+  blocked: "🛑 Blocked by fact check (draft left unchanged)",
+  failed: "❌ Failed",
 };
 
 const AdminRevise = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const isAdmin = useIsAdmin();
   const [params] = useSearchParams();
   const key = (params.get("key") || "").trim();
@@ -60,16 +61,29 @@ const AdminRevise = () => {
   });
 
   useEffect(() => {
-    document.title = `差し戻し ${key || ""} | VibeRush`;
+    document.title = `Revise ${key || ""} | VibeRush`;
   }, [key]);
+
+  // The Supabase session is restored asynchronously. Without this guard a reload
+  // flashes "No access" before the user is known.
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header onSubmitClick={() => {}} />
+        <div className="container mx-auto px-4 py-16 text-center text-muted-foreground">
+          Loading…
+        </div>
+      </div>
+    );
+  }
 
   if (!user || !isAdmin) {
     return (
       <div className="min-h-screen bg-background">
         <Header onSubmitClick={() => {}} />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">アクセス権限がありません</h1>
-          <Link to="/auth" className="text-primary hover:underline">ログインする</Link>
+          <h1 className="text-2xl font-bold text-foreground mb-4">No access</h1>
+          <Link to="/auth" className="text-primary hover:underline">Sign in</Link>
         </div>
       </div>
     );
@@ -102,13 +116,13 @@ const AdminRevise = () => {
         >
           <ArrowLeft className="w-4 h-4" /> Analytics
         </Link>
-        <h1 className="text-xl font-bold text-foreground mb-1">差し戻し</h1>
+        <h1 className="text-xl font-bold text-foreground mb-1">Revise</h1>
         <p className="text-sm text-muted-foreground mb-4">
-          便: <span className="font-mono text-foreground">{key || "（key が無い）"}</span>
+          Post: <span className="font-mono text-foreground">{key || "(no key)"}</span>
         </p>
         {!key ? (
           <p className="text-destructive text-sm">
-            URL に <span className="font-mono">?key=2026-W37:mon</span> が要ります。Discord のレビュー便のリンクから開いてください。
+            This URL needs <span className="font-mono">?key=2026-W37:mon</span>. Open it from the link in the Discord review message.
           </p>
         ) : (
           <>
@@ -116,35 +130,35 @@ const AdminRevise = () => {
               autoFocus
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="一言で。例: 冒頭を問いかけに／順位はサイト表示に合わせて／Mockit の段落を削る"
+              placeholder="One line. e.g. Open with a question / Match the ranking to the site / Cut the Mockit paragraph"
               className="w-full min-h-[120px] rounded-md border border-input bg-background px-3 py-2 text-base text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
             <div className="flex items-center justify-between mt-3">
               <span className="text-xs text-muted-foreground">
-                送ると 30 分以内に改稿され、Discord に「指示 → 変えた点」が届きます
+                The draft is rewritten within 30 minutes and Discord gets "instruction → what changed"
               </span>
               <Button onClick={submit} disabled={sending || !text.trim()}>
-                <Send className="w-4 h-4 mr-2" /> 差し戻す
+                <Send className="w-4 h-4 mr-2" /> Send back
               </Button>
             </div>
             {error && <p className="text-destructive text-sm mt-2">{error}</p>}
 
             {history && history.length > 0 && (
               <section className="mt-8">
-                <h2 className="text-sm font-semibold text-muted-foreground mb-2">この便の差し戻し履歴</h2>
+                <h2 className="text-sm font-semibold text-muted-foreground mb-2">Revision history for this post</h2>
                 <ul className="space-y-3">
                   {history.map((r) => (
                     <li key={r.id} className="rounded-md border border-border p-3 text-sm">
                       <div className="text-foreground">{r.instruction}</div>
                       <div className="text-muted-foreground mt-1">
                         {STATUS_LABEL[r.status] || r.status}
-                        {r.depth ? ` · 分類 ${r.depth}` : ""}
+                        {r.depth ? ` · ${r.depth}` : ""}
                       </div>
                       {r.result && (
                         <div className="mt-1 whitespace-pre-wrap text-foreground/90">{r.result}</div>
                       )}
                       <div className="text-xs text-muted-foreground mt-1">
-                        {new Date(r.created_at).toLocaleString("ja-JP")}
+                        {new Date(r.created_at).toLocaleString("en-US")}
                       </div>
                     </li>
                   ))}

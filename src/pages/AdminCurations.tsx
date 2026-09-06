@@ -448,8 +448,8 @@ const AdminCurations = () => {
       <div className="min-h-screen bg-background">
         <Header onSubmitClick={() => {}} />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">アクセス権限がありません</h1>
-          <Link to="/" className="text-primary hover:underline">← ホームへ戻る</Link>
+          <h1 className="text-2xl font-bold text-foreground mb-4">No access</h1>
+          <Link to="/" className="text-primary hover:underline">← Back to home</Link>
         </div>
       </div>
     );
@@ -466,7 +466,7 @@ const AdminCurations = () => {
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-foreground mb-1">Curation & Respect</h1>
           <p className="text-sm text-muted-foreground">
-            特別に認めたプロダクトとMakerへの熱量を込めた記事を管理します。
+            Manage the hand-picked products and the articles written for their Makers.
           </p>
         </div>
 

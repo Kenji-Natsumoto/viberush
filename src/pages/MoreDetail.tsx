@@ -260,7 +260,7 @@ export default function MoreDetail() {
                 placeholder="e.g. Jane Doe / Team Name"
                 className="bg-secondary border-transparent focus:border-border"
               />
-              <p className="text-xs text-muted-foreground">プロダクトの制作者名として表示されます</p>
+              <p className="text-xs text-muted-foreground">Shown as the product's creator name</p>
             </div>
 
             <div className="space-y-2">

@@ -24,8 +24,8 @@ const AdminClaims = () => {
       <div className="min-h-screen bg-background">
         <Header onSubmitClick={() => {}} />
         <div className="container mx-auto px-4 py-16 text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">アクセス権限がありません</h1>
-          <Link to="/" className="text-primary hover:underline">← ホームへ戻る</Link>
+          <h1 className="text-2xl font-bold text-foreground mb-4">No access</h1>
+          <Link to="/" className="text-primary hover:underline">← Back to home</Link>
         </div>
       </div>
     );
@@ -59,22 +59,22 @@ const AdminClaims = () => {
       <main className="container mx-auto px-4 py-8 max-w-4xl">
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 transition-colors">
           <ArrowLeft className="h-4 w-4" />
-          ホームへ戻る
+          Back to home
         </Link>
 
         <h1 className="text-2xl font-bold text-foreground mb-2 flex items-center gap-2">
           <Shield className="h-6 w-6" />
-          権限譲渡の管理
+          Ownership transfers
         </h1>
         <p className="text-sm text-muted-foreground mb-8">
-          代理登録したプロダクトの所有権を「本当の作者」に譲渡します。
+          Transfer proxy-submitted products to their real creator.
         </p>
 
         {/* Search */}
         <div className="relative mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="プロダクト名で検索..."
+            placeholder="Search by product name…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-9"
@@ -84,13 +84,13 @@ const AdminClaims = () => {
         {/* Proxy-submitted products (admin submitted on behalf of others) */}
         <section className="mb-10">
           <h2 className="text-lg font-semibold text-foreground mb-4">
-            代理登録プロダクト ({proxyProducts.length})
+            Proxy-submitted products ({proxyProducts.length})
           </h2>
           {isLoading ? (
-            <div className="text-muted-foreground">読み込み中...</div>
+            <div className="text-muted-foreground">Loading…</div>
           ) : filterProducts(proxyProducts).length === 0 ? (
             <div className="text-muted-foreground bg-card border border-border rounded-xl p-6 text-center">
-              {search ? "該当するプロダクトがありません" : "代理登録したプロダクトはありません"}
+              {search ? "No matching products" : "No proxy-submitted products"}
             </div>
           ) : (
             <div className="space-y-3">
@@ -108,11 +108,11 @@ const AdminClaims = () => {
                       </Link>
                       <p className="text-sm text-muted-foreground truncate">
                         {product.proxyCreatorName
-                          ? `制作者: ${product.proxyCreatorName}`
-                          : "制作者名未設定"}
+                          ? `Creator: ${product.proxyCreatorName}`
+                          : "No creator name set"}
                         {product.ownerId && (
                           <span className="ml-2 text-primary">
-                            → 譲渡済み ({product.ownerId.slice(0, 8)}...)
+                            → Transferred ({product.ownerId.slice(0, 8)}...)
                           </span>
                         )}
                       </p>
@@ -123,7 +123,7 @@ const AdminClaims = () => {
                     <div className="flex items-center gap-2">
                       <span className="text-sm text-primary flex items-center gap-1">
                         <User className="h-3.5 w-3.5" />
-                        オーナー: {product.ownerId.slice(0, 8)}...
+                        Owner: {product.ownerId.slice(0, 8)}...
                       </span>
                       <Button
                         size="sm"
@@ -133,13 +133,13 @@ const AdminClaims = () => {
                         className="text-xs text-muted-foreground"
                       >
                         <X className="h-3 w-3 mr-1" />
-                        取消
+                        Revoke
                       </Button>
                     </div>
                   ) : (
                     <div className="flex items-center gap-2">
                       <Input
-                        placeholder="譲渡先のユーザーUUID"
+                        placeholder="Recipient user UUID"
                         value={transferTarget[product.id] || ""}
                         onChange={(e) =>
                           setTransferTarget((prev) => ({
@@ -159,7 +159,7 @@ const AdminClaims = () => {
                         className="gap-1 bg-primary text-primary-foreground hover:bg-primary/90"
                       >
                         <ArrowRightLeft className="h-3 w-3" />
-                        譲渡
+                        Transfer
                       </Button>
                     </div>
                   )}
@@ -172,13 +172,13 @@ const AdminClaims = () => {
         {/* User-submitted products (for reference) */}
         <section className="mb-10">
           <h2 className="text-lg font-semibold text-foreground mb-4">
-            ユーザー自身のプロダクト ({userProducts.length})
+            Self-submitted products ({userProducts.length})
           </h2>
           <p className="text-sm text-muted-foreground mb-4">
-            これらはユーザーが自分でSHIPしたプロダクトです。編集権限は本人にあります。
+            These were shipped by the users themselves; they hold the edit rights.
           </p>
           {isLoading ? (
-            <div className="text-muted-foreground">読み込み中...</div>
+            <div className="text-muted-foreground">Loading…</div>
           ) : (
             <div className="space-y-3">
               {filterProducts(userProducts).map((product) => (
@@ -193,10 +193,10 @@ const AdminClaims = () => {
                       {product.name}
                     </Link>
                     <p className="text-xs text-muted-foreground truncate">
-                      投稿者: {product.userId.slice(0, 8)}...
+                      Submitted by: {product.userId.slice(0, 8)}...
                     </p>
                   </div>
-                  <span className="text-xs text-muted-foreground">自己管理</span>
+                  <span className="text-xs text-muted-foreground">Self-managed</span>
                 </div>
               ))}
             </div>

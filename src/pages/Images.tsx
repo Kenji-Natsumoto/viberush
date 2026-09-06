@@ -72,13 +72,13 @@ function ProductImageCard({ product }: { product: Product }) {
           {!hasBanner && (
             <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-destructive/10 text-destructive border border-destructive/20">
               <AlertCircle className="h-3 w-3" />
-              バナー未登録
+              No banner
             </span>
           )}
           {!hasAvatar && (
             <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
               <AlertCircle className="h-3 w-3" />
-              アバター未登録
+              No avatar
             </span>
           )}
           {expanded ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
@@ -91,10 +91,10 @@ function ProductImageCard({ product }: { product: Product }) {
           {/* Banner */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-foreground">バナー画像</label>
+              <label className="text-sm font-medium text-foreground">Banner image</label>
               <Button size="sm" variant="outline" className="h-7 text-xs gap-1" onClick={() => bannerInputRef.current?.click()} disabled={uploading}>
                 <Upload className="h-3 w-3" />
-                アップロード
+                Upload
               </Button>
               <input ref={bannerInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
                 const f = e.target.files?.[0];
@@ -108,7 +108,7 @@ function ProductImageCard({ product }: { product: Product }) {
               </div>
             ) : (
               <div className="h-24 rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground text-sm">
-                バナー画像なし
+                No banner image
               </div>
             )}
           </div>
@@ -116,10 +116,10 @@ function ProductImageCard({ product }: { product: Product }) {
           {/* Avatar */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-foreground">アバターアイコン</label>
+              <label className="text-sm font-medium text-foreground">Avatar icon</label>
               <Button size="sm" variant="outline" className="h-7 text-xs gap-1" onClick={() => avatarInputRef.current?.click()} disabled={uploading}>
                 <Upload className="h-3 w-3" />
-                アップロード
+                Upload
               </Button>
               <input ref={avatarInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => {
                 const f = e.target.files?.[0];
@@ -131,7 +131,7 @@ function ProductImageCard({ product }: { product: Product }) {
               <img src={product.proxyAvatarUrl} alt="Avatar" className="w-16 h-16 rounded-full object-cover border border-border" onError={(e) => { e.currentTarget.src = `https://api.dicebear.com/7.x/avataaars/svg?seed=${product.userId}`; }} />
             ) : (
               <div className="w-16 h-16 rounded-full border-2 border-dashed border-border flex items-center justify-center text-muted-foreground text-xs">
-                なし
+                None
               </div>
             )}
           </div>
@@ -139,10 +139,10 @@ function ProductImageCard({ product }: { product: Product }) {
           {/* Screenshots */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-foreground">スクリーンショット ({screenshots.length})</label>
+              <label className="text-sm font-medium text-foreground">Screenshots ({screenshots.length})</label>
               <Button size="sm" variant="outline" className="h-7 text-xs gap-1" onClick={() => screenshotInputRef.current?.click()} disabled={addScreenshots.isPending}>
                 {addScreenshots.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
-                複数追加
+                Add several
               </Button>
               <input ref={screenshotInputRef} type="file" accept="image/*" multiple className="hidden" onChange={(e) => {
                 if (e.target.files?.length) handleScreenshotUpload(e.target.files);
@@ -150,10 +150,10 @@ function ProductImageCard({ product }: { product: Product }) {
               }} />
             </div>
             {screenshotsLoading ? (
-              <div className="text-sm text-muted-foreground">読み込み中...</div>
+              <div className="text-sm text-muted-foreground">Loading…</div>
             ) : screenshots.length === 0 ? (
               <div className="h-20 rounded-lg border-2 border-dashed border-border flex items-center justify-center text-muted-foreground text-sm">
-                スクリーンショットなし
+                No screenshots
               </div>
             ) : (
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
@@ -191,19 +191,19 @@ const Images = () => {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-foreground">Image Manager</h1>
-            <p className="text-muted-foreground mt-1">プロダクトごとにバナー、アバター、スクリーンショットを管理できます。</p>
+            <p className="text-muted-foreground mt-1">Manage the banner, avatar and screenshots for each product.</p>
           </div>
 
           {!user ? (
             <div className="text-center py-16 text-muted-foreground">
-              <p>画像を管理するには<a href="/auth" className="text-primary underline">サインイン</a>してください。</p>
+              <p>To manage images, <a href="/auth" className="text-primary underline">sign in</a>.</p>
             </div>
           ) : isLoading ? (
-            <div className="text-center py-8 text-muted-foreground">読み込み中...</div>
+            <div className="text-center py-8 text-muted-foreground">Loading…</div>
           ) : myProducts.length === 0 ? (
             <div className="text-center py-16 text-muted-foreground">
               <ImageIcon className="h-12 w-12 mx-auto mb-3 opacity-30" />
-              <p>まだプロダクトがありません。先にプロダクトをShipしてください。</p>
+              <p>No products yet. Ship a product first.</p>
             </div>
           ) : (
             <div className="space-y-3">

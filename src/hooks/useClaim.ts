@@ -31,10 +31,10 @@ export function useTransferOwnership() {
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['product', variables.productId] });
-      toast({ title: "権限を譲渡しました ✅", description: "オーナーが更新されました。" });
+      toast({ title: "Ownership transferred ✅", description: "The owner has been updated." });
     },
     onError: (error: Error) => {
-      toast({ title: "譲渡に失敗", description: error.message, variant: "destructive" });
+      toast({ title: "Transfer failed", description: error.message, variant: "destructive" });
     },
   });
 }
@@ -59,10 +59,10 @@ export function useRevokeOwnership() {
     onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['product', result.productId] });
-      toast({ title: "権限を取消しました", description: "オーナーがリセットされました。" });
+      toast({ title: "Ownership revoked", description: "The owner has been reset." });
     },
     onError: (error: Error) => {
-      toast({ title: "取消に失敗", description: error.message, variant: "destructive" });
+      toast({ title: "Revoke failed", description: error.message, variant: "destructive" });
     },
   });
 }
