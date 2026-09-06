@@ -17,6 +17,7 @@ import { useShortUrl, useCreateShortUrl } from "@/hooks/useShortUrl";
 import { useIsAdmin } from "@/hooks/useClaim";
 import { getProductIconUrl } from "@/lib/iconUtils";
 import { CurationSection } from "@/components/CurationSection";
+import { ProductUpdatesTimeline } from "@/components/ProductUpdatesTimeline";
 import { dummyProducts } from "@/data/dummyProducts";
 import type { Product } from "@/types/database";
 
@@ -395,6 +396,9 @@ const ProductDetail = () => {
 
         {/* Curator's Voice — shows only when a curation exists */}
         <CurationSection productId={product.id} />
+
+        {/* Release updates — renders nothing when the maker has posted none */}
+        <ProductUpdatesTimeline productId={product.id} />
 
         {/* Edit Modal */}
         <EditProductModal

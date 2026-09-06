@@ -9,6 +9,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ImageUpload } from "@/components/ImageUpload";
 import { cn } from "@/lib/utils";
 import { useProduct, useUpdateProduct } from "@/hooks/useProducts";
+import { ProductUpdatesEditor } from "@/components/ProductUpdatesEditor";
 import { useAuth } from "@/contexts/AuthContext";
 import { TOOL_CATEGORIES, toolColors, TIME_OPTIONS } from "@/lib/toolConfig";
 import { PRODUCT_CATEGORIES } from "@/lib/categoryConfig";
@@ -31,6 +32,10 @@ export default function MoreDetail() {
   const { data: product, isLoading } = useProduct(productId ?? undefined);
   const updateProduct = useUpdateProduct();
   const { user } = useAuth();
+  // Same ownership test as ProductDetail (requirements §2-3). The Updates tab is
+  // the one part of this page that is gated: §2-5 records that the rest of the form
+  // renders for anyone signed in, and we do not carry that gap into a public feature.
+  const isOwner = !!user && !!product && (user.id === product.userId || product.ownerId === user.id);
 
   const [saveStatus, setSaveStatus] = useState<SaveStatus>("idle");
 
@@ -192,11 +197,12 @@ export default function MoreDetail() {
         </div>
 
         <Tabs defaultValue="basics" className="space-y-6">
-          <TabsList className="w-full grid grid-cols-4">
+          <TabsList className={cn("w-full grid", isOwner ? "grid-cols-5" : "grid-cols-4")}>
             <TabsTrigger value="basics">Basics</TabsTrigger>
             <TabsTrigger value="story">Story</TabsTrigger>
             <TabsTrigger value="links">Links & Social</TabsTrigger>
             <TabsTrigger value="screenshots">Screenshots</TabsTrigger>
+            {isOwner && <TabsTrigger value="updates">Updates</TabsTrigger>}
           </TabsList>
 
           {/* ====== Tab 1: Basics ====== */}
@@ -486,6 +492,13 @@ export default function MoreDetail() {
           <TabsContent value="screenshots" className="space-y-5">
             <ScreenshotsTab productId={productId} />
           </TabsContent>
+
+          {/* ====== Tab 5: Updates (owner only) ====== */}
+          {isOwner && productId && user && (
+            <TabsContent value="updates" className="space-y-5">
+              <ProductUpdatesEditor productId={productId} authorId={user.id} />
+            </TabsContent>
+          )}
         </Tabs>
       </div>
     </div>
