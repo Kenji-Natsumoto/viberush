@@ -27,7 +27,10 @@ export function ProductFeed() {
   }, []);
 
   const sortedProducts = useMemo(() => {
-    const sorted = [...products].sort((a, b) => {
+    // Filter out products with empty URLs from ranking
+    const productsWithUrl = products.filter(p => p.url && p.url.trim() !== '');
+    
+    const sorted = [...productsWithUrl].sort((a, b) => {
       if (sortBy === "newest") {
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
