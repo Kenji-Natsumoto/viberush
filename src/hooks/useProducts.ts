@@ -15,6 +15,32 @@ import { getProductIconUrl } from '@/lib/iconUtils';
 
 const PRODUCTS_KEY = ['products'];
 
+// Last successful product list, kept in localStorage so a slow/failed fetch
+// (e.g. Supabase API latency) shows the previous data instead of an empty feed.
+const PRODUCTS_CACHE_KEY = 'vr:products-cache:v1';
+const PRODUCTS_FETCH_TIMEOUT_MS = 20000;
+const PRODUCTS_ERROR_REFETCH_MS = 15000;
+
+function readProductsCache(): { rows: DbProduct[]; at: number } | undefined {
+  try {
+    const raw = localStorage.getItem(PRODUCTS_CACHE_KEY);
+    if (!raw) return undefined;
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed?.rows) || typeof parsed?.at !== 'number') return undefined;
+    return parsed;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeProductsCache(rows: DbProduct[]) {
+  try {
+    localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({ rows, at: Date.now() }));
+  } catch {
+    // Storage full or blocked — the cache is a convenience only
+  }
+}
+
 export function useProducts() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -29,7 +55,7 @@ export function useProducts() {
     queryKey: PRODUCTS_KEY,
     queryFn: async (): Promise<Product[]> => {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000); // 10s timeout
+      const timeout = setTimeout(() => controller.abort(), PRODUCTS_FETCH_TIMEOUT_MS);
 
       try {
         const { data, error } = await supabase
@@ -40,11 +66,20 @@ export function useProducts() {
           .abortSignal(controller.signal);
 
         if (error) throw error;
-        return (data as DbProduct[]).map((p) => dbProductToProduct(p));
+        const rows = data as DbProduct[];
+        writeProductsCache(rows);
+        return rows.map((p) => dbProductToProduct(p));
       } finally {
         clearTimeout(timeout);
       }
     },
+    // Seed from the last successful fetch; marked with its original time so it
+    // is treated as stale and refetched in the background right away.
+    initialData: () => readProductsCache()?.rows.map((p) => dbProductToProduct(p)),
+    initialDataUpdatedAt: () => readProductsCache()?.at,
+    // While the last fetch failed, keep retrying in the background.
+    refetchInterval: (query) =>
+      query.state.status === 'error' ? PRODUCTS_ERROR_REFETCH_MS : false,
     networkMode: 'always',
   });
 
